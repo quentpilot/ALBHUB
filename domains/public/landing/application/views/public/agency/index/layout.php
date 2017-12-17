@@ -68,28 +68,31 @@
       <div class="container clearfix">
         <div class="row margin-bottom">
           <div class="col-md-6 margin-bottom"> 
-            <h2 class="heading">About us</h2>
-            <p class="lead">Able an hope of body. Any nay shyness article matters own removal nothing his forming.</p>
-            <p>Impossible considered invitation him men instrument saw celebrated unpleasant. Put rest and must set kind next many near nay. He exquisite continued explained middleton am. Voice hours young woody has she think equal. Estate moment he at on wonder at season little. Six garden result summer set family esteem nay estate. End admiration mrs unreserved discovered comparison especially invitation. </p>
+            <h2 class="heading">A propos <small>ALB Impression</small></h2>
+            <p class="lead text-center">Nous réalisons vos idées<br> grâce à l'impression numérique <br>sur tous support</p>
+            <p>ALB Impression est une enseigne d'impression publicitaire.<br>
+              Nous utilisons différents procédés afin de garantir une durabilité du produit.
+
+            </p>
             <div class="row">
               <div class="col-sm-6">
                 <ul>
-                  <li>considered invitation</li>
-                  <li>put rest and must set</li>
-                  <li>Estate moment he at on</li>
+                  <li>Materialisation du modèle</li>
+                  <li>Impression du rendu souhaité</li>
+                  <li>Finissions à la main</li>
                 </ul>
               </div>
               <div class="col-sm-6">
                 <ul>
-                  <li>considered invitation</li>
-                  <li>put rest and must set</li>
-                  <li>Estate moment he at on</li>
+                  <li>Modèle informatique</li>
+                  <li>Numérique | Sérigraphie</li>
+                  <li>Vérification du rendu</li>
                 </ul>
               </div>
             </div>
           </div>
           <div class="col-md-6 margin-bottom">
-            <p><img src="img/template-homepage.png" alt="" class="img-responsive"></p>
+            <p><img src="<?= site_url("$template/img/template-homepage.png") ?>" alt="" class="img-responsive"></p>
           </div>
         </div>
         <div class="row">
@@ -119,27 +122,31 @@
       <div class="container clearfix">
         <div class="row services">
           <div class="col-md-12">
-            <h2 class="heading">Services</h2>
+            <h2 class="heading">Services <small>Nos savoir-faire</small></h2>
             <div class="row">
               <div class="col-sm-4">
                 <div class="box box-services">
                   <div class="icon"><i class="ti-desktop"></i></div>
-                  <h4 class="heading">Webdesign</h4>
-                  <p>Fifth abundantly made Give sixth hath. Cattle creature i be don't them.</p>
+                  <h4 class="heading">Sérigraphie</h4>
+                  <p class="lead">Depuis 25 ans, nous utilisons la sérigraphie pour certains de nos projets<br>
+                    Une méthode efficace et durable pour les textiles !
+                  </p>
                 </div>
               </div>
               <div class="col-sm-4">
                 <div class="box box-services">
                   <div class="icon"><i class="ti-printer"></i></div>
-                  <h4 class="heading">Print</h4>
-                  <p>Advantage old had otherwise sincerity dependent additions. It in adapted natural.</p>
+                  <h4 class="heading">Impression Numérique</h4>
+                  <p class="lead">Grâce aux avancées technologiques, l'impression numérique étend les possibilités de création !<br>
+                  Avis aux amateurs de grands formats</p>
                 </div>
               </div>
               <div class="col-sm-4">
                 <div class="box box-services">
                   <div class="icon"><i class="ti-search"></i></div>
-                  <h4 class="heading">SEO and SEM</h4>
-                  <p>Am terminated it excellence invitation projection as. She graceful shy. </p>
+                  <h4 class="heading">Reproductions</h4>
+                  <p class="lead">Reproduction d'images, tableau, enseignes<br>
+                  </p>
                 </div>
               </div>
             </div>
@@ -147,22 +154,22 @@
               <div class="col-sm-4">
                 <div class="box box-services">
                   <div class="icon"><i class="ti-comments"></i></div>
-                  <h4 class="heading">Consulting</h4>
-                  <p>Fifth abundantly made Give sixth hath. Cattle creature i be don't them.</p>
+                  <h4 class="heading">Poses adhésives</h4>
+                  <p>Poses adhésives ultra résistantes sur la vitrine de votre commerce, tout comme sur les carrosseries</p>
                 </div>
               </div>
               <div class="col-sm-4">
                 <div class="box box-services">
                   <div class="icon"><i class="ti-email"></i></div>
-                  <h4 class="heading">Email Marketing</h4>
-                  <p>Advantage old had otherwise sincerity dependent additions. It in adapted natural.</p>
+                  <h4 class="heading">Infographie</h4>
+                  <p>Montage numérique avant l'impression de votre commande.</p>
                 </div>
               </div>
               <div class="col-sm-4">
                 <div class="box box-services">
                   <div class="icon"><i class="ti-layout-sidebar-left"></i></div>
-                  <h4 class="heading">UX &amp; UI</h4>
-                  <p>Am terminated it excellence invitation projection as. She graceful shy. </p>
+                  <h4 class="heading">Artisanat</h4>
+                  <p>Une qualité inégalée pour un coût raisonnable face à l'industrie</p>
                 </div>
               </div>
             </div>
@@ -175,56 +182,37 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12">
-            <h2 class="heading">Portfolio</h2>
-            <p class="text-center">You can make also a portfolio or image gallery.</p>
+            <h2 class="heading">Nos produits</h2>
+            <p class="text-center">Quelque-unes de nos réalisations.<br>
+              Découvrez-en plus sur notre <a href="http://portfolio.albimpression.fr" class="external">portfolio en ligne</a></p>
           </div>
         </div>
       </div>
       <div class="container-fluid">
         <div class="row no-space">
           <div class="col-sm-4 col-md-3">
-            <div class="box"><a href="#" title=""><img src="img/portfolio-1.jpg" alt="" class="img-responsive"></a></div>
+            <div class="box"><a href="#" title=""><img src="<?= site_url("$template/img/portfolio-1.jpg") ?>" alt="" class="img-responsive"></a></div>
           </div>
           <div class="col-sm-4 col-md-3">
-            <div class="box"><a href="#" title=""><img src="img/portfolio-7.jpg" alt="" class="img-responsive"></a></div>
+            <div class="box"><a href="#" title=""><img src="<?= site_url("$template/img/portfolio-7.jpg") ?>" alt="" class="img-responsive"></a></div>
           </div>
           <div class="col-sm-4 col-md-3">
-            <div class="box"><a href="#" title=""><img src="img/portfolio-3.jpg" alt="" class="img-responsive"></a></div>
+            <div class="box"><a href="#" title=""><img src="<?= site_url("$template/img/portfolio-3.jpg") ?>" alt="" class="img-responsive"></a></div>
           </div>
           <div class="col-sm-4 col-md-3">
-            <div class="box"><a href="#" title=""><img src="img/portfolio-5.jpg" alt="" class="img-responsive"></a></div>
+            <div class="box"><a href="#" title=""><img src="<?= site_url("$template/img/portfolio-5.jpg") ?>" alt="" class="img-responsive"></a></div>
           </div>
           <div class="col-sm-4 col-md-3">
-            <div class="box"><a href="#" title=""><img src="img/portfolio-4.jpg" alt="" class="img-responsive"></a></div>
+            <div class="box"><a href="#" title=""><img src="<?= site_url("$template/img/portfolio-4.jpg") ?>" alt="" class="img-responsive"></a></div>
           </div>
           <div class="col-sm-4 col-md-3">
-            <div class="box"><a href="#" title=""><img src="img/portfolio-6.jpg" alt="" class="img-responsive"></a></div>
+            <div class="box"><a href="#" title=""><img src="<?= site_url("$template/img/portfolio-6.jpg") ?>" alt="" class="img-responsive"></a></div>
           </div>
           <div class="col-sm-4 col-md-3">
-            <div class="box"><a href="#" title=""><img src="img/portfolio-2.jpg" alt="" class="img-responsive"></a></div>
+            <div class="box"><a href="#" title=""><img src="<?= site_url("$template/img/portfolio-2.jpg") ?>" alt="" class="img-responsive"></a></div>
           </div>
           <div class="col-sm-4 col-md-3">
-            <div class="box"><a href="#" title=""><img src="img/portfolio-8.jpg" alt="" class="img-responsive"></a></div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- text-->
-    <section id="text" class="section-gray">
-      <div class="container clearfix">
-        <div class="row">
-          <div class="col-md-12">
-            <h2 class="heading">Text page</h2>
-            <div class="row">
-              <div class="col-sm-6">
-                <p>Able an hope of body. Any nay shyness article matters own removal nothing his forming. Gay own additions education satisfied the perpetual. If he cause manor happy. Without farther she exposed saw man led. Along on happy could cease green oh. </p>
-                <p>Betrayed cheerful declared end and. Questions we additions is extremely incommode. Next half add call them eat face. Age lived smile six defer bed their few. Had admitting concluded too behaviour him she. Of death to or to being other. </p>
-              </div>
-              <div class="col-sm-6">
-                <p>Effects present letters inquiry no an removed or friends. Desire behind latter me though in. Supposing shameless am he engrossed up additions. My possible peculiar together to. Desire so better am cannot he up before points. Remember mistaken opinions it pleasure of debating. Court front maids forty if aware their at. Chicken use are pressed removed. </p>
-                <p>Saw yet kindness too replying whatever marianne. Old sentiments resolution admiration unaffected its mrs literature. Behaviour new set existence dashwoods. It satisfied to mr commanded consisted disposing engrossed. Tall snug do of till on easy. Form not calm new fail. </p>
-              </div>
-            </div>
+            <div class="box"><a href="#" title=""><img src="<?= site_url("$template/img/portfolio-8.jpg") ?>" alt="" class="img-responsive"></a></div>
           </div>
         </div>
       </div>
@@ -234,13 +222,13 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12">
-            <h2 class="heading">Our team</h2>
+            <h2 class="heading">Nos Clients</h2>
             <div class="row"></div>
             <!-- team-member-->
             <div class="col-md-3 col-sm-6">
               <div class="team-member">
-                <div class="image"><a href="#"><img src="img/person-1.jpg" alt="" class="img-responsive"></a></div>
-                <h3><a href="#">Han Solo</a></h3>
+                <div class="image"><a href="#"><img src="<?= site_url("$template/img/person-1.jpg") ?>" alt="" title="Site internet" class="img-responsive"></a></div>
+                <h3><a href="http://client.albimpression.fr/han-solo" target="_blank" title="Profil Client">Han Solo</a></h3>
                 <p class="role">Founder</p>
                 <div class="social">
                   <a href="#" class="external facebook" data-animate-hover="pulse"><i class="fa fa-facebook"></i></a>
@@ -257,7 +245,7 @@
             <!-- team-member-->
             <div class="col-md-3 col-sm-6">
               <div class="team-member">
-                <div class="image"><a href="#"><img src="img/person-2.jpg" alt="" class="img-responsive"></a></div>
+                <div class="image"><a href="#"><img src="<?= site_url("$template/img/person-2.jpg") ?>" alt="" class="img-responsive"></a></div>
                 <h3><a href="#">Luke Skywalker</a></h3>
                 <p class="role">CTO</p>
                 <div class="social">
@@ -275,7 +263,7 @@
             <!-- team-member-->
             <div class="col-md-3 col-sm-6">
               <div class="team-member">
-                <div class="image"><a href="#"><img src="img/person-3.jpg" alt="" class="img-responsive"></a></div>
+                <div class="image"><a href="#"><img src="<?= site_url("$template/img/person-3.jpg") ?>" alt="" class="img-responsive"></a></div>
                 <h3><a href="#">Princess Leia</a></h3>
                 <p class="role">Team Leader</p>
                 <div class="social">
@@ -293,7 +281,7 @@
             <!-- team-member-->
             <div class="col-md-3 col-sm-6">
               <div class="team-member">
-                <div class="image"><a href="#"><img src="img/person-4.jpg" alt="" class="img-responsive"></a></div>
+                <div class="image"><a href="#"><img src="<?= site_url("$template/img/person-4.jpg") ?>" alt="" class="img-responsive"></a></div>
                 <h3><a href="#">Jabba Hut</a></h3>
                 <p class="role">Lead Developer</p>
                 <div class="social">
@@ -312,13 +300,34 @@
         </div>
       </div>
     </section>
+    <!-- text-->
+    <section id="text" class="section-gray">
+      <div class="container clearfix">
+        <div class="row">
+          <div class="col-md-12">
+            <h2 class="heading">Post Scriptum</h2>
+            <div class="row">
+              <div class="col-sm-6">
+                <p>Able an hope of body. Any nay shyness article matters own removal nothing his forming. Gay own additions education satisfied the perpetual. If he cause manor happy. Without farther she exposed saw man led. Along on happy could cease green oh. </p>
+                <p>Betrayed cheerful declared end and. Questions we additions is extremely incommode. Next half add call them eat face. Age lived smile six defer bed their few. Had admitting concluded too behaviour him she. Of death to or to being other. </p>
+              </div>
+              <div class="col-sm-6">
+                <p>Effects present letters inquiry no an removed or friends. Desire behind latter me though in. Supposing shameless am he engrossed up additions. My possible peculiar together to. Desire so better am cannot he up before points. Remember mistaken opinions it pleasure of debating. Court front maids forty if aware their at. Chicken use are pressed removed. </p>
+                <p>Saw yet kindness too replying whatever marianne. Old sentiments resolution admiration unaffected its mrs literature. Behaviour new set existence dashwoods. It satisfied to mr commanded consisted disposing engrossed. Tall snug do of till on easy. Form not calm new fail. </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
     <!-- map-->
     <section id="map"></section>
     <section id="contact">
       <div class="container clearfix">
         <div class="row">
           <div class="col-md-12">
-            <h2 class="heading">Contact</h2>
+            <h2 class="heading">Nous Contacter</h2>
             <div class="row">
               <div class="col-md-6">
                 <form id="contact-form" method="post" action="contact.php" class="contact-form form">
@@ -326,35 +335,42 @@
                     <div class="row">
                       <div class="col-sm-6">
                         <div class="form-group">
-                          <label for="name">Your firstname *</label>
-                          <input type="text" name="name" id="name" placeholder="Enter your firstname" required="required" class="form-control">
+                          <label for="name">Nom *</label>
+                          <input type="text" name="name" id="name" placeholder="Votre nom" required="required" class="form-control input-lg">
                         </div>
                       </div>
                       <div class="col-sm-6">
                         <div class="form-group">
-                          <label for="surname">Your lastname *</label>
-                          <input type="text" name="surname" id="surname" placeholder="Enter your  lastname" required="required" class="form-control">
+                          <label for="enterprise">Entreprise</label>
+                          <input type="text" name="enterprise" id="enterprise" placeholder="Nom de votre entreprise" class="form-control input-lg">
                         </div>
                       </div>
                     </div>
                     <div class="form-group">
-                      <label for="email">Your email *</label>
-                      <input type="email" name="email" id="email" placeholder="Enter your  email" required="required" class="form-control">
+                      <label for="email">Adresse email *</label>
+                      <input type="email" name="email" id="email" placeholder="bonjour.bonheur@asgardia.space" required="required" class="form-control input-lg">
                     </div>
                     <div class="form-group">
-                      <label for="message">Your message for us *</label>
-                      <textarea rows="4" name="message" id="message" placeholder="Enter your message" required="required" class="form-control"></textarea>
+                      <label for="message">Votre message *</label>
+                      <textarea rows="4" name="message" id="message" placeholder="Que souhaitez-vous nous transmettre ?" required="required" class="form-control"></textarea>
                     </div>
                     <div class="text-center">
-                      <input type="submit" value="Send message" class="btn btn-primary btn-block">
+                      <input type="submit" value="Envoyer le message" class="btn btn-primary btn-block input-lg">
                     </div>
                   </div>
                 </form>
               </div>
-              <div class="col-md-6">
-                <p>Effects present letters inquiry no an removed or friends. Desire behind latter me though in. Supposing shameless am he engrossed up additions. My possible peculiar together to. Desire so better am cannot he up before points. Remember mistaken opinions it pleasure of debating. Court front maids forty if aware their at. Chicken use are pressed removed. </p>
-                <p>Able an hope of body. Any nay shyness article matters own removal nothing his forming. Gay own additions education satisfied the perpetual. If he cause manor happy. Without farther she exposed saw man led. Along on happy could cease green oh. </p>
-                <p class="social"><a href="#" title="" class="facebook"><i class="fa fa-facebook"></i></a><a href="#" title="" class="twitter"><i class="fa fa-twitter"></i></a><a href="#" title="" class="gplus"><i class="fa fa-google-plus"></i></a><a href="#" title="" class="instagram"><i class="fa fa-instagram"></i></a><a href="#" title="" class="email"><i class="fa fa-envelope"></i></a></p>
+              <div class="col-md-6 text-center">
+                <p class="lead">N'hésitez pas à nous envoyer un message <br>ou<br> nous contacter par téléphone.</p>
+                <p class="lead">Ligne fixe : 03 85 59 06 92</p>
+                <p class="lead">Site Internet : <a href="http://albimpression.fr" class="external"> ALB Impression</a></p>
+                <br><br><br><br>
+                <p class="text-center">Visitez également nos autres sites afin de découvrir nos produits !</p>
+                <p class="social"><a href="http://shop.albimpression.fr" title="Notre e-boutique" class="facebook"><i class="fa fa-globe"></i></a>
+                  <a href="http://portfolio.albimpression.fr" title="Nos réalisations" class="twitter"><i class="fa fa-sitemap"></i></a>
+                  <a href="http://deadline.albimpression.fr" title="Prochainement !" class="instagram"><i class="fa fa-globe"></i></a>
+                  <a href="http://client.albimpression.fr" title="Espace Client" class="gplus"><i class="fa fa-user-md"></i></a>
+                </p>
               </div>
             </div>
           </div>
@@ -365,10 +381,10 @@
       <div class="container">
         <div class="row copyright">
           <div class="col-md-6">
-            <p class="roboto">&copy;2017 Your name/company goes here</p>
+            <p class="roboto">&copy;2017 ALB Impression, la publicité par l'image</p>
           </div>
           <div class="col-md-6">
-            <p class="credit roboto"><a href="https://www.bootstrapious.com/tutorials">Bootstrapious</a></p>
+            <p class="credit roboto"><a href="https://www.bootstrapious.com/tutorials" class="external">Bootstrapious</a></p>
             <!-- Please do not remove the backlink to us unless you support the development at https://bootstrapious.com/donate. It is part of the license conditions. Thanks for understanding :) -->
           </div>
         </div>
