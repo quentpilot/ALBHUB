@@ -26,11 +26,14 @@
     <div style="background-image: url('<?= site_url("$template/img/Mars-NASA.jpg") ?>')" class="main"> 
       <div class="overlay"></div>
       <div class="container">
-        <p class="social"><a href="#" title="" class="facebook"><i class="fa fa-facebook"></i></a><a href="#" title="" class="twitter"><i class="fa fa-twitter"></i></a><a href="#" title="" class="gplus"><i class="fa fa-google-plus"></i></a><a href="#" title="" class="instagram"><i class="fa fa-instagram"></i></a></p>
+        <!--<p class="social"><a href="#" title="" class="facebook"><i class="fa fa-facebook"></i></a><a href="#" title="" class="twitter"><i class="fa fa-twitter"></i></a><a href="#" title="" class="gplus"><i class="fa fa-google-plus"></i></a><a href="#" title="" class="instagram"><i class="fa fa-instagram"></i></a></p>-->
         <div class="row">
           <div class="col-sm-12">
-            <h1 class="cursive">Compte à rebours<br> ALB Impression</h1>
-            <h2 class="sub">On vous envoie des retours régulièrement</h2>
+            <h1 class="cursive">Prochainement !<br> ALB Impression</h1>
+            <h2 class="sub">Lancement du HUB <a href="http://albimpression.fr" class="external">ALB Impression</a>
+              <br><br>
+              Impression numérique<br> sous tous support
+            </h2>
           </div>
         </div>
         <!-- countdown-->
@@ -38,19 +41,19 @@
           <div class="row">
             <div class="countdown-item col-sm-3 col-xs-6">
               <div id="countdown-days" class="countdown-number">&nbsp;</div>
-              <div class="countdown-label">days</div>
+              <div class="countdown-label">JOURS</div>
             </div>
             <div class="countdown-item col-sm-3 col-xs-6">
               <div id="countdown-hours" class="countdown-number">&nbsp;</div>
-              <div class="countdown-label">hours</div>
+              <div class="countdown-label">HEURES</div>
             </div>
             <div class="countdown-item col-sm-3 col-xs-6">
               <div id="countdown-minutes" class="countdown-number">&nbsp;</div>
-              <div class="countdown-label">minutes</div>
+              <div class="countdown-label">MINUTES</div>
             </div>
             <div class="countdown-item col-sm-3 col-xs-6">
               <div id="countdown-seconds" class="countdown-number">&nbsp;</div>
-              <div class="countdown-label">seconds</div>
+              <div class="countdown-label">SECONDES</div>
             </div>
           </div>
         </div>
@@ -61,7 +64,7 @@
             <form class="form-inline">
               <div class="form-group">
                 <label for="email" class="sr-only"></label>
-                <input type="email" name="email" placeholder="bonjour.bonheur@paradise.space" id="email" class="form-control transparent input-lg">
+                <input type="email" name="email" placeholder="bonjour.bonheur@asgardia.space" id="email" class="form-control transparent input-lg">
               </div>
               <button class="btn btn-info btn-lg" disabled="disabled">S'inscrire à la newsletter</button>
             </form>
@@ -72,7 +75,7 @@
         <div class="container">
           <div class="row">
             <div class="col-md-6">
-              <p>&copy;2017 ALB Impression, la publicité par l'image</p>
+              <p>&copy;2017 <a href="http://albimpression.fr" class="external">ALB Impression</a>, la publicité par l'image</p>
             </div>
             <div class="col-md-6">
               <p class="credit">Developed by <a href="https://pilotaweb.fr" target="_blank">PilotaWeb</a></p>

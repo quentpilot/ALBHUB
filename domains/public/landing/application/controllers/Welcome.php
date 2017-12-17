@@ -20,6 +20,8 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->load->view('welcome_message');
+		//$this->load->view('welcome_message');
+		$view_path = "feed/assets/public/libs/templates/agency";
+		$this->load->view('public/agency/index/layout', array("template" => $view_path));
 	}
 }
