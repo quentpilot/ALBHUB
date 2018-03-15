@@ -1,4 +1,5 @@
 <?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
 * Render class would to build render view with template type selected
@@ -82,7 +83,7 @@ class Render implements IViews {
       $this->load_parser = $load_parser;
       $this->index = 'layout';
       $this->view = $view;
-      $this->data = $data;
+      $this->data = (is_array($data) && !count($data)) ?? array('null') ?? $data;
       $this->return_output = $return_output;
   }
 
@@ -113,20 +114,20 @@ class Render implements IViews {
 
     // create a new template
     $this->template = new Template($this->config->item($tpl_name), $tpl_type, $this->config->item('tpl_root_path'));
-
+    return true;
     // then build template layout for renderer
-    if (!$this->build_layout())
-      return false;
+    //if (!$this->build_layout())
+      //return false;
 
     // if layout is not set return false, otherwise return true
-    return ($this->layout instanceof Layout) ?? true ?? false;
+    //return ($this->layout instanceof Layout) ?? true ?? false;
   }
 
   /**
   * build_layout method would to make a new layout following template & layout type and rules
   */
   public function build_layout() {
-    $this->layout = new Layout($this->template);
+    $this->layout = new Layout($this->template, $this);
     return $this->layout->build();
   }
 
@@ -137,17 +138,19 @@ class Render implements IViews {
   * @return boolean or string defining current view file to load
   */
   protected function build_view() {
+    if (!$this->build_layout())
+      return false;
     $tpl_type = $this->template->get('type');
 
     // build current sub view requested with data received
     // choose to load view with CI_Parser or via CI_Loader library
-    if ($this->load_parser)
+    /*if ($this->load_parser)
       $body_content = array('renderer' => $this->layout->set('renderer', $this->ci->parser->parse($tpl_type.'/'.$this->view, array($this->data), true)));
     else
       $body_content = array('renderer' => $this->layout->set('renderer', $this->ci->load->view($tpl_type.'/'.$this->view, $this->data, true)));
 
     // reset body layout to include requested view file to load
-    $this->layout->set('body', $this->ci->parser->parse($this->layout->get('path').'body', $body_content, true));
+    $this->layout->set('body', $this->ci->parser->parse($this->layout->get('path').'body', $body_content, true));*/
 
     // set final values for layout view file
     $content = array(

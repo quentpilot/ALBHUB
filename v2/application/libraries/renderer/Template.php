@@ -1,4 +1,5 @@
 <?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
 * Template class would to load selected template used in final Render class
@@ -60,6 +61,12 @@ class Template implements IViews {
   protected $js_path = null;
 
   /**
+  * ttf_path attribut define the current template sub folder ttf files to load
+  * properly scripts include to html page
+  */
+  protected $ttf_path = null;
+
+  /**
   * constructor to set main attributes
   */
   public function __construct($name = null, $type = 'public', $path = 'assets/templates') {
@@ -70,35 +77,100 @@ class Template implements IViews {
     $this->path = "$path/$type/$name";
     $this->css_path = $this->path."/css";
     $this->js_path = $this->path."/js";
+    $this->ttf_path = $this->path."/fonts";
   }
 
   /**
   * load_css method would to find and build an array of css files to use for current view
   * except filename in params
   */
-  public function load_css($except = array()) {
+  public function load_css($except = array(), $r_string = true, $echo = false) {
     $css = array();
-    $path = APPPATH . '../'.$this->css_path;
-    $files = scandir($path);
-    foreach ($files as $file) {
-      $css[] = '<link rel="stylesheet" href="'.$path.'/'.$file.'">';
+    $files = scandir($this->css_path);
+    //return $files;
+    foreach ($files as $file => $name) {
+      //echo $name;
+      $exploded = explode('.', $name);
+      $ext = $exploded[1];
+      if (!in_array($name, array('.', '..')) && !in_array($name, $except) && $ext == 'css') {
+        if ($echo)
+          echo ($css[] = '<link rel="stylesheet" href="'.$this->css_path.'/'.$name.'">');
+        else
+          $css[] = '<link rel="stylesheet" href="'.$this->css_path.'/'.$name.'">';
+      }
+    }
+
+    if ($r_string) {
+      $css = implode(",", $css);
+      $css = str_replace(',', '', $css);
     }
     return $css;
   }
 
   /**
-  * load_css method would to find and build an array of js files to use for current view
+  * load_js method would to find and build an array of js files to use for current view
   * except filename in params
   */
-  public function load_js($except = array()) {
+  public function load_js($except = array(), $r_string = true, $echo = false) {
     $js = array();
-    $path = APPPATH . '../'.$this->css_path;
-    $files = scandir($path);
+    $files = scandir($this->js_path);
 
-    foreach ($files as $file) {
-      $js[] = '<script src="'.$path.'/'.$file.'"></script>';
+    foreach ($files as $file => $name) {
+      $exploded = explode('.', $name);
+      $ext = $exploded[1];
+      if (!in_array($name, array('.', '..')) && !in_array($name, $except) && $ext == 'js') {
+        if ($echo)
+          echo ($js[] = '<script src="'.$this->js_path.'/'.$name.'"></script>');
+        else
+          $js[] = '<script src="'.$this->js_path.'/'.$name.'"></script>';
+      }
+    }
+
+    if ($r_string) {
+      $js = implode(",", $js);
+      $js = str_replace(',', '', $js);
     }
     return $js;
+  }
+
+  /**
+  * load_font method would to find and build an array of ttf files to use for current view
+  * except filename in params
+  */
+  public function load_fonts($ufiles = array(), $except = array(), $r_string = true, $echo = false) {
+    $ttf = array();
+    $subdir = $this->config->item('tpl_ttf_files');
+    if (count($subdir))
+      $this->ttf_path .'/'. implode(',', $subdir);
+    //$files = (is_array($ufiles) && count($ufiles)) ?? $ufiles ?? scandir($this->ttf_path);
+    $files = scandir($this->ttf_path);
+
+    foreach ($files as $file => $name) {
+      $exploded = explode('.', $name);
+      if (count($exploded) > 1)
+        $ext = $exploded[1];
+
+      if (!in_array($name, array('.', '..')) && !in_array($name, $except) && $ext == 'ttf') {
+        if ($echo)
+          echo ($ttf[] = '<link rel="stylesheet" type="font/ttf" href="'.$this->ttf_path.'/'.$name.'">');
+        else
+          $ttf[] = '<link rel="stylesheet" type="font/ttf" href="'.$this->ttf_path.'/'.$name.'">';
+      }
+    }
+
+    if ($r_string) {
+      $ttf = implode(",", $ttf);
+      $ttf = str_replace(',', '', $ttf);
+    }
+    return $ttf;
+  }
+
+  public function load_files($files = array(), $except = array(), $r_string = true, $echo = false) {
+
+  }
+
+  public function load_scandir($except = array(), $r_string = true, $echo = false) {
+
   }
 
   /**
