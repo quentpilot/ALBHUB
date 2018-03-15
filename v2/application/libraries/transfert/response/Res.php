@@ -4,9 +4,13 @@ require_once APPPATH . 'libraries/transfert/ITransfert.php';
 
 class Res implements ITransfert {
 
+  protected $query = null;
+
   protected $data = null;
 
   protected $type = null;
+
+  protected $result = null;
 
   protected $protocol = null;
 
@@ -16,6 +20,13 @@ class Res implements ITransfert {
     $this->data = $data;
     $this->type = $type;
     $protocol = (is_null($protocol)) ? new Protocol() : $protocol;
+  }
+
+  public function result($query = null, $data = null, $type = null) {
+    $this->query = $query;
+    $this->data = $data;
+    $this->type = $type;
+    return $this->result;
   }
 
   /**

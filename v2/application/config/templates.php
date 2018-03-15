@@ -14,3 +14,5 @@ $config['tpl_admin_name'] = 'admalbi';
 */
 $config['layout_public_path'] = 'public';
 $config['layout_admin_path'] = 'admin';
+$config['layout_public_parts'] = array('head', 'nav_menu', 'body', 'foot');
+$config['layout_admin_parts'] = array('head', 'nav_menu', 'side_menu', 'body', 'foot');

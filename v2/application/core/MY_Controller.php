@@ -31,4 +31,14 @@ class MY_Controller extends CI_Controller {
    public function render($view = 'index', $data = null, $return = false, $parser = true) {
      return $this->view->render($view, $data, $return, $parser);
    }
+
+   public function request($query = null, $data = null, $type = null) {
+     $this->request->query($query, $data, $type);
+     return $this->response();
+   }
+
+   public function response($query = null, $data = null, $type = null, $result = null) {
+     $this->response->result($query, $data, $type);
+     return $this->response;
+   }
 }

@@ -60,12 +60,6 @@ class Template implements IViews {
   protected $js_path = null;
 
   /**
-  * layout attribute would to be an instance of Layout library class used to structure
-  * each part of page
-  */
-  protected $layout = null;
-
-  /**
   * constructor to set main attributes
   */
   public function __construct($name = null, $type = 'public', $path = 'assets/templates') {
@@ -79,20 +73,17 @@ class Template implements IViews {
   }
 
   /**
-  * build_layout method would to make a new layout following template & layout type and rules
-  */
-  public function build_layout() {
-    $this->layout = new Layout();
-    return true;
-  }
-
-  /**
   * load_css method would to find and build an array of css files to use for current view
   * except filename in params
   */
   public function load_css($except = array()) {
-    $files = array();
-    return $files;
+    $css = array();
+    $path = APPPATH . '../'.$this->css_path;
+    $files = scandir($path);
+    foreach ($files as $file) {
+      $css[] = '<link rel="stylesheet" href="'.$path.'/'.$file.'">';
+    }
+    return $css;
   }
 
   /**
@@ -100,8 +91,14 @@ class Template implements IViews {
   * except filename in params
   */
   public function load_js($except = array()) {
-    $files = array();
-    return $files;
+    $js = array();
+    $path = APPPATH . '../'.$this->css_path;
+    $files = scandir($path);
+
+    foreach ($files as $file) {
+      $js[] = '<script src="'.$path.'/'.$file.'"></script>';
+    }
+    return $js;
   }
 
   /**
@@ -112,6 +109,7 @@ class Template implements IViews {
       return false;
     if (property_exists($this, $property))
       return $this->$property;
+    return false;
   }
 
   /**

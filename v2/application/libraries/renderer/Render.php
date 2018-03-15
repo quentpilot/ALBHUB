@@ -31,6 +31,12 @@ class Render implements IViews {
   protected $template = null;
 
   /**
+  * layout attribute would to be an instance of Layout library class used to structure
+  * each part of page
+  */
+  protected $layout = null;
+
+  /**
   * index attribut would to define the main file to load to structure sub views
   * this file contains each main html parts needed to properly load final page
   *
@@ -48,7 +54,7 @@ class Render implements IViews {
   * data attribut is an array of all the dynamic data used through
   * current view file to display
   */
-  protected $data = null;
+  protected $data = array();
 
   /**
   * output attribut is the final view built and ready to be print as a string
@@ -70,11 +76,10 @@ class Render implements IViews {
   /**
   * constructor to set main attributes
   */
-  public function __construct($parser = false, $view = null, $data = null, $return_output = false) {
+  public function __construct($load_parser = false, $view = null, $data = array(), $return_output = false) {
       $this->ci = &get_instance();
       $this->config = $this->ci->config;
-      $this->template = new Template();
-      $this->load_parser = $parser;
+      $this->load_parser = $load_parser;
       $this->index = 'layout';
       $this->view = $view;
       $this->data = $data;
@@ -84,7 +89,7 @@ class Render implements IViews {
   /*
   * render method to set and build view output to load and display what controller wants
   */
-  public function render($view = null, $data = null, $return_output = false, $load_parser = false) {
+  public function render($view = null, $data = array(), $return_output = false, $load_parser = false) {
     $this->view = $view;
     $this->data = $data;
     $this->return_output = $return_output;
@@ -101,7 +106,7 @@ class Render implements IViews {
   * following Render::render() methods params
   */
   protected function build_template() {
-    // define if route want an admin or public template
+    // define if route wants an admin or public template
     $uri_segment = $this->ci->uri->segments;
     $tpl_type = (count($uri_segment) && $uri_segment[1] == 'admin') ? 'admin' : 'public';
     $tpl_name = 'tpl_'.$tpl_type.'_name';
@@ -110,10 +115,19 @@ class Render implements IViews {
     $this->template = new Template($this->config->item($tpl_name), $tpl_type, $this->config->item('tpl_root_path'));
 
     // then build template layout for renderer
-    $this->template->build_layout();
+    if (!$this->build_layout())
+      return false;
 
     // if layout is not set return false, otherwise return true
-    return ($this->template->get('layout') instanceof Layout) ?? true ?? false;
+    return ($this->layout instanceof Layout) ?? true ?? false;
+  }
+
+  /**
+  * build_layout method would to make a new layout following template & layout type and rules
+  */
+  public function build_layout() {
+    $this->layout = new Layout($this->template);
+    return $this->layout->build();
   }
 
   /**
@@ -126,15 +140,30 @@ class Render implements IViews {
     $tpl_type = $this->template->get('type');
 
     // build current sub view requested with data received
-    $content = $this->ci->load->view($tpl_type.'/'.$this->view, $this->data, true);
+    // choose to load view with CI_Parser or via CI_Loader library
+    if ($this->load_parser)
+      $body_content = array('renderer' => $this->layout->set('renderer', $this->ci->parser->parse($tpl_type.'/'.$this->view, array($this->data), true)));
+    else
+      $body_content = array('renderer' => $this->layout->set('renderer', $this->ci->load->view($tpl_type.'/'.$this->view, $this->data, true)));
+
+    // reset body layout to include requested view file to load
+    $this->layout->set('body', $this->ci->parser->parse($this->layout->get('path').'body', $body_content, true));
+
+    // set final values for layout view file
+    $content = array(
+      'template' => $this->template,
+      'layout' => $this->layout
+    );
 
     // then build full html view with current view as data content
     // and return true or return a string representing a full html page requested by client (HTTP request/response protocol)
     // following return_output value
-    if ($this->return_output)
+    if ($this->return_output) {
       return ($this->output = $this->ci->load->view($this->template->get('type').'/'.$this->index, $content, true));
-    $this->output = $this->ci->load->view($tpl_type.'/'.$this->index, $content);
-    return true;
+    } else {
+      $this->output = $this->ci->load->view($tpl_type.'/'.$this->index, $content);
+      return true;
+    }
   }
 
   protected function build_views() {
@@ -160,6 +189,7 @@ class Render implements IViews {
     }
 
     // then reset attributes
+    $this->view = $views;
     $this->output = $output;
     $this->return_output = $return_output;
 

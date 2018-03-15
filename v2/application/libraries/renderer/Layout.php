@@ -17,6 +17,12 @@ require_once 'IViews.php';
 class Layout implements IViews {
 
   /**
+  * ci attribute would to store current CodeIgniter instance
+  * used to config Render class
+  */
+  protected $ci = null;
+
+  /**
   * config attribute would to be a copy of current CI_Config instance
   */
   protected $config = null;
@@ -27,7 +33,74 @@ class Layout implements IViews {
   */
   protected $builder = null;
 
-  public function __construct() {
+  protected $template = null;
+
+  protected $path = null;
+
+  protected $head = null;
+
+  protected $nav_menu = null;
+
+  protected $side_menu = null;
+
+  protected $body = null;
+
+  protected $renderer = null;
+
+  protected $foot = null;
+
+  public function __construct(Template $template = null) {
+    $this->ci = &get_instance();
+    $this->config = $this->ci->config;
+    $this->template = $template;
+  }
+
+  public function build() {
+    $this->path = $this->template->get('type').'/parts/';
+    $parts = $this->get_printable_parts();
+    $output = "";
+
+    foreach ($parts as $part) {
+      if (property_exists($this, $part)) {
+        $data = array('renderer' => $this->renderer);
+        $output = $this->ci->load->view($this->path.$part, $data, true);
+        $this->$part = $output;
+      }
+    }
+    return $this->is_built();
+  }
+
+  public function echo($part = null) {
+    if (!$this->is_built())
+      return false;
+    $printable_parts = $this->get_printable_parts();
+    if (property_exists($this, $part) && in_array($part, $printable_parts)) {
+      echo $this->$part;
+    } else {
+      echo "";
+    }
+  }
+
+  protected function get_printable_parts() {
+    if ($this->template->get('type') == 'admin')
+      $printable_parts = $this->config->item('layout_admin_parts');
+    else
+      $printable_parts = $this->config->item('layout_public_parts');
+    return $printable_parts;
+  }
+
+  public function is_built() {
+    if (!$this->template instanceof Template)
+      return false;
+      $parts = $this->get_printable_parts();
+
+    foreach ($parts as $part) {
+      if (!property_exists($this, $part))
+        return false;
+      if (is_null($this->$part) || !is_string($this->$part))
+        return false;
+    }
+    return true;
   }
 
   /**

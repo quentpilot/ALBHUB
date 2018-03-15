@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Administrator extends CI_Controller {
+class Administrator extends MY_Admin_Controller {
 
 	/**
 	 * Index Page for this controller.
