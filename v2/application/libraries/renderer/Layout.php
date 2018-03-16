@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 *
 * @date 2018-03-14
 * @author Quentin Le Bian <quentin.lebian@pilotaweb.fr>
-* @see MY_Controller, Render as example
+* @see Template, Render as example
 */
 
 require_once 'IViews.php';
@@ -29,10 +29,10 @@ class Layout implements IViews {
   protected $config = null;
 
   /**
-  * builder attribute would to be an instance of current layout builder class
-  * used to template rules and more
+  * model attribute would to be an instance of current model class
+  * used to get related data for each patrial view
   */
-  protected $builder = null;
+  protected $model = null;
 
   /**
   * template attribute would to be an instance of current template class
@@ -57,29 +57,15 @@ class Layout implements IViews {
   protected $head = null;
 
   /**
-  * nav_menu attribute would to be the main menu navigation html part represents as string
-  */
-  protected $nav_menu = null;
-
-  /**
-  * side_menu attribute would to be the menu side html part represents as string
-  */
-  protected $side_menu = null;
-
-  /**
   * body attribute would to be the body html part represents as string
   */
   protected $body = null;
 
   /**
   * renderer attribute would to be the subview dynamic content html part represents as string
+  * on the future, it will be an a dynamic array representing each partial view
   */
   protected $renderer = null;
-
-  /**
-  * foot attribute would to be the foot html part represents as string
-  */
-  protected $foot = null;
 
   /**
   * constructor which would to set main Layout attributes
@@ -89,89 +75,87 @@ class Layout implements IViews {
     $this->config = $this->ci->config;
     $this->template = $template;
     $this->render = $render;
+    $this->renderer = array();
   }
 
   /**
-  * build() method would to build each partial view from parts/ repository
+  * build method would to build each partial view from parts/ repository
   */
   public function build() {
-    $this->path = $this->template->get('type').'/parts/';
+    $this->path = $this->template->get('type').'/'.$this->template->get('name').'/parts/';
+    $this->model = $this->new_model();
+    $instance = $this->new_model();
     $parts = $this->get_printable_parts();
     $output = "";
     $body_content = array();
+    $data = array();
 
-    $body_content['js_files'] = $this->template->load_js();
-    $body_content['assets_url'] = base_url() . $this->template->get('path');
+    // build each body partial views
     foreach ($parts as $part) {
-      if (property_exists($this, $part) && $part != 'body') {
+      if ($part != 'body') {
         // select data to use for each part
-        $part_data = ucfirst($part);
-        if ($part == 'head')
-          $data = array('assets_url' => $body_content['assets_url'], 'css_files' => $this->template->load_css(), 'ttf_files' => $this->template->load_fonts());
-        else
-          $data = array($part.'_content' => $part_data);
+        $data[$part] = $this->get_data($part);
         if ($this->render->get('load_parser'))
-          $output = $this->ci->parser->parse($this->path.$part, $data, true);
+          $output = $this->ci->parser->parse($this->path.$part, $data[$part], true);
         else
-          $output = $this->ci->load->view($this->path.$part, $data, true);
+          $output = $this->ci->load->view($this->path.$part, $data[$part], true);
+        // head is not a part of body view
         if ($part != 'head')
           $body_content[$part.'_content'] = $output;
-        $this->$part = $output;
+        // store final partial view to a dynamic array
+        $this->renderer[$part] = $output;
       }
     }
-
-    /*$render_data = $this->render->get('data');
-    $view_content['assets_url'] = base_url() . $this->template->get('path');
-    if (is_null($render_data))
-      $render_data = array($view_content);
-    else
-        $render_data = array_combine($this->render->get('data'), $view_content);*/
-
-    //$this->render->set('data', $render_data);
+    $this->head = $this->renderer['head'];
 
     // build body view
+    $body_content = array_merge($body_content, $this->get_data('body'));
     if ($this->render->get('load_parser')) {
-      $body_content['body_content'] = $this->ci->parser->parse($this->template->get('type').'/'.$this->render->get('view'), array('assets_url' => $body_content['assets_url'], $this->render->get('data')), true);
+      $body_content['body_content'] = $this->ci->parser->parse($this->render->get('path').'/'.$this->render->get('view'), $this->get_data('body'), true);
       $this->body = $this->ci->parser->parse($this->path.'body', $body_content, true);
     } else {
-      $body_content['body_content'] = $this->ci->load->view($this->template->get('type').'/'.$this->render->get('view'), array('assets_url' => $body_content['assets_url'], $this->render->get('data')), true);
+      $body_content['body_content'] = $this->ci->load->view($this->render->get('path').'/'.$this->render->get('view'), $this->get_data('body'), true);
       $this->body = $this->ci->load->view($this->path.'body', $body_content, true);
     }
-
-    return $this->is_built();
-  }
-
-  public function build_() {
-    $this->path = $this->template->get('type').'/parts/';
-    $parts = $this->get_printable_parts();
-    $output = "";
-
-    foreach ($parts as $part) {
-      if (property_exists($this, $part)) {
-        $data = array('renderer' => $this->renderer);
-        $output = $this->ci->load->view($this->path.$part, $data, true);
-        $this->$part = $output;
-      }
-    }
     return $this->is_built();
   }
 
   /**
-  * echo() methods would help to print the wanted partial view into the layout.php file
+  * new_model method creates a new instance of the current template model class.
+  * for each template a class is mandatory
   */
-  public function echo($part = null) {
-    if (!$this->is_built())
-      return false;
-    $printable_parts = $this->get_printable_parts();
-    if (property_exists($this, $part) && in_array($part, $printable_parts)) {
-      echo $this->$part;
-    } else {
-      echo "";
+  protected function new_model() {
+    $instance = null;
+    $base_name = 'Template_model';
+    $suffix = '_template_model';
+    $name = $this->template->get('name');
+    $class_name = null;
+    if ($name == null)
+      $class_name = $base_name;
+    else {
+      $preffix = str_replace('-', '', $name);
+      $preffix = strtolower($preffix);
+      $class_name = $preffix.$suffix;
     }
+    $this->ci->load->model('template/Template_model');
+    $this->ci->load->model('template/'.$class_name);
+    $class_name = ucfirst($class_name);
+    $instance = new $class_name($this->template, $this->render);
+    return $instance;
   }
 
   /**
-  * get_printable_parts() method would to get all partial view filename from config file (templates.php)
+  * get_data method would to get current partial view data to transfert from model
+  */
+  protected function get_data($part = null) {
+    $tpl_type = $this->template->get('type');
+    $data = array();
+    $data = $this->model->get_partial($part, $tpl_type);
+    return $data;
+  }
+
+  /**
+  * get_printable_parts method would to get all partial view filename from config file (templates.php)
   * following template type to use
   */
   protected function get_printable_parts() {
@@ -183,20 +167,32 @@ class Layout implements IViews {
   }
 
   /**
-  * is_built() method is the final to check if each partial view has been create
+  * is_built method is the final to check if each partial view has been create
   */
   public function is_built() {
-    if (!$this->template instanceof Template || !$this->render instanceof Render)
+    if (!$this->template instanceof Template || !$this->render instanceof Render || !$this->model instanceof Template_model)
       return false;
-      $parts = $this->get_printable_parts();
-
-    foreach ($parts as $part) {
-      if (!property_exists($this, $part))
+      $render = $this->renderer;
+      if (is_null($this->head) || is_null($this->body) || is_null($render))
         return false;
-      if (is_null($this->$part) || !is_string($this->$part))
-        return false;
-    }
+      foreach ($render as $key => $value) {
+        if (empty($value) || !is_string($value))
+          return false;
+      }
     return true;
+  }
+
+  /**
+  * echo methods would help to print the wanted partial view into the layout.php file
+  */
+  public function echo($part = null) {
+    if (!$this->is_built())
+      return false;
+    $printable_parts = $this->get_printable_parts();
+    if (property_exists($this, $part) && in_array($part, $printable_parts))
+      echo $this->$part;
+    else
+      echo $this->renderer[$part];
   }
 
   /**

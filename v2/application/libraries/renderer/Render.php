@@ -52,6 +52,11 @@ class Render implements IViews {
   protected $view = null;
 
   /**
+  * path attribute is the full path of the current template view repository
+  */
+  protected $path = null;
+
+  /**
   * data attribut is an array of all the dynamic data used through
   * current view file to display
   */
@@ -78,13 +83,13 @@ class Render implements IViews {
   * constructor to set main attributes
   */
   public function __construct($load_parser = false, $view = null, $data = array(), $return_output = false) {
-      $this->ci = &get_instance();
-      $this->config = $this->ci->config;
-      $this->load_parser = $load_parser;
-      $this->index = 'layout';
-      $this->view = $view;
-      $this->data = (is_array($data) && !count($data)) ?? array('null') ?? $data;
-      $this->return_output = $return_output;
+    $this->ci = &get_instance();
+    $this->config = $this->ci->config;
+    $this->load_parser = $load_parser;
+    $this->index = 'layout';
+    $this->view = $view;
+    $this->data = (is_array($data) && !count($data)) ?? array('null' => 'yes') ?? $data;
+    $this->return_output = $return_output;
   }
 
   /*
@@ -114,13 +119,12 @@ class Render implements IViews {
 
     // create a new template
     $this->template = new Template($this->config->item($tpl_name), $tpl_type, $this->config->item('tpl_root_path'));
-    return true;
-    // then build template layout for renderer
-    //if (!$this->build_layout())
-      //return false;
 
-    // if layout is not set return false, otherwise return true
-    //return ($this->layout instanceof Layout) ?? true ?? false;
+    // build final view path
+    $tpl_type = $this->template->get('type');
+    $tpl_name = $this->template->get('name');
+    $this->path = "$tpl_type/$tpl_name";
+    return true;
   }
 
   /**
@@ -140,31 +144,20 @@ class Render implements IViews {
   protected function build_view() {
     if (!$this->build_layout())
       return false;
-    $tpl_type = $this->template->get('type');
-
-    // build current sub view requested with data received
-    // choose to load view with CI_Parser or via CI_Loader library
-    /*if ($this->load_parser)
-      $body_content = array('renderer' => $this->layout->set('renderer', $this->ci->parser->parse($tpl_type.'/'.$this->view, array($this->data), true)));
-    else
-      $body_content = array('renderer' => $this->layout->set('renderer', $this->ci->load->view($tpl_type.'/'.$this->view, $this->data, true)));
-
-    // reset body layout to include requested view file to load
-    $this->layout->set('body', $this->ci->parser->parse($this->layout->get('path').'body', $body_content, true));*/
-
     // set final values for layout view file
     $content = array(
+      'response' => $this->data,
       'template' => $this->template,
-      'layout' => $this->layout
+      'layout' => $this->layout,
     );
 
     // then build full html view with current view as data content
     // and return true or return a string representing a full html page requested by client (HTTP request/response protocol)
     // following return_output value
     if ($this->return_output) {
-      return ($this->output = $this->ci->load->view($this->template->get('type').'/'.$this->index, $content, true));
+      return ($this->output = $this->ci->load->view($this->path.'/'.$this->index, $content, true));
     } else {
-      $this->output = $this->ci->load->view($tpl_type.'/'.$this->index, $content);
+      $this->output = $this->ci->load->view($this->path.'/'.$this->index, $content);
       return true;
     }
   }

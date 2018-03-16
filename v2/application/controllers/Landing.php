@@ -9,10 +9,6 @@ class Landing extends MY_Controller {
 
   public function index()
 	{
-    //print_r($this->config->config);
-    //print_r($this->render->get('template'));
-		//$this->load->view('welcome_message');
-    //$this->render('index', null, false, true);
     $this->render();
 	}
 }

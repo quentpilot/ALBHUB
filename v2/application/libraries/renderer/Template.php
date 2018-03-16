@@ -8,7 +8,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 *
 * @date 2018-03-14
 * @author Quentin Le Bian <quentin.lebian@pilotaweb.fr>
-* @see MY_Controller, Render as example
+* @see Render as example
 */
 
 require_once 'IViews.php';
@@ -84,19 +84,22 @@ class Template implements IViews {
   * load_css method would to find and build an array of css files to use for current view
   * except filename in params
   */
-  public function load_css($except = array(), $r_string = true, $echo = false) {
+  public function load_css($echo = false, $r_string = true) {
     $css = array();
-    $files = scandir($this->css_path);
+    if (count($this->config->item('tpl_css_files')))
+      $files = $this->config->item('tpl_css_files');
+    else
+      $files = scandir(APPPATH . '../'. $this->css_path);
     //return $files;
     foreach ($files as $file => $name) {
       //echo $name;
       $exploded = explode('.', $name);
-      $ext = $exploded[1];
-      if (!in_array($name, array('.', '..')) && !in_array($name, $except) && $ext == 'css') {
+      $ext = $exploded[count($exploded) - 1];
+      if (!in_array($name, array('.', '..')) && $ext == 'css') {
         if ($echo)
-          echo ($css[] = '<link rel="stylesheet" href="'.$this->css_path.'/'.$name.'">');
+          echo ($css[] = '<link rel="stylesheet" href="'.base_url().$this->css_path.'/'.$name.'">');
         else
-          $css[] = '<link rel="stylesheet" href="'.$this->css_path.'/'.$name.'">';
+          $css[] = '<link rel="stylesheet" href="'.base_url().$this->css_path.'/'.$name.'">';
       }
     }
 
@@ -111,18 +114,21 @@ class Template implements IViews {
   * load_js method would to find and build an array of js files to use for current view
   * except filename in params
   */
-  public function load_js($except = array(), $r_string = true, $echo = false) {
+  public function load_js($echo = false, $r_string = true, $except = array()) {
     $js = array();
-    $files = scandir($this->js_path);
+    if (count($this->config->item('tpl_js_files')))
+      $files = $this->config->item('tpl_js_files');
+    else
+      $files = scandir($this->js_path);
 
     foreach ($files as $file => $name) {
       $exploded = explode('.', $name);
-      $ext = $exploded[1];
+      $ext = $exploded[count($exploded) - 1];
       if (!in_array($name, array('.', '..')) && !in_array($name, $except) && $ext == 'js') {
         if ($echo)
-          echo ($js[] = '<script src="'.$this->js_path.'/'.$name.'"></script>');
+          echo ($js[] = '<script src="'.base_url().$this->js_path.'/'.$name.'"></script>');
         else
-          $js[] = '<script src="'.$this->js_path.'/'.$name.'"></script>';
+          $js[] = '<script src="'.base_url().$this->js_path.'/'.$name.'"></script>';
       }
     }
 
@@ -137,12 +143,11 @@ class Template implements IViews {
   * load_font method would to find and build an array of ttf files to use for current view
   * except filename in params
   */
-  public function load_fonts($ufiles = array(), $except = array(), $r_string = true, $echo = false) {
+  public function load_fonts($ufiles = array(), $echo = false, $r_string = true, $except = array()) {
     $ttf = array();
     $subdir = $this->config->item('tpl_ttf_files');
     if (count($subdir))
       $this->ttf_path .'/'. implode(',', $subdir);
-    //$files = (is_array($ufiles) && count($ufiles)) ?? $ufiles ?? scandir($this->ttf_path);
     $files = scandir($this->ttf_path);
 
     foreach ($files as $file => $name) {
@@ -152,9 +157,9 @@ class Template implements IViews {
 
       if (!in_array($name, array('.', '..')) && !in_array($name, $except) && $ext == 'ttf') {
         if ($echo)
-          echo ($ttf[] = '<link rel="stylesheet" type="font/ttf" href="'.$this->ttf_path.'/'.$name.'">');
+          echo ($ttf[] = '<link rel="stylesheet" type="font/ttf" href="'.base_url().$this->ttf_path.'/'.$name.'">');
         else
-          $ttf[] = '<link rel="stylesheet" type="font/ttf" href="'.$this->ttf_path.'/'.$name.'">';
+          $ttf[] = '<link rel="stylesheet" type="font/ttf" href="'.base_url().$this->ttf_path.'/'.$name.'">';
       }
     }
 
@@ -163,14 +168,6 @@ class Template implements IViews {
       $ttf = str_replace(',', '', $ttf);
     }
     return $ttf;
-  }
-
-  public function load_files($files = array(), $except = array(), $r_string = true, $echo = false) {
-
-  }
-
-  public function load_scandir($except = array(), $r_string = true, $echo = false) {
-
   }
 
   /**
