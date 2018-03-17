@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Landing_model extends MY_Model {
+class Page_model extends MY_Model {
 
   public function __construct() {
     parent::__construct();
   }
 
   public function get_page($slug = null) {
-    return $this->result(array('title' => 'welcome'));
+    return array('title' => 'index');
   }
 }

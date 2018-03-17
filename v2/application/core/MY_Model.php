@@ -25,10 +25,19 @@ class MY_Model extends CI_Model {
 
    public function __construct($request = null, $process = false, $use_query_parser = false) {
      parent::__construct();
-     $this->use_query_parser = $use_query_parser;
+     /*$this->use_query_parser = $use_query_parser;
      $this->request = ((is_string($request)) || (is_array($request)) || $request instanceof Req) ?? $request ?? null;
      // once use_request_parser defined, check through AI parser if request is ok (string, array or instance...)
-     $this->response = ($process) ?? $this->build() ?? null;
+     $this->response = ($process) ? $this->build() : null;*/
+   }
+
+   public function response($query = null, $data = null, $type = null, $result = null) {
+     $this->response->query($query, $data, $type);
+     return $this->response->result();
+   }
+
+   public function result($data = null) {
+     return $data;
    }
 
    protected function build() {

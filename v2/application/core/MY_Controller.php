@@ -21,11 +21,12 @@ class MY_Controller extends CI_Controller {
 	 */
 
    protected $request = null;
-   protected $response = null;
    protected $view = null;
 
    public function __construct() {
      parent::__construct();
+     $this->request = $this->req;
+     $this->response = $this->res;
      $this->view = new Render(true);
      $this->_config();
    }
@@ -41,11 +42,7 @@ class MY_Controller extends CI_Controller {
 
    public function request($query = null, $data = null, $type = null) {
      $this->request->query($query, $data, $type);
-     return $this->response();
-   }
-
-   public function response($query = null, $data = null, $type = null, $result = null) {
-     $this->response->result($query, $data, $type);
-     return $this->response;
+     return $this->request->result();
+     //return $this->response();
    }
 }

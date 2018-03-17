@@ -63,7 +63,12 @@ $autoload['libraries'] = array(
   'session',
   'parser',
   'form_validation',
+  'transfert/protocol/validation/validation',
+  'transfert/protocol/rules',
   'transfert/protocol/protocol',
+  'transfert/parser/query_parser',
+  'transfert/query/query',
+  'transfert/transfert',
   'transfert/request/req',
   'transfert/response/res',
   'renderer/layout',
@@ -114,7 +119,7 @@ $autoload['helper'] = array('url');
 | config files.  Otherwise, leave it blank.
 |
 */
-$autoload['config'] = array('templates');
+$autoload['config'] = array('templates', 'transferts');
 
 /*
 | -------------------------------------------------------------------
@@ -145,5 +150,6 @@ $autoload['language'] = array();
 */
 $autoload['model'] = array(
   'template/template_model',
-  'landing_model'
+  'landing_model',
+  'page_model'
 );

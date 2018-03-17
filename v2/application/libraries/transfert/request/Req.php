@@ -1,52 +1,20 @@
 <?php
 
-require_once APPPATH . 'libraries/transfert/ITransfert.php';
+require_once APPPATH . 'libraries/transfert/Transfert.php';
 
-class Req implements ITransfert {
+/**
+* Req library class is a child of Transfert class
+* Goal is to format transfert actions classes through controller and model
+*
+* use Req to transfert request from controller to model
+*
+* @date 2018-03-17
+* @author Quentin Le Bian <quentin.lebian@pilotaweb.fr>
+* @see MY_Controller as example
+*/
+class Req extends Transfert {
 
-  protected $query = null;
-
-  protected $data = null;
-
-  protected $type = null;
-
-  protected $protocol = null;
-
-  protected $error = null;
-
-  public function __construct($data = null, $type = null, $protocol = null) {
-    $this->data = $data;
-    $this->type = $type;
-    $protocol = (is_null($protocol)) ? new Protocol() : $protocol;
-  }
-
-  public function query($query = null, $data = null, $type = null) {
-    $this->query = $query;
-    $this->data = $data;
-    $this->type = $type;
-    return true;
-  }
-
-  /**
-  * get method would to return class attribute value entered as param
-  */
-  public function get($property = null) {
-    if (is_null($property))
-      return false;
-    if (property_exists($this, $property))
-      return $this->$property;
-  }
-
-  /**
-  * set method would to set attribute choosen with wanted value
-  */
-  public function set($property = null, $value = null) {
-    if (is_null($property))
-      return false;
-    if (property_exists($this, $property)) {
-      $this->$property = $value;
-      return $value;
-    }
-    return null;
+  public function __construct($query = null, $data = null, $type = null, $protocol = null) {
+    parent::__construct($query, $data, $type, $protocol);
   }
 }
