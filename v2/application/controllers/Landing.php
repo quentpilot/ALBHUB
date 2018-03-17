@@ -11,4 +11,8 @@ class Landing extends MY_Controller {
 	{
     $this->render();
 	}
+
+  public function bienvenue() {
+    $this->render();
+  }
 }

@@ -16,7 +16,6 @@ class Render implements IViews {
 
   /**
   * ci attribute would to store current CodeIgniter instance
-  * used to config Render class
   */
   protected $ci = null;
 
@@ -87,7 +86,7 @@ class Render implements IViews {
     $this->config = $this->ci->config;
     $this->load_parser = $load_parser;
     $this->index = 'layout';
-    $this->view = $view;
+    $this->view = is_array($view) ? $view : array($view);
     $this->data = (is_array($data) && !count($data)) ?? array('null' => 'yes') ?? $data;
     $this->return_output = $return_output;
   }
@@ -96,14 +95,11 @@ class Render implements IViews {
   * render method to set and build view output to load and display what controller wants
   */
   public function render($view = null, $data = array(), $return_output = false, $load_parser = false) {
-    $this->view = $view;
+    // able to load only one or several views
+    $this->view = is_array($view) ? $view : array($view);
     $this->data = $data;
     $this->return_output = $return_output;
     $this->parser = $load_parser;
-
-    // able to load only one or several views
-    if (is_array($view))
-      return $this->build_views();
     return $this->build_template() ? $this->build_view() : false;
   }
 
@@ -112,10 +108,14 @@ class Render implements IViews {
   * following Render::render() methods params
   */
   protected function build_template() {
-    // define if route wants an admin or public template
+    // define if current route wants an admin or public template
     $uri_segment = $this->ci->uri->segments;
     $tpl_type = (count($uri_segment) && $uri_segment[1] == 'admin') ? 'admin' : 'public';
     $tpl_name = 'tpl_'.$tpl_type.'_name';
+
+    // set template config file
+    if (!$this->set_config($tpl_type, $tpl_name))
+      return false;
 
     // create a new template
     $this->template = new Template($this->config->item($tpl_name), $tpl_type, $this->config->item('tpl_root_path'));
@@ -142,8 +142,10 @@ class Render implements IViews {
   * @return boolean or string defining current view file to load
   */
   protected function build_view() {
+    // build partial views
     if (!$this->build_layout())
       return false;
+
     // set final values for layout view file
     $content = array(
       'response' => $this->data,
@@ -154,6 +156,7 @@ class Render implements IViews {
     // then build full html view with current view as data content
     // and return true or return a string representing a full html page requested by client (HTTP request/response protocol)
     // following return_output value
+    // note that for the layout file which use objects, CI_Parser couldn't be used
     if ($this->return_output) {
       return ($this->output = $this->ci->load->view($this->path.'/'.$this->index, $content, true));
     } else {
@@ -167,9 +170,9 @@ class Render implements IViews {
     if (!$this->build_template())
       return false;
 
-      // store and reset views to not having string conversion conflict in build_view() method
-      $views = $this->view;
-      $this->view = null;
+    // store and reset views to not having string conversion conflict in build_view() method
+    $views = $this->view;
+    $this->view = null;
 
     // store output status we finally want
     $return_output = $this->return_output;
@@ -193,6 +196,18 @@ class Render implements IViews {
     if ($this->return_output)
       return $this->output;
     echo $this->output;
+    return true;
+  }
+
+  /**
+  * set_config method would to select the current template config file to load
+  */
+  protected function set_config($tpl_type = null, $tpl_name = null) {
+    $t_name = $this->config->item($tpl_name);
+    $t_type = $tpl_type;
+    $file_path = "../views/$t_type/$t_name/config/template";
+    $this->ci->config->load($file_path);
+    $this->config = $this->ci->config;
     return true;
   }
 

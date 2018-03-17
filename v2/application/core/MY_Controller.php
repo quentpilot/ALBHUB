@@ -16,6 +16,7 @@ class MY_Controller extends CI_Controller {
 	 *
 	 * So any other public methods not prefixed with an underscore will
 	 * map to /index.php/welcome/<method_name>
+   *
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
 
@@ -26,6 +27,12 @@ class MY_Controller extends CI_Controller {
    public function __construct() {
      parent::__construct();
      $this->view = new Render(true);
+     $this->_config();
+   }
+
+   protected function _config() {
+     // set template dynamically from db or config file
+     $this->config->set_item('tpl_public_name', 'albi-corporate');
    }
 
    public function render($view = 'index', $data = null, $return = false, $parser = true) {

@@ -17,7 +17,6 @@ class Template implements IViews {
 
   /**
   * ci attribute would to store current CodeIgniter instance
-  * used to config Render class
   */
   protected $ci = null;
 

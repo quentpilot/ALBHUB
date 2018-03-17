@@ -19,7 +19,6 @@ class Layout implements IViews {
 
   /**
   * ci attribute would to store current CodeIgniter instance
-  * used to config Render class
   */
   protected $ci = null;
 
@@ -62,8 +61,8 @@ class Layout implements IViews {
   protected $body = null;
 
   /**
-  * renderer attribute would to be the subview dynamic content html part represents as string
-  * on the future, it will be an a dynamic array representing each partial view
+  * renderer attribute would be the subviews content html parts built
+  * a dynamic array representing each partial view
   */
   protected $renderer = null;
 
@@ -80,11 +79,12 @@ class Layout implements IViews {
 
   /**
   * build method would to build each partial view from parts/ repository
+  *
+  * @see Render::build_view()
   */
   public function build() {
     $this->path = $this->template->get('type').'/'.$this->template->get('name').'/parts/';
     $this->model = $this->new_model();
-    $instance = $this->new_model();
     $parts = $this->get_printable_parts();
     $output = "";
     $body_content = array();
@@ -108,21 +108,45 @@ class Layout implements IViews {
     }
     $this->head = $this->renderer['head'];
 
-    // build body view
+    // build body view which is the dynamic partial view asked by controller
     $body_content = array_merge($body_content, $this->get_data('body'));
     if ($this->render->get('load_parser')) {
-      $body_content['body_content'] = $this->ci->parser->parse($this->render->get('path').'/'.$this->render->get('view'), $this->get_data('body'), true);
+      $body_content['body_content'] = $this->build_content('parser');
       $this->body = $this->ci->parser->parse($this->path.'body', $body_content, true);
     } else {
-      $body_content['body_content'] = $this->ci->load->view($this->render->get('path').'/'.$this->render->get('view'), $this->get_data('body'), true);
+      $body_content['body_content'] = $this->build_content();
       $this->body = $this->ci->load->view($this->path.'body', $body_content, true);
     }
     return $this->is_built();
   }
 
   /**
+  * build_content method would to build one or several view files asked from controller
+  * to body content when call the Render::render() method
+  *
+  * TODO : create classes protocol to manage engine/data for each view to avoid useless condidion codes
+  * @see Layout::build()
+  */
+  protected function build_content($engine = 'loader') {
+    $path = $this->render->get('path').'/';
+    $data = $this->get_data('body');
+    $views = $this->render->get('view');
+    $output = null;
+
+    foreach ($views as $view) {
+      if ($engine == 'loader')
+        $output .= $this->ci->load->view($path.$view, $data, true);
+      elseif ($engine == 'parser')
+        $output .= $this->ci->parser->parse($path.$view, $data, true);
+    }
+    return $output;
+  }
+
+  /**
   * new_model method creates a new instance of the current template model class.
   * for each template a class is mandatory
+  *
+  * @see Layout::build()
   */
   protected function new_model() {
     $instance = null;
@@ -146,6 +170,8 @@ class Layout implements IViews {
 
   /**
   * get_data method would to get current partial view data to transfert from model
+  *
+  * @see Layout::build()
   */
   protected function get_data($part = null) {
     $tpl_type = $this->template->get('type');
@@ -184,6 +210,8 @@ class Layout implements IViews {
 
   /**
   * echo methods would help to print the wanted partial view into the layout.php file
+  *
+  * @see layout.php view file
   */
   public function echo($part = null) {
     if (!$this->is_built())

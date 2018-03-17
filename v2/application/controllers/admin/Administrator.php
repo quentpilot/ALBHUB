@@ -18,8 +18,15 @@ class Administrator extends MY_Admin_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
-	public function index()
-	{
+	public function index() {
+		$this->load->view('welcome_message');
+	}
+
+	public function manage($section) {
+		$this->load->view('welcome_message');
+	}
+
+	public function section($type) {
 		$this->load->view('welcome_message');
 	}
 }

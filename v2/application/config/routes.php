@@ -51,10 +51,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $route['default_controller'] = 'landing';
 $route['404_override'] = '';
-$route['translate_uri_dashes'] = FALSE;
+$route['translate_uri_dashes'] = TRUE;
+
+/**
+* main albi-corporate web app routes
+*/
+// public root methods
 $route['index'] = 'landing';
-$route['bienvenue'] = 'landing';
+$route['bienvenue'] = 'landing/bienvenue';
+$route['a-propos'] = 'page/a-propos';
+$route['nos-services'] = 'page/nos_services';
+$route['nos-realisations'] = 'page/nos_realisations';
+$route['nous-contacter'] = 'page/nous_contacter';
+
+// public dyanamic methods
+$route['nos-realisations/(:any)'] = 'page/portfolio/$1';
+$route['nos-realisations/(:any)/(:any)'] = 'page/project/$1';
+
+// admin root methods
+$route['admin'] = 'admin/administrator';
+$route['admin/manager/(:any)'] = 'admin/administrator/manage/$1';
+$route['admin/manager/(:any)/(:any)'] = 'admin/administrator/section/$1';
+
+/**
+* Haby infos routes
+*/
 $route['haby/index'] = 'welcome';
 $route['haby/(:any)'] = 'welcome/$1';
-$route['admin'] = 'admin/administrator';
-$route['admin/(:any)'] = 'admin/$1';
