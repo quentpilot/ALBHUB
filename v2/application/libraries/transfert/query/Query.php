@@ -18,18 +18,30 @@ require_once APPPATH . 'libraries/transfert/ITransfert.php';
 */
 class Query implements ITransfert {
 
+  /**
+  * parser attribute would to be an instance of the current parser to use
+  */
   protected $parser = null;
 
+  /**
+  * error attribute store error messages if parser failed
+  */
   protected $error = null;
 
   public function __construct($query = null) {
     $this->parser = new Query_parser($query);
   }
 
+  /**
+  * parse method would to run the query parser to define each model and method to load
+  */
   public function parse($query = null) {
     return $this->parser->parse($query);
   }
 
+  /**
+  * is_parsed method would to check if parser failed or not
+  */
   public function is_parsed() {
     if (!is_null($this->parser->get('commands')))
       return true;

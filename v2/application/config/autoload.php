@@ -59,10 +59,12 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
 $autoload['libraries'] = array(
+  // main CI libraries
   'database',
   'session',
   'parser',
   'form_validation',
+  // Haby libraries used to controllers and models
   'transfert/protocol/validation/validation',
   'transfert/protocol/rules',
   'transfert/protocol/protocol',
@@ -71,6 +73,7 @@ $autoload['libraries'] = array(
   'transfert/transfert',
   'transfert/request/req',
   'transfert/response/res',
+  // Haby libraries used to build and display the final output
   'renderer/layout',
   'renderer/template',
   'renderer/render',

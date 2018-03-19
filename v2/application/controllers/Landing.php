@@ -19,12 +19,14 @@ class Landing extends MY_Controller {
     $req = array(
       'page_model' => 'get_page',
       'landing_model' => 'get_page',
+      //'admin/admin_model' => 'get_page',
     );
 
-    $this->request("page_model get_page, landing_model get_page");
-    $this->request($req);
+    //print_r($this->request("page_model get_page, landing_model get_page"));
+    //$this->request($req);
     //print_r($this->request($req));
-    $this->render();
+    $response = $this->request($req);
+    $this->render('index', $response);
 	}
 
   public function bienvenue() {

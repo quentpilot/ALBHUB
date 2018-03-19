@@ -63,7 +63,7 @@
 	<div class="container text-center">
 		<div class="col-md-12">
 			<div class="heading text-center">
-				<h2>Our main focus</h2>
+				<h2>{title_services}</h2>
 			</div>
 			<div class="row">
 				<div class="col-lg-4 col-md-6">

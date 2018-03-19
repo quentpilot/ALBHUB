@@ -8,6 +8,10 @@ class Page_model extends MY_Model {
   }
 
   public function get_page($slug = null) {
-    return array('title' => 'index');
+    $response = array(
+      'title' => 'ALB Impression - Bienvenue',
+      'title_services' => 'Nos Services'
+    );
+    return $this->result($response);
   }
 }

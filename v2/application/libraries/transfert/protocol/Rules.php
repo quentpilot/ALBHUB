@@ -14,6 +14,7 @@ require_once APPPATH . 'libraries/transfert/protocol/IProtocol.php';
 * @see Protocol, Validation as example
 */
 class Rules implements IProtocol {
+
   protected $query_type = null;
   protected $result_key_name = null;
   protected $result_key_type = null;
@@ -21,9 +22,11 @@ class Rules implements IProtocol {
 
   public function __construct($rules = null) {
     $this->set_rules($rules);
-
   }
 
+  /**
+  * set_rules method would to set each rule value needed by protocol validation
+  */
   public function set_rules($rules = null) : bool {
     if (is_null($rules))
       return false;

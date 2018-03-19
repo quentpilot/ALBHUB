@@ -14,9 +14,24 @@ require_once APPPATH . 'libraries/transfert/ITransfert.php';
 */
 class Validation implements ITransfert {
 
+  /**
+  * config attribute would to be an instance of the current CI_Config object
+  */
   protected $config = null;
+
+  /**
+  * transfert attribute would to be a copy of the current Transfert object
+  */
   protected $transfert = null;
+
+  /**
+  * validators attribute would to be an array of each method to check and valid the current transfert result
+  */
   protected $validators = null;
+
+  /**
+  * error attribute store error messages if validation failed
+  */
   protected $error = null;
 
   public function __construct($transfert = null) {
@@ -25,6 +40,9 @@ class Validation implements ITransfert {
     $this->validators = $this->config->item('transfert_protocol')['validation'];
   }
 
+  /**
+  * run method would to process the validation of transfert request
+  */
   public function run($transfert = null) {
     if (!is_null($transfert))
       $this->transfert = $transfert;
@@ -33,6 +51,9 @@ class Validation implements ITransfert {
     return $this->process();
   }
 
+  /**
+  * process method would to check each validators method to determine if transfert result is valid
+  */
   protected function process() {
     $validators = is_array($this->validators) ? $this->validators : array('request', 'response');
 
@@ -46,11 +67,17 @@ class Validation implements ITransfert {
     return false;
   }
 
+  /**
+  * is_valid_request method would to check transfert type of request and protocol rules
+  */
   protected function is_valid_request(Req $request = null) {
     //print_r(gettype($request));
     return true;
   }
 
+  /**
+  * is_valid_response method would to check transfert type of response and protocol rules
+  */
   protected function is_valid_response(Res $response = null) {
     //print_r(gettype($response));
     return true;
