@@ -41,7 +41,7 @@ class Albicorporate_template_model extends Template_model {
       'css_files' => $this->template->load_css(),
       'ttf_files' => $this->template->load_fonts()
     );
-    $data = array_merge($data, (array)$this->render->get('data')['page_model_get_page']);
+    $data = array_merge($data, (array)$this->render->get('data')['pages_model_get_page']);
     return $data;
   }
 
@@ -53,7 +53,7 @@ class Albicorporate_template_model extends Template_model {
       'assets_url' => $this->_asset_path(),
       //'js_files' => $this->template->load_js()
     );
-    $data = array_merge($data, (array)$this->render->get('data')['page_model_get_page']);
+    $data = array_merge($data, (array)$this->render->get('data')['pages_model_get_page']);
     return $data;
   }
 

@@ -70,7 +70,9 @@ class Validation implements ITransfert {
   /**
   * is_valid_request method would to check transfert type of request and protocol rules
   */
-  protected function is_valid_request(Req $request = null) {
+  protected function is_valid_request($request = null) {
+    if (!$request instanceof Req)
+      return false;
     //print_r(gettype($request));
     return true;
   }
@@ -78,7 +80,9 @@ class Validation implements ITransfert {
   /**
   * is_valid_response method would to check transfert type of response and protocol rules
   */
-  protected function is_valid_response(Res $response = null) {
+  protected function is_valid_response($response = null) {
+    if (!$response instanceof Res)
+      return false;
     //print_r(gettype($response));
     return true;
   }

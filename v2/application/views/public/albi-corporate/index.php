@@ -64,6 +64,7 @@
 		<div class="col-md-12">
 			<div class="heading text-center">
 				<h2>{title_services}</h2>
+				<small>{landing_model_load_result}{title}{/landing_model_load_result}</small>
 			</div>
 			<div class="row">
 				<div class="col-lg-4 col-md-6">

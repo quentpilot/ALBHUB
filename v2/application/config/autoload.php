@@ -64,7 +64,7 @@ $autoload['libraries'] = array(
   'session',
   'parser',
   'form_validation',
-  // Haby libraries used to controllers and models
+  // Haby libraries used by controllers and models
   'transfert/protocol/validation/validation',
   'transfert/protocol/rules',
   'transfert/protocol/protocol',
@@ -73,6 +73,18 @@ $autoload['libraries'] = array(
   'transfert/transfert',
   'transfert/request/req',
   'transfert/response/res',
+  'api/api',
+  // Haby libraries used to build and manage items
+  'category/category',
+  'item/item',
+  'item/item_content',
+  'item/page/page',
+  'item/menu/menu',
+  'item/menu/menu_nav',
+  'item/menu/menu_side',
+  'item/article/article',
+  'item/widget/widget',
+  'item/item_factory',
   // Haby libraries used to build and display the final output
   'renderer/layout',
   'renderer/template',
@@ -152,7 +164,16 @@ $autoload['language'] = array();
 |	$autoload['model'] = array('first_model' => 'first');
 */
 $autoload['model'] = array(
+  // Haby models used to manage items
+  'item/item_model',
+  'item/page/page_model',
+  'item/article/article_model',
+  'item/menu/menu_model',
+  'item/widget/widget_model',
+  'item/items_model',
+  //'item/items_model',
+  // Haby models used to manage template data
   'template/template_model',
   'landing_model',
-  'page_model'
+  'pages_model',
 );
