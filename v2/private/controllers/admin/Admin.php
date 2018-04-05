@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Administrator extends MY_Admin_Controller {
+class Admin extends MY_Admin_Controller {
 
 	public function __construct() {
 		parent::__construct();
@@ -12,11 +12,11 @@ class Administrator extends MY_Admin_Controller {
 		$this->render();
 	}
 
-	public function manage($section) {
-		$this->load->view('welcome_message');
+	public function manage($section = null) {
+		//$this->load->view('welcome_message');
 	}
 
-	public function section($type) {
-		$this->load->view('welcome_message');
+	public function section($type = null) {
+		//$this->load->view('welcome_message');
 	}
 }

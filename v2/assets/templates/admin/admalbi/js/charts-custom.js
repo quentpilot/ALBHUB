@@ -413,7 +413,7 @@ $(document).ready(function () {
             }
         },
         data: {
-            labels: ["A", "B", "C", "D", "E", "F", "G", "H"],
+            labels: ["A", "B", "C", "D", "E", "F", "G"],
             datasets: [
                 {
                     label: "Data Set 1",

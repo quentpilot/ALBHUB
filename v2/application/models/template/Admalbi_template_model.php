@@ -51,9 +51,11 @@ class Admalbi_template_model extends Template_model {
   protected function _get_body() {
     $data = array(
       'assets_url' => $this->_asset_path(),
+      'site_url' => site_url(),
       //'js_files' => $this->template->load_js()
     );
-    //$data = array_merge($data, (array)$this->render->get('data')['pages_model_get_page']);
+    //print_r($this->render->get('data')[0]);
+    $data = array_merge($data, (array)$this->render->get('data'));
     return $data;
   }
 
@@ -62,7 +64,8 @@ class Admalbi_template_model extends Template_model {
   */
   protected function _get_nav_menu() {
     $data = array(
-      'assets_url' => $this->_asset_path()
+      'assets_url' => $this->_asset_path(),
+      'site_url' => site_url(),
     );
     $menu_links = array(
       'index' => 'index.html',
@@ -81,7 +84,35 @@ class Admalbi_template_model extends Template_model {
   protected function _get_side_menu() {
     $data = array(
       'assets_url' => $this->_asset_path(),
+      'site_url' => site_url(),
     );
+    $data = array_merge($data, $this->user_model->get_user(get_instance()->session->userdata('username')));
+    return $data;
+  }
+
+  /**
+  * _get_alert_message method would to build an alert message data
+  */
+  protected function _get_alert_message() {
+    $alert_message = $this->session->flashdata('alert_message');
+    if (is_null($alert_message))
+      $data = array(
+        'alert_message' => ''
+      );
+    else {
+      $data = array(
+        'alert_message' => '
+          <div class"col-md-8 col-sm-6 col-md-offset-2 col-sm-offset-3">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              '.$alert_message.'
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+        '
+      );
+    }
     return $data;
   }
 

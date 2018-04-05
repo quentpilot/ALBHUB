@@ -64,6 +64,7 @@ $autoload['libraries'] = array(
   'session',
   'parser',
   'form_validation',
+  'email',
   // Haby libraries used by controllers and models
   'transfert/protocol/validation/validation',
   'transfert/protocol/rules',
@@ -74,6 +75,13 @@ $autoload['libraries'] = array(
   'transfert/request/req',
   'transfert/response/res',
   'api/api',
+  // Haby data access objects
+  'dao/dao',
+  // Haby libraries used to manage users
+  'user/user_session',
+  'user/user_infos',
+  'user/connect/user_log',
+  'email/email_config',
   // Haby libraries used to build and manage items
   'category/category',
   'item/item',
@@ -120,7 +128,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('url');
+$autoload['helper'] = array('url', 'debug', 'token');
 
 /*
 | -------------------------------------------------------------------
@@ -171,7 +179,8 @@ $autoload['model'] = array(
   'item/menu/menu_model',
   'item/widget/widget_model',
   'item/items_model',
-  //'item/items_model',
+  // Haby models used to get users infos
+  'user/user_model',
   // Haby models used to manage template data
   'template/template_model',
   'landing_model',

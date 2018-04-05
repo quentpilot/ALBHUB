@@ -4,16 +4,16 @@
     <div class="search-box">
       <button class="dismiss"><i class="icon-close"></i></button>
       <form id="searchForm" action="#" role="search">
-        <input type="search" placeholder="What are you looking for..." class="form-control">
+        <input type="search" placeholder="Que recherchez-vous ?" class="form-control">
       </form>
     </div>
     <div class="container-fluid">
       <div class="navbar-holder d-flex align-items-center justify-content-between">
         <!-- Navbar Header-->
         <div class="navbar-header">
-          <!-- Navbar Brand --><a href="index.html" class="navbar-brand">
-            <div class="brand-text brand-big"><span>Bootstrap </span><strong>Dashboard</strong></div>
-            <div class="brand-text brand-small"><strong>BD</strong></div></a>
+          <!-- Navbar Brand --><a href="{site_url}/admin" class="navbar-brand">
+            <div class="brand-text brand-big"><span>ALB Impression</span><strong> Admin</strong></div>
+            <div class="brand-text brand-small"><strong>Admin</strong></div></a>
           <!-- Toggle Button--><a id="toggle-btn" href="#" class="menu-btn active"><span></span><span></span><span></span></a>
         </div>
         <!-- Navbar Menu -->
@@ -68,14 +68,15 @@
             </ul>
           </li>
           <!-- Languages dropdown    -->
-          <li class="nav-item dropdown"><a id="languages" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link language dropdown-toggle"><img src="{assets_url}/img/flags/16/GB.png" alt="English"><span class="d-none d-sm-inline-block">English</span></a>
+          <li class="nav-item dropdown"><a id="languages" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link language dropdown-toggle"><img src="{assets_url}/img/flags/16/FR.png" alt="English"><span class="d-none d-sm-inline-block">Français</span></a>
             <ul aria-labelledby="languages" class="dropdown-menu">
-              <li><a rel="nofollow" href="#" class="dropdown-item"> <img src="{assets_url}/img/flags/16/DE.png" alt="English" class="mr-2">German</a></li>
-              <li><a rel="nofollow" href="#" class="dropdown-item"> <img src="{assets_url}/img/flags/16/FR.png" alt="English" class="mr-2">French                                         </a></li>
+              <li><a rel="nofollow" href="#" class="dropdown-item"> <img src="{assets_url}/img/flags/16/GB.png" alt="English" class="mr-2">English</a></li>
+              <li><a rel="nofollow" href="#" class="dropdown-item"> <img src="{assets_url}/img/flags/16/ES.png" alt="Spain" class="mr-2">Spanish</a></li>
+              <li><a rel="nofollow" href="#" class="dropdown-item"> <img src="{assets_url}/img/flags/16/DE.png" alt="Germany" class="mr-2">German</a></li>
             </ul>
           </li>
           <!-- Logout    -->
-          <li class="nav-item"><a href="login.html" class="nav-link logout">Logout<i class="fa fa-sign-out"></i></a></li>
+          <li class="nav-item"><a href="{site_url}/admin/user/logout" class="nav-link logout">Déconnexion<i class="fa fa-sign-out"></i></a></li>
         </ul>
       </div>
     </div>

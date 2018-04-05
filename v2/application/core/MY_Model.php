@@ -21,6 +21,7 @@ class MY_Model extends CI_Model {
 
    protected $response = null;
    protected $use_query_parser = false;
+   protected $error = null;
 
    public function __construct($request = null, $process = false, $use_query_parser = false) {
      parent::__construct();
@@ -53,7 +54,15 @@ class MY_Model extends CI_Model {
    }
 
    public function select() {
+     return false;
+   }
 
+   public static function new() {
+     return null;
+   }
+
+   public function create($query) : bool {
+     return false;
    }
 
    public function insert($query) : bool {

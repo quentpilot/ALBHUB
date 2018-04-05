@@ -1,5 +1,7 @@
 <body>
 
+<?php if ($this->user_log->is_loged()) : ?>
+
 <div class="page">
 
   {nav_menu_content}
@@ -12,9 +14,11 @@
       <!-- Page Header-->
       <header class="page-header">
         <div class="container-fluid">
-          <h2 class="no-margin-bottom">Dashboard</h2>
+          <h2 class="no-margin-bottom">Tableau de bord</h2>
         </div>
       </header>
+
+      {alert_message_content}
 
       {body_content}
 
@@ -24,6 +28,15 @@
   </div>
 </div>
 
+<?php endif ?>
+
+<?php ?>
+
+<?php if (!$this->user_log->is_loged()) : ?>
+
+  {body_content}
+
+<?php endif ?>
 <!--{js_files}-->
 
 <script src="{assets_url}/vendor/jquery/jquery.min.js"></script>

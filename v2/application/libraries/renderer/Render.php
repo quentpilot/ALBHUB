@@ -46,6 +46,12 @@ class Render implements IViews {
   protected $index = null;
 
   /**
+  * folder attribute is the name of sub view folder used to parse and display
+  * set attibute from your controller before to call the Render::render() method
+  */
+  protected $folder = null;
+
+  /**
   * view attribute is the name of sub view file to parse and display
   */
   protected $view = null;
@@ -96,7 +102,8 @@ class Render implements IViews {
   */
   public function render($view = null, $data = array(), $return_output = false, $load_parser = false) {
     // able to load only one or several views
-    $this->view = is_array($view) ? $view : array($view);
+    //$this->view = is_array($view) ? $view : array($view);
+    $this->view = $this->set_view($view);
     $this->data = $data;
     $this->return_output = $return_output;
     $this->parser = $load_parser;
@@ -209,6 +216,18 @@ class Render implements IViews {
     $this->ci->config->load($file_path);
     $this->config = $this->ci->config;
     return true;
+  }
+
+  public function set_view($view = null) {
+    $view = is_array($view) ? $view : array($view);
+    $path = '';
+    $views = array();
+    if (!is_null($this->folder))
+      $path = $this->folder . '/';
+    foreach ($view as $file) {
+      $views[] = $path.$file;
+    }
+    return $views;
   }
 
   /**
