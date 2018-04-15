@@ -59,7 +59,7 @@ $route['translate_uri_dashes'] = TRUE;
 // public root methods
 $route['index'] = 'landing';
 $route['bienvenue'] = 'landing/bienvenue';
-$route['a-propos'] = 'page/a-propos';
+$route['a-propos'] = 'page/a_propos';
 $route['nos-services'] = 'page/nos_services';
 $route['nos-realisations'] = 'page/nos_realisations';
 $route['nous-contacter'] = 'page/nous_contacter';

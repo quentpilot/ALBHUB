@@ -65,11 +65,30 @@ class Albicorporate_template_model extends Template_model {
       'assets_url' => $this->_asset_path()
     );
     $menu_links = array(
-      'index' => 'index.html',
-      'about' => 'about.html',
-      'examples' => 'examples.html',
-      'documentation' => 'documentation.html',
-      'contact' => 'contact.html'
+      'nav_menu_links' => array(
+        array(
+          array(
+            'title' => 'index',
+            'url' => site_url()
+          ),
+          array(
+            'title' => 'contact',
+            'url' => site_url().'/contactez-nous'
+          ),
+          array(
+            'title' => 'services',
+            'url' => site_url().'/nos-services'
+          ),
+          array(
+            'title' => 'A propos',
+            'url' => site_url().'/a-propos'
+          ),
+        ),
+        /*'about' => 'about',
+        'examples' => 'examples',
+        'documentation' => 'documentation',
+        'contact' => 'contact'*/
+      )
     );
     $data = array_merge($data, $menu_links);
     return $data;

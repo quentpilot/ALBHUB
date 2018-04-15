@@ -82,7 +82,7 @@ $autoload['libraries'] = array(
   'user/user_infos',
   'user/connect/user_log',
   'email/email_config',
-  // Haby libraries used to build and manage items
+  // Haby libraries used to build items
   'category/category',
   'item/item',
   'item/item_content',
@@ -93,6 +93,15 @@ $autoload['libraries'] = array(
   'item/article/article',
   'item/widget/widget',
   'item/item_factory',
+  // Haby libraries used to manage items
+  'manager/tools_manager',
+  'manager/setting/setting_manager',
+  'manager/setting/items/items_manager_setting',
+  'manager/setting/items/pages_manager_setting',
+  'manager/dao/items/items_manager_dao',
+  'manager/dao/items/pages_manager_dao',
+  'manager/format/items/items_manager_format',
+  'manager/format/items/pages_manager_format',
   // Haby libraries used to build and display the final output
   'renderer/layout',
   'renderer/template',
@@ -181,6 +190,12 @@ $autoload['model'] = array(
   'item/items_model',
   // Haby models used to get users infos
   'user/user_model',
+  // Haby models used to manage main manager controllers for admin
+  'manager/items/items_manager_model',
+  'manager/items/pages_manager_model',
+  'manager/items/menus_manager_model',
+  'manager/items/articles_manager_model',
+  'manager/items/widgets_manager_model',
   // Haby models used to manage template data
   'template/template_model',
   'landing_model',

@@ -1,17 +1,18 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Manager extends MY_Admin_Controller {
+class _Manager extends MY_Admin_Controller {
 
 	public function __construct() {
 		parent::__construct();
 	}
 
 	public function index() {
-		$this->render();
+		//$this->render();
 	}
 
 	public function manage($section = null) {
+		debug(array('coucou'));
 		$this->render();
 	}
 

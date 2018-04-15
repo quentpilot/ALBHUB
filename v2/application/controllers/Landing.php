@@ -25,10 +25,10 @@ class Landing extends MY_Controller {
     //$this->request($req);
     //print_r($this->request($req));
     $response = $this->request($methods, $params);
-    print_r($response);
+    //print_r($response);
     //print_r($this->category);
 
-    //$this->render('index', $response);
+    $this->render('index', $response);
 	}
 
   public function bienvenue() {

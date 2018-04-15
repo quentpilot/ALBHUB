@@ -9,16 +9,21 @@ class User extends MY_Admin_Controller {
 	}
 
 	public function index() {
-		$this->render();
+		$data = array();
+		$data = $this->user_model->get_user(0);
+		if (!$data)
+			$this->render('../errors/404', array('heading' => "Erreur 404 - page introuvable", 'message' => "La page que vous recherchez n'existe pas"));
+		else
+			$this->render('profile');
 	}
 
-	public function profile($user_id) {
+	public function profile($user_id = 0) {
 		$data = array();
 		$data = $this->user_model->get_user($user_id);
 		if (!$data)
-			$this->render('../errors/404', array('heading' => "Erreur 404 - page introuvable", 'message' => "La page que vous recherchez n'existe pas"));
-			//redirect('admin/errors/404');
-		$this->render('profile', $data);
+			$this->render('../errors/404', array('heading' => "Erreur 404 - page introuvable", 'message' => "La page que vous recherchez n'existe pas<br> Aucun utilisateur trouvé"));
+		else
+			$this->render('profile', $data);
 	}
 
 	public function edit($user_id = null) {
@@ -80,9 +85,9 @@ class User extends MY_Admin_Controller {
 		else {
 			$user = $this->user_model->log_user();
 			//print_r($user);
-			if ($user->get('status_id')) {
+			if ($user->get('usr_status_id')) {
 				if ($this->user_log->set_session($user, $this->user_infos)) {
-					$this->session->set_flashdata('alert_message', "Bonjour <b> ".$this->user_session->username."</b> !");
+					$this->session->set_flashdata('alert_message', "Bonjour <b> ".$this->user_infos->usi_firstname."</b> !");
 					redirect('admin/dashboard');
 				}
 			}
@@ -92,6 +97,7 @@ class User extends MY_Admin_Controller {
 	}
 
 	public function logout() {
+		$this->db->set_dbprefix();
 		$this->user_model->logout_user();
 		redirect('admin');
 	}

@@ -1,10 +1,10 @@
 <nav class="side-navbar">
   <!-- Sidebar Header-->
   <div class="sidebar-header d-flex align-items-center">
-    <a href="{site_url}/admin/user/profile/{username}"><div class="avatar"><img src="{assets_url}/img/{profile_image}" alt="user_profile_img" class="img-fluid rounded-circle" style="max-height: 65px"></div></a>
+    <a href="{site_url}/admin/user/profile/{usr_username}"><div class="avatar"><img src="{assets_url}/img/{usi_profile_image}" alt="user_profile_img" class="img-fluid rounded-circle" style="max-height: 65px"></div></a>
     <div class="title">
-      <h1 class="h3"><a href="{site_url}/admin/user/profile/{username}">{firstname} {lastname}</a></h1>
-      <p>{job}</p>
+      <h1 class="h3"><a href="{site_url}/admin/user/profile/{usr_username}">{usi_firstname} {usi_lastname}</a></h1>
+      <p>{usi_job}</p>
     </div>
   </div>
   <!-- Sidebar Navidation Menus-->
@@ -17,7 +17,7 @@
         <li><a href="{site_url}/admin/manager/hub/portfolio">Portfolio</a></li>
         <li><a href="{site_url}/admin/manager/hub/e-commerce">E-Commerce</a></li>
         <li><a href="{site_url}/admin/manager/hub/crm">Relation Clients</a></li>
-      </ul>²
+      </ul>
     </li>
   </ul>
   <span class="heading">Gestion Entreprise</span>
@@ -66,10 +66,11 @@
     <li><a href="tables.html"><i class="icon-grid"></i>Calendrier</a></li>
     <li><a href="#users" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>Utilisateurs</a>
       <ul id="users" class="collapse list-unstyled ">
-        <li><a href="{site_url}/admin/manager/">Visiteurs</a></li>
-        <li><a href="{site_url}/admin/manager/">Clients</a></li>
-        <li><a href="{site_url}/admin/manager/">Salariés</a></li>
-        <li><a href="{site_url}/admin/manager/">Gestionnaire</a></li>
+        <li><a href="{site_url}/admin/users/">Tous</a></li>
+        <li><a href="{site_url}/admin/users/visitors">Visiteurs</a></li>
+        <li><a href="{site_url}/admin/users/clients">Clients</a></li>
+        <li><a href="{site_url}/admin/users/employees">Salariés</a></li>
+        <li><a href="{site_url}/admin/manager/users">Gestionnaire</a></li>
       </ul>
     </li>
   </ul>
@@ -77,10 +78,10 @@
   <ul class="list-unstyled">
     <li><a href="#items" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>Contenu</a>
       <ul id="items" class="collapse list-unstyled ">
-        <li><a href="{site_url}/admin/manager/">Pages</a></li>
-        <li><a href="{site_url}/admin/manager/">Menus</a></li>
-        <li><a href="{site_url}/admin/manager/">Articles</a></li>
-        <li><a href="{site_url}/admin/manager/">Widgets</a></li>
+        <li><a href="{site_url}/admin/manager/items/pages"><i class="icon-grid"></i>Pages</a></li>
+        <li><a href="{site_url}/admin/manager/items/menus"><i class="icon-grid"></i>Menus</a></li>
+        <li><a href="{site_url}/admin/manager/items/articles"><i class="icon-grid"></i>Articles</a></li>
+        <li><a href="{site_url}/admin/manager/items/widgets"><i class="icon-grid"></i>Widgets</a></li>
       </ul>
     </li>
     <li><a href="login.html"> <i class="icon-interface-windows"></i>Thèmes</a></li>

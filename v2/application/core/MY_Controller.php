@@ -72,3 +72,11 @@ class MY_Admin_Controller extends MY_Controller {
       $this->config->set_item('tpl_admin_name', 'admalbi');
 	}
 }
+
+class MY_Admin_Manager_Controller extends MY_Admin_Controller {
+
+	public function __construct($template_name = null) {
+    parent::__construct($template_name);
+    $this->view->set('folder', 'manager');
+  }
+}

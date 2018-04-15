@@ -27,38 +27,38 @@ class User_log {
     if (is_null($user))
       return false;
     $usr_user = array(
-      'id' => $user->id,
-      'username' => $user->username,
-      'email' => $user->email,
-      'valid_email' => $user->valid_email,
-      'register_date' => $user->register_date,
-      'last_log' => $user->last_log,
-      'group_id' => $user->group_id,
-      'status_id' => $user->status_id
+      'id' => $user->usr_id,
+      'username' => $user->usr_username,
+      'email' => $user->usr_email,
+      'valid_email' => $user->usr_valid_email,
+      'register_date' => $user->usr_register_date,
+      'last_log' => $user->usr_last_log,
+      'group_id' => $user->usr_group_id,
+      'status_id' => $user->usr_status_id
     );
 
     get_instance()->session->set_userdata($usr_user);
 
     if (!is_null($infos)) {
       $usr_infos = array(
-        'user_id' => $user->id,
-        'groups_id' => $infos->groups_id,
-        'firstname' => $infos->firstname,
-        'lastname' => $infos->lastname,
-        'phone' => $infos->phone,
-        'token' => $infos->token,
-        'invite_token' => $infos->invite_token,
-        'profile_image' => $infos->profile_image,
-        'background_image' => $infos->background_image,
-        'social_networks' => $infos->social_networks,
-        'job' => $infos->job,
-        'work_hours' => $infos->work_hours
+        'user_id' => $user->usr_id,
+        'groups_id' => $infos->usi_groups_id,
+        'firstname' => $infos->usi_firstname,
+        'lastname' => $infos->usi_lastname,
+        'phone' => $infos->usi_phone,
+        'token' => $infos->usi_token,
+        'invite_token' => $infos->usi_invite_token,
+        'profile_image' => $infos->usi_profile_image,
+        'background_image' => $infos->usi_background_image,
+        'social_networks' => $infos->usi_social_networks,
+        'job' => $infos->usi_job,
+        'work_hours' => $infos->usi_work_hours
       );
       get_instance()->session->set_userdata($usr_infos);
     }
     $this->user = $user;
     $this->infos = $infos;
-    $this->status = $user->status_id;
+    $this->status = $user->usr_status_id;
     return true;
   }
 

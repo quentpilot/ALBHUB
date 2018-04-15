@@ -24,4 +24,4 @@ $config['tpl_js_vendor_files'] = array();
 $config['layout_public_path'] = 'public';
 $config['layout_admin_path'] = 'admin';
 $config['layout_public_parts'] = array('head', 'body', 'info_bar', 'user_modal', 'nav_menu', 'foot');
-$config['layout_admin_parts'] = array('head', 'body', 'nav_menu', 'side_menu', 'foot', 'alert_message');
+$config['layout_admin_parts'] = array('head', 'body', 'nav_menu', 'side_menu', 'page_bar', 'foot', 'alert_message');

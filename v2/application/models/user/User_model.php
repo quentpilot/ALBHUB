@@ -1,12 +1,12 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class User_model extends MY_Model {
+class User_model extends MY_Session_Model {
 
   protected $user = null;
 
   public function __construct() {
-    parent::__construct();
+    parent::__construct('users', 'usr_');
   }
 
   public function create($type = 'post') : bool {
@@ -163,40 +163,41 @@ class User_model extends MY_Model {
     $username = $this->input->post('username');
     $password = $this->input->post('password');
 
-    $req = $this->db->select()->from('usr_users')->where('username', $username)->or_where('email', $username)->limit(1)->get();
+    $req = $this->db->select()->from($this->prefix.'users')->where($this->prefix.'username', $username)->or_where($this->prefix.'email', $username)->limit(1)->get();
 
-    if (count($req->result()) && $password === $req->result()[0]->password && $req->result()[0]->valid_email == 1) {
+    if (count($req->result()) && $password === $req->result()[0]->usr_password && $req->result()[0]->usr_valid_email == 1) {
       // set main user data
       $this->user_session->copy($req->result()[0]);
-      $this->user_session->set('status_id', 1);
+      $this->user_session->set($this->prefix.'status_id', 1);
       $this->user = $this->user_session;
-      $this->db->where('id', $this->user_session->id)
-               ->update('usr_users', $this->user_session);
+      $this->db->where($this->prefix.'id', $this->user_session->usr_id)->update($this->prefix.'users', $this->user_session);
       // get and set advanced user data
-      $req = $this->db->select()->from('usr_advanced_infos')->where('user_id', $this->user_session->id)->get();
+      $req = $this->db->select()->from('usi_users_infos')->where('usi_user_id', $this->user_session->usr_id)->get();
       $this->user_infos->copy($req->result()[0]);
     } else {
-      $this->user_session->status_id = 0;
+      $this->user_session->usr_status_id = 0;
     }
     return $this->user_session;
   }
 
   public function logout_user() : bool {
-    $this->db->set('status_id', 0)
-             ->where('id', $this->session->userdata('id'))
-             ->update('usr_users');
+    $this->db->set($this->prefix.'status_id', 0)
+             ->where($this->prefix.'id', $this->session->userdata('id'))
+             ->update($this->prefix.'users');
     $this->session->userdata = array();
     return true;
   }
 
   public function get_user($slug = null) : array {
-    $response = false;
+    $response = array();
+    if (is_null($slug))
+      return $response;
     $where_row = (is_numeric($slug))
-                  ? 'id'
-                  : 'username';
+                  ? $this->prefix.'id'
+                  : $this->prefix.'username';
     $response = $this->db->select()
-                      ->from('usr_users')
-                      ->join('usr_advanced_infos', 'usr_advanced_infos.user_id = usr_users.id')
+                      ->from($this->prefix.'users')
+                      ->join('usi_users_infos', 'usi_users_infos.usi_user_id = '.$this->prefix.'users'.'.'.$this->prefix.'id')
                       ->where($where_row, $slug)
                       ->get()
                       ->result_array();
@@ -206,37 +207,10 @@ class User_model extends MY_Model {
   }
 
   protected function get_contact_infos() {
-    $req = $this->db->select()->from('albi_settings')->where('status_id', 1)->order_by('id')->limit(1)->get()->result()[0];
+    $req = $this->db->select()->from('set_settings')->where('set_status_id', 1)->order_by('set_id')->limit(1)->get()->result()[0];
     if (isset($req) && !is_null($req)) {
       $infos = $req;
       return (is_null($infos)) ? null : $infos;
-    }
-    return null;
-  }
-
-  protected function get_contact_email() {
-    $req = $this->db->select('contact_email')->from('albi_settings')->where('status_id', 1)->order_by('id')->limit(1)->get()->result()[0];
-    if (isset($req) && !is_null($req)) {
-      $email = $req->contact_email;
-      return (is_null($email)) ? null : $email;
-    }
-    return null;
-  }
-
-  protected function get_site_name() {
-    $req = $this->db->select('site_name')->from('albi_settings')->where('status_id', 1)->order_by('id')->limit(1);
-    if (count($req->result())) {
-      $email = $req->result()[0]->site_name;
-      return (is_null($email)) ? null : $email;
-    }
-    return null;
-  }
-
-  protected function get_site_url() {
-    $req = $this->db->select('site_url')->from('albi_settings')->where('status_id', 1)->order_by('id')->limit(1);
-    if (count($req->result())) {
-      $email = $req->result()[0]->site_url;
-      return (is_null($email)) ? null : $email;
     }
     return null;
   }
@@ -250,8 +224,8 @@ class User_model extends MY_Model {
   }
 
   protected function is_valid_invite_token() : bool {
-    $token = $this->input->post('invite_token');
-    $req = $this->db->select('invite_token')->from('usr_advanced_infos')->where('invite_token', $token)->get();
+    $token = $this->input->post('usi_invite_token');
+    $req = $this->db->select('usi_invite_token')->from('usi_users_infos')->where('usi_invite_token', $token)->get();
     if (!count($req->result_array()))
       return false;
     return true;

@@ -90,6 +90,17 @@ class Admalbi_template_model extends Template_model {
     return $data;
   }
 
+  protected function _get_page_bar() {
+    $data = array(
+      'assets_url' => $this->_asset_path(),
+      'site_url' => site_url(),
+      'breadcrumb' => explode('>', implode('>', $this->uri->segments)),
+      'breadcrumb_url' => array(),
+      'title' => $this->uri->segment(count($this->uri->segments)). ' manager',
+    );
+    return $data;
+  }
+
   /**
   * _get_alert_message method would to build an alert message data
   */

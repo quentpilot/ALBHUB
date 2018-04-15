@@ -12,11 +12,11 @@
             </div>
           </div>
           <div class="card-body text-center">
-            <div class="client-avatar"><img src="{assets_url}/img/{profile_image}" alt="{profile_image}" style="max-height: 120px" class="img-fluid rounded-circle">
+            <div class="client-avatar"><img src="{assets_url}/img/{usi_profile_image}" alt="{profile_image}" style="max-height: 120px" class="img-fluid rounded-circle">
               <div class="status bg-green"></div>
             </div>
             <div class="client-title">
-              <h3>{firstname} {lastname}</h3><span>{job}</span><a href="#">Follow</a>
+              <h3>{usi_firstname} {usi_lastname}</h3><span>{usi_job}</span><a href="#">Follow</a>
             </div>
             <div class="client-info">
               <div class="row">
@@ -41,7 +41,7 @@
           <div class="card-body">
             <h3>Temps travaillé</h3><small>Heures de travail actuelles cette semaine</small>
             <div class="chart text-center">
-              <div class="text"><strong>{work_hours}</strong><br><span>Heures</span></div>
+              <div class="text"><strong>{usi_work_hours}</strong><br><span>Heures</span></div>
               <canvas id="pieChart"></canvas>
             </div>
           </div>

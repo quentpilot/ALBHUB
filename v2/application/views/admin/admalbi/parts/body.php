@@ -11,12 +11,8 @@
   {side_menu_content}
 
     <div class="content-inner">
-      <!-- Page Header-->
-      <header class="page-header">
-        <div class="container-fluid">
-          <h2 class="no-margin-bottom">Tableau de bord</h2>
-        </div>
-      </header>
+
+      {page_bar_content}
 
       {alert_message_content}
 

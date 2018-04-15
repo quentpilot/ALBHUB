@@ -19,6 +19,8 @@ class MY_Model extends CI_Model {
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
 
+   protected $datatable = null;
+   protected $prefix = null;
    protected $response = null;
    protected $use_query_parser = false;
    protected $error = null;
@@ -107,4 +109,139 @@ class MY_Model extends CI_Model {
      }
      return null;
    }
+}
+
+class MY_Session_Model extends MY_Model {
+  public function __construct(string $datatable = null, string $prefix = '') {
+    parent::__construct();
+    $this->datatable = $datatable;
+    $this->prefix = $prefix;
+  }
+}
+
+class MY_Admin_Model extends MY_Model {
+
+  public function __construct($request = null, $process = false, $use_query_parser = false) {
+    parent::__construct($request, $process, $use_query_parser);
+  }
+}
+
+class MY_Manager_Model extends MY_Model {
+  protected $setting = null;
+  protected $dao = null;
+  protected $format = null;
+  protected $type = null;
+  protected $result = null;
+
+  public function __construct(IDao_manager $dao = null, IFormat_manager $format = null, string $type = null) {
+    parent::__construct();
+    $part = $this->uri->segment(4);
+    $type = is_null($type) ? substr($part, 0, strlen($part)) : $type;
+    //$manager = (is_null($type) || $this->uri->segment(3) == 'manager') ? null : $type;
+    //$type = is_null($type) ? substr($this->uri->segment(3), 0, strlen($this->uri->segment(3)) - 1) : $type;
+    $this->type = $type;
+    //$this->load();
+    $this->load(array('setting', 'dao', 'format'));
+  }
+
+  protected function load(array $tools, $type = null) {
+    if (!count($tools)) return false;
+
+    foreach ($tools as $tool) {
+      if (property_exists($this, $tool)) {
+        $this->type = is_null($type) ? $this->type : $type;
+        $class_name_suffix = '_manager_'.$tool;
+        $class_name = is_null($this->type) ? 'Items' : ucfirst($this->type);
+        $class_name .= $class_name_suffix;
+        $tool_instance = null;
+
+        if (class_exists($class_name))
+          $tool_instance = new $class_name();
+        $tool_interface = 'I'.ucfirst($tool).'_manager';
+
+        if ($tool_instance instanceof $tool_interface) {
+          $tool_instance = is_null($this->$tool) ? $tool_instance : $this->$tool;
+          $this->$tool = $tool_instance;
+        }
+        //print_r($this->config);
+      }
+    }
+    return true;
+  }
+
+  protected function tools($tools, $types, $configs = null) {
+    if (is_null($tools))
+      return null;
+    $types = is_null($types) ? $this->type : $types;
+    $configs = is_null($configs) ? $this->setting : $configs;
+    $results = array();
+
+    if (is_array($tools) && is_array($types) && (count($tools) == count($types))) {
+      foreach ($tools as $key => $tool) {
+        if (property_exists($this, $tool)) {
+          $type = $types[$key];
+          $method = 'load_' . $type;
+          if (method_exists($this->$tool, $method)) {
+            $config = (is_array($configs)) ? $configs[$key] : $this->setting;
+            $this->$tool->$method($config);
+            $this->setting = $this->$tool->get('configs');
+            $results[$tool.'.'.$type] = $this->$tool->load_result();
+          }
+        }
+      }
+      //print_r($results);
+      $this->result = $results;
+      return $this->result;
+    } elseif (is_string($tools) && is_string($types) && $configs instanceof Setting_manager) {
+      if (property_exists($this, $tools)) {
+        $type = is_null($types) ? $this->type : $types;
+        $method = 'load_' . $type;
+        if (method_exists($this->$tools, $method)) {
+          $this->$tools->$method($configs);
+          $results = $this->$tools->load_result();
+          $this->setting = $this->$tools->get('configs');
+          $this->result = $results;
+          return $results;
+        }
+      }
+    }
+    return null;
+  }
+
+  protected function setting($type = null) {
+    if (is_null($this->setting))
+      return false;
+    $type = is_null($type) ? $this->type : $type;
+    $method = 'set_'.$type;
+    if (method_exists($this->setting, $method)) {
+      $this->setting->$method();
+      $this->result = $this->setting;
+      return $this->result;
+    }
+    return false;
+  }
+
+  protected function dao($type = null) {
+    if (is_null($this->dao))
+      return false;
+    $type = is_null($type) ? $this->type : $type;
+    $method = 'load_'.$type;
+    if (method_exists($this->dao, $method)) {
+      $this->result = $this->dao->$method($this->setting);
+      return $this->result;
+    }
+    return false;
+  }
+
+  protected function format($type = null) {
+    if (is_null($this->format))
+      return false;
+    $type = is_null($type) ? $this->type : $type;
+    $method = 'load_'.$type;
+    if (method_exists($this->format, $method)) {
+      $this->result = $this->format->$method($this->dao);
+      return $this->result;
+    }
+    return false;
+  }
 }
