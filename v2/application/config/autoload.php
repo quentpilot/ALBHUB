@@ -86,12 +86,12 @@ $autoload['libraries'] = array(
   'category/category',
   'item/item',
   'item/item_content',
-  'item/page/page',
   'item/menu/menu',
   'item/menu/menu_nav',
   'item/menu/menu_side',
   'item/article/article',
   'item/widget/widget',
+  'item/page/page',
   'item/item_factory',
   // Haby libraries used to manage items
   'manager/tools_manager',

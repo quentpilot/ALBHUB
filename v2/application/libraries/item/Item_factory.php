@@ -138,7 +138,7 @@ class Item_factory implements IItem_factory {
     $this->published = $object->published;
     $this->edited = $object->edited;
     $this->user_id = $object->user_id;
-    $this->cat_id = $object->cat_id;
+    $this->ilp_id = $object->ilp_id;
     $this->status_id = $object->status_id;
     return true;
   }

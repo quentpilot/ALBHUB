@@ -10,15 +10,40 @@ class Items_manager_model extends MY_Manager_Model implements IManager_model {
   }
 
   public function list(Items_manager_setting $configs = null) {
-    $this->setting = is_null($configs) ? $this->setting : $configs;
+    $this->set_configs($configs);
     $tools = array('dao', 'format', 'dao', 'format');
     $types = array('table', 'table', 'pagination', 'pagination');
+    $this->setting->set_table();
     $this->tools($tools, $types);
     return $this->result;
   }
 
   public function pagination(Items_manager_setting $configs = null) {
-    $this->setting = is_null($configs) ? $this->setting : $configs;
+    $this->set_configs($configs);
+    $tools = array('dao', 'format');
+    $types = array('pagination', 'pagination');
+    $this->tools($tools, $types);
+    return $this->result;
+  }
+
+  public function form_new(Items_manager_setting $configs = null) {
+    $this->set_configs($configs);
+    $tools = array('dao', 'format');
+    $types = array('pagination', 'pagination');
+    $this->tools($tools, $types);
+    return $this->result;
+  }
+
+  public function form_edit(Items_manager_setting $configs = null) {
+    $this->set_configs($configs);
+    $tools = array('dao', 'format');
+    $types = array('pagination', 'pagination');
+    $this->tools($tools, $types);
+    return $this->result;
+  }
+
+  public function form_config(Items_manager_setting $configs = null) {
+    $this->set_configs($configs);
     $tools = array('dao', 'format');
     $types = array('pagination', 'pagination');
     $this->tools($tools, $types);

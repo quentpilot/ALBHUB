@@ -37,7 +37,7 @@ abstract class AItem implements IItem {
   /**
   * table_content attribute is the name of related advanced content table value of current item
   */
-  protected $table_content = "albi_items_content";
+  protected $table_content = "itc_items_content";
 
   /**
   * user_id attribute is the id value of current user who created this item
@@ -45,21 +45,16 @@ abstract class AItem implements IItem {
   protected $user_id = 0;
 
   /**
-  * cat_id attribute is the id value of current item category
+  * ilp_id attribute is the id value of current item category
   */
-  protected $cat_id = 0;
+  protected $ilp_id = 0;
 
   /**
   * status_id attribute is the id value of current item status
   */
   protected $status_id = 0;
 
-  /**
-  * table_name attribute is the name of current table to store item data
-  */
-  protected $table_name = 'albi_items';
-
-  public function __construct(int $id = 0, string $title = null, string $subtitle = null, string $slug = null, $published = "NOW()", $edited = "NOW()", int $user_id = 0, int $cat_id = 0, int $status_id = 0) {
+  public function __construct(int $id = 0, string $title = null, string $subtitle = null, string $slug = null, $published = "NOW()", $edited = "NOW()", int $user_id = 0, int $ilp_id = 0, int $status_id = 0) {
     $this->id = $id;
     $this->title = $title;
     $this->subtitle = $subtitle;
@@ -67,7 +62,7 @@ abstract class AItem implements IItem {
     $this->published = $published;
     $this->edited = $edited;
     $this->user_id = $user_id;
-    $this->cat_id = $cat_id;
+    $this->ilp_id = $ilp_id;
     $this->status_id = $status_id;
   }
 
@@ -93,7 +88,7 @@ abstract class AItem implements IItem {
     $this->published = $object->published;
     $this->edited = $object->edited;
     $this->user_id = $object->user_id;
-    $this->cat_id = $object->cat_id;
+    $this->ilp_id = $object->ilp_id;
     $this->status_id = $object->status_id;
     return true;
   }

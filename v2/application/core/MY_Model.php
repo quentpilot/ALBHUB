@@ -189,7 +189,6 @@ class MY_Manager_Model extends MY_Model {
           }
         }
       }
-      //print_r($results);
       $this->result = $results;
       return $this->result;
     } elseif (is_string($tools) && is_string($types) && $configs instanceof Setting_manager) {
@@ -243,5 +242,10 @@ class MY_Manager_Model extends MY_Model {
       return $this->result;
     }
     return false;
+  }
+
+  protected function set_configs(Setting_manager $configs = null) {
+    $this->setting = is_null($configs) ? $this->setting : $configs;
+    return true;
   }
 }

@@ -5,8 +5,16 @@ require_once APPPATH . 'libraries/manager/dao/IDao_manager.php';
 
 class Items_manager_dao extends Tools_manager implements IDao_manager {
 
+  protected $pojo = null;
+  protected $db = null;
+
   public function __construct(Items_manager_setting $configs = null) {
     parent::__construct($configs);
+    $type = $this->ci->uri->segment(4);
+    $type = ucfirst(substr($type, 0, strlen($type) -1));
+    if (class_exists($type))
+      $this->pojo = new $type();
+    $this->db = $this->ci->db;
   }
 
   public function build() {
@@ -25,7 +33,7 @@ class Items_manager_dao extends Tools_manager implements IDao_manager {
     $this->ci = &get_instance();
     $this->configs = $configs;
     $this->configs->add('dao.table', 'table done');
-    $this->result = 'table loaded';
+    $this->result = $this->pojo;
     return true;
     // process to get configs data through database then build as result objects types
   }
