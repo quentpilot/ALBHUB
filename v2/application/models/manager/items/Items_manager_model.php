@@ -9,13 +9,22 @@ class Items_manager_model extends MY_Manager_Model implements IManager_model {
     parent::__construct($dao, $format, $type);
   }
 
+  public function nav_menu(Items_manager_setting $configs = null) {
+    $this->set_configs($configs);
+    $tools = array('dao', 'format');
+    $types = array('nav_menu', 'nav_menu');
+    $this->setting->set_nav_menu();
+    return $this->tools($tools, $types);
+  }
+
   public function list(Items_manager_setting $configs = null) {
     $this->set_configs($configs);
     $tools = array('dao', 'format', 'dao', 'format');
     $types = array('table', 'table', 'pagination', 'pagination');
     $this->setting->set_table();
     $this->tools($tools, $types);
-    return $this->result;
+    echo $this->setting->get('query_string');
+    return $this->result['format.table'];
   }
 
   public function pagination(Items_manager_setting $configs = null) {
@@ -45,9 +54,10 @@ class Items_manager_model extends MY_Manager_Model implements IManager_model {
   public function form_config(Items_manager_setting $configs = null) {
     $this->set_configs($configs);
     $tools = array('dao', 'format');
-    $types = array('pagination', 'pagination');
+    $types = array('table', 'table');
+    $this->setting->set_form_config();
     $this->tools($tools, $types);
-    return $this->result;
+    return $this->result['format.table'];
   }
 
   public function settings_menu($config = null) {

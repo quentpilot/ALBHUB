@@ -19,11 +19,23 @@ class Items_manager_format extends Tools_manager implements IFormat_manager {
     return 'formated';
   }
 
+  public function load_nav_menu(Items_manager_setting $configs = null) {
+    $this->ci = &get_instance();
+    $this->configs = $configs;
+    $this->configs->add('format.table', 'table done');
+    $this->result = 'nav_menu loaded';
+    return true;
+  }
+
   public function load_table(Items_manager_setting $configs = null) {
     $this->ci = &get_instance();
     $this->configs = $configs;
     $this->configs->add('format.table', 'table done');
-    $this->result = 'table formatted';
+    $folder = explode('/', $this->ci->get('view')->get('folder'));
+    unset($folder[count($folder) - 1]);
+    $folder = implode('/', $folder).'/';
+    //$this->result = $this->ci->load->view($folder.'list', null, true);
+    $this->result = $folder;
     return true;
   }
 
@@ -35,26 +47,15 @@ class Items_manager_format extends Tools_manager implements IFormat_manager {
     return true;
   }
 
-  /**
-  * get method would to return class attribute value entered as param
-  */
-  public function get($property = null) {
-    if (is_null($property))
-      return false;
-    if (property_exists($this, $property))
-      return $this->$property;
-  }
-
-  /**
-  * set method would to set attribute choosen with wanted value
-  */
-  public function set($property = null, $value = null) {
-    if (is_null($property))
-      return false;
-    if (property_exists($this, $property)) {
-      $this->$property = $value;
-      return $value;
-    }
-    return null;
+  public function load_form_config(Items_manager_setting $configs = null) {
+    $this->ci = &get_instance();
+    $this->configs = $configs;
+    $this->configs->add('format.form_config', 'form_config done');
+    $folder = explode('/', $this->ci->get('view')->get('folder'));
+    unset($folder[count($folder) - 1]);
+    $folder = implode('/', $folder).'/';
+    //$this->result = $this->ci->load->view($folder.'list', null, true);
+    $this->result = $folder;
+    return true;
   }
 }

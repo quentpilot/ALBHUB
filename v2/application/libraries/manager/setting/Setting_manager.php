@@ -5,8 +5,13 @@ require_once APPPATH . 'libraries/manager/setting/ISetting_manager.php';
 
 class Setting_manager extends Tools_manager implements ISetting_manager {
 
+  public $type = null;
+
   public function __construct(array $configs = array()) {
     parent::__construct($configs);
+    $part = $this->ci->uri->segment(4);
+    $type = substr($part, 0, strlen($part) - 1);
+    $this->type = $type;
   }
 
   public function add(string $key, $item = null) : bool {
@@ -38,6 +43,24 @@ class Setting_manager extends Tools_manager implements ISetting_manager {
       $this->set($key, $value);
       $this->add($key, $value);
     }
+    return true;
+  }
+
+  public function set_views(array $views = array()) {
+    $views = count($views) ? $views : $this->get_item('render.views');
+    $config = array('render.views' => array());
+    foreach ($views as $file) {
+      $index = $file;
+      $config['render.views'][] = $index;
+      $this->set_items($config);
+    }
+    return true;
+  }
+
+  public function set_configs(ISetting $configs = null, $new_ci = true) {
+    if ($new_ci)
+      $this->ci = &get_instance();
+    $this->configs = is_null($configs->get('configs')) ? $this->configs : $configs;
     return true;
   }
 }

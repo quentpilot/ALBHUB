@@ -91,12 +91,16 @@ class Admalbi_template_model extends Template_model {
   }
 
   protected function _get_page_bar() {
+    $views_data = $this->render->get('data');
+    //print_r($views_data);
+    //print_r($views_data['data_page_bar']);
+    $page_data = (isset($views_data['page_bar']) && !is_null($views_data['page_bar'])) ? $views_data['page_bar'] : array() ;
     $data = array(
       'assets_url' => $this->_asset_path(),
       'site_url' => site_url(),
       'breadcrumb' => explode('>', implode('>', $this->uri->segments)),
       'breadcrumb_url' => array(),
-      'title' => $this->uri->segment(count($this->uri->segments)). ' manager',
+      'title' => (isset($page_data) && isset($page_data['title'])) ? $page_data['title'] : $this->uri->segment(count($this->uri->segments)) . ' manager',
     );
     return $data;
   }

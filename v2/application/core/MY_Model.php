@@ -137,8 +137,6 @@ class MY_Manager_Model extends MY_Model {
     parent::__construct();
     $part = $this->uri->segment(4);
     $type = is_null($type) ? substr($part, 0, strlen($part)) : $type;
-    //$manager = (is_null($type) || $this->uri->segment(3) == 'manager') ? null : $type;
-    //$type = is_null($type) ? substr($this->uri->segment(3), 0, strlen($this->uri->segment(3)) - 1) : $type;
     $this->type = $type;
     //$this->load();
     $this->load(array('setting', 'dao', 'format'));
@@ -163,7 +161,7 @@ class MY_Manager_Model extends MY_Model {
           $tool_instance = is_null($this->$tool) ? $tool_instance : $this->$tool;
           $this->$tool = $tool_instance;
         }
-        //print_r($this->config);
+        //print_r($this->setting);
       }
     }
     return true;
@@ -244,7 +242,7 @@ class MY_Manager_Model extends MY_Model {
     return false;
   }
 
-  protected function set_configs(Setting_manager $configs = null) {
+  protected function set_configs(ISetting_manager $configs = null) {
     $this->setting = is_null($configs) ? $this->setting : $configs;
     return true;
   }

@@ -219,6 +219,7 @@ class Render implements IViews {
   }
 
   public function set_view($view = null) {
+    $view = is_null($view) ? $this->view : $view;
     $view = is_array($view) ? $view : array($view);
     $path = '';
     $views = array();

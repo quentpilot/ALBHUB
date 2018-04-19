@@ -48,6 +48,29 @@ class MY_Controller extends CI_Controller {
      return $this->request->result();
      //return $this->response();
    }
+
+   /**
+   * get method would to return class attribute value entered as param
+   */
+   public function get($property = null) {
+     if (is_null($property))
+       return false;
+     if (property_exists($this, $property))
+       return $this->$property;
+   }
+
+   /**
+   * set method would to set attribute choosen with wanted value
+   */
+   public function set($property = null, $value = null) {
+     if (is_null($property))
+       return false;
+     if (property_exists($this, $property)) {
+       $this->$property = $value;
+       return $value;
+     }
+     return null;
+   }
 }
 
 class MY_Admin_Controller extends MY_Controller {
@@ -75,8 +98,33 @@ class MY_Admin_Controller extends MY_Controller {
 
 class MY_Admin_Manager_Controller extends MY_Admin_Controller {
 
+  protected $data = null;
+
 	public function __construct($template_name = null) {
     parent::__construct($template_name);
+    $this->data = array();
     $this->view->set('folder', 'manager');
+  }
+
+  public function manager(string $manager_type, string $method) {
+    $model = ucfirst(strtolower($manager_type)) . '_manager_model';
+    if (class_exists($model)) {
+      $model = strtolower($model);
+      if (isset($this->$model)) {
+        if (method_exists($this->$model, $method)) {
+          $result = $this->$model->$method();
+          $result = is_array($result) ? array("data_" . $method => $result) : array("data_" . $method => array($result));
+          $this->data = array_merge($this->data, $result);
+          $views = $this->view->get('view');
+          $views = is_array($views) ? $views : array($views);
+          $this->view->set('view', array_merge($views, $this->$model->get('format')->load_views()));
+          //TODO : pseudo API when url got manager method and args
+          if (count($this->uri->segments) == 7 && $this->uri->segment(5) == 'manager')
+            print_r(json_encode($result));
+          return $result;
+        }
+      }
+    }
+    return false;
   }
 }
