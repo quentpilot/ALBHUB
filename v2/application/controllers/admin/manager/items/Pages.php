@@ -25,6 +25,11 @@ class Pages extends MY_Admin_Manager_Controller {
 		//print_r($this->manager('pages', 'nav_menu'));
 		//$this->pages_manager_model->dao('table');
 		//$this->pages_manager_model->format('table');
+		//$res = $this->db->query("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'usr_users'")->result();
+		//print_r($res);
+		//$res = $this->orm->new_datatable('usr_users', true);
+		//debug($res);
+		//debug($this->orm->refresh(array(), true));
 		$this->render($views, $this->data);
 	}
 
@@ -37,7 +42,7 @@ class Pages extends MY_Admin_Manager_Controller {
 			'data_form' => $this->pages_manager_model->form_config(),
 			//'pagin_table' => $this->pages_manager_model->pagination(),
 		);
-		
+
 		//$this->pages_manager_model->dao('table');
 		//$this->pages_manager_model->format('table');
 		$this->render($views, $data);

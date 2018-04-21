@@ -45,21 +45,21 @@ class Item_model extends MY_Model {
     return $result;
   }
 
-  public function insert($query) : bool {
+  public function insert($query = null) : bool {
     $result = array();
     if (!$this->build_query())
       return false;
     return $result;
   }
 
-  public function update($query) : bool {
+  public function update($query = null) : bool {
     $result = array();
     if (!$this->build_query())
       return false;
     return $result;
   }
 
-  public function delete($query) : bool {
+  public function delete($query = null) : bool {
     $result = array();
     if (!$this->build_query())
       return false;
@@ -73,7 +73,7 @@ class Item_model extends MY_Model {
     return false;
   }
 
-  public function count($query) : int {
+  public function count($query = null) : int {
     $result = array();
     if (!$this->build_query())
       return false;

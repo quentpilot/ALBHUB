@@ -163,7 +163,7 @@ class Render implements IViews {
     // then build full html view with current view as data content
     // and return true or return a string representing a full html page requested by client (HTTP request/response protocol)
     // following return_output value
-    // note that for the layout file which use objects, CI_Parser couldn't be used
+    // note that for the layout file which uses objects, CI_Parser couldn't be used. EDIT : now MY_Parser fix transfer objects issues
     if ($this->return_output) {
       return ($this->output = $this->ci->load->view($this->path.'/'.$this->index, $content, true));
     } else {

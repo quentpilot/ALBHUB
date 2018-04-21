@@ -20,9 +20,13 @@ class MY_Model extends CI_Model {
 	 */
 
    protected $datatable = null;
+
    protected $prefix = null;
+
    protected $response = null;
+
    protected $use_query_parser = false;
+
    protected $error = null;
 
    public function __construct($request = null, $process = false, $use_query_parser = false) {
@@ -47,6 +51,10 @@ class MY_Model extends CI_Model {
      return $this->response->result();
    }
 
+   public function query() {
+     return false;
+   }
+
    public function result($data = null) {
      return $data;
    }
@@ -55,35 +63,35 @@ class MY_Model extends CI_Model {
      return new Res();
    }
 
-   public function select() {
+   public function select($query = null) {
      return false;
    }
 
-   public static function new() {
-     return null;
-   }
-
-   public function create($query) : bool {
+   public function new($query = null) {
      return false;
    }
 
-   public function insert($query) : bool {
+   public function create(IQuery_builder $query = null) {
      return false;
    }
 
-   public function update($query) : bool {
+   public function insert($query = null) {
      return false;
    }
 
-   public function delete($query) : bool {
+   public function update($query = null) {
      return false;
    }
 
-   public function exists($id = null) : bool {
+   public function delete($query = null) {
      return false;
    }
 
-   public function count($query) : int {
+   public function exists($id = null) {
+     return false;
+   }
+
+   public function count($query = null) {
      return false;
    }
 
@@ -126,11 +134,67 @@ class MY_Admin_Model extends MY_Model {
   }
 }
 
-class MY_Manager_Model extends MY_Model {
+class MY_DAO_Model extends MY_Model {
+
+  public function __construct() {
+    parent::__construct();
+  }
+
+  protected function orm(string $tablename = null, string $delim = '_') {
+    $tablename = is_null($tablename) ? $this->prefix . $this->datatable : $tablename;
+    $delim = is_null($delim) ? '_' : $delim;
+    $this->orm->set_tablename($tablename, $delim);
+    return $this->orm;
+  }
+
+  public function select($query = null) {
+    return $this->orm()->query()->select();
+  }
+
+  public function new($query = null) {
+    $ci = &get_instance();
+    return $this->orm()->set_datatable();
+  }
+
+  public function create(IQuery_builder $query = null) {
+    return false;
+  }
+
+  public function insert($query = null) {
+    return false;
+  }
+
+  public function update($query = null) {
+    return false;
+  }
+
+  public function delete($query = null) {
+    return false;
+  }
+
+  public function exists($id = null) {
+    return false;
+  }
+
+  public function count($query = null) {
+    return false;
+  }
+
+  public function result($data = null) {
+    return $this->orm->result();
+  }
+}
+
+class MY_Manager_Model extends MY_DAO_Model {
+
   protected $setting = null;
+
   protected $dao = null;
+
   protected $format = null;
+
   protected $type = null;
+
   protected $result = null;
 
   public function __construct(IDao_manager $dao = null, IFormat_manager $format = null, string $type = null) {
@@ -203,43 +267,6 @@ class MY_Manager_Model extends MY_Model {
       }
     }
     return null;
-  }
-
-  protected function setting($type = null) {
-    if (is_null($this->setting))
-      return false;
-    $type = is_null($type) ? $this->type : $type;
-    $method = 'set_'.$type;
-    if (method_exists($this->setting, $method)) {
-      $this->setting->$method();
-      $this->result = $this->setting;
-      return $this->result;
-    }
-    return false;
-  }
-
-  protected function dao($type = null) {
-    if (is_null($this->dao))
-      return false;
-    $type = is_null($type) ? $this->type : $type;
-    $method = 'load_'.$type;
-    if (method_exists($this->dao, $method)) {
-      $this->result = $this->dao->$method($this->setting);
-      return $this->result;
-    }
-    return false;
-  }
-
-  protected function format($type = null) {
-    if (is_null($this->format))
-      return false;
-    $type = is_null($type) ? $this->type : $type;
-    $method = 'load_'.$type;
-    if (method_exists($this->format, $method)) {
-      $this->result = $this->format->$method($this->dao);
-      return $this->result;
-    }
-    return false;
   }
 
   protected function set_configs(ISetting_manager $configs = null) {

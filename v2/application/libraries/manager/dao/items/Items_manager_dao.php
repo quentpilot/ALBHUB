@@ -5,6 +5,7 @@ require_once APPPATH . 'libraries/manager/dao/IDao_manager.php';
 
 class Items_manager_dao extends Tools_manager implements IDao_manager {
 
+  protected $orm = null;
   protected $pojo = null;
   protected $db = null;
 
@@ -15,6 +16,7 @@ class Items_manager_dao extends Tools_manager implements IDao_manager {
     if (class_exists($type))
       $this->pojo = new $type();
     $this->db = $this->ci->db;
+    $this->orm = $this->ci->orm;
   }
 
   public function build() {
@@ -30,8 +32,7 @@ class Items_manager_dao extends Tools_manager implements IDao_manager {
   }
 
   public function load_nav_menu(Items_manager_setting $configs = null) {
-    $this->ci = &get_instance();
-    $this->configs = $configs;
+    $this->set_configs($configs);
     $this->result = $this->pojo;
     $this->configs->add('dao.nav_menu', array('pojo' => $this->pojo, 'status' => 'table done'));
     //echo $this->configs->type;
@@ -64,5 +65,14 @@ class Items_manager_dao extends Tools_manager implements IDao_manager {
     //echo __CLASS__;
     return true;
     // process to get configs data through database then build as result objects types
+  }
+
+  public function set_configs($configs = null, bool $new_ci = false) : bool {
+    if ($new_ci)
+      $this->ci = &get_instance();
+    if (!$configs instanceof Items_manager_setting)
+      return false;
+    $this->configs = is_null($configs) ? $this->configs : $configs;
+    return true;
   }
 }

@@ -57,9 +57,8 @@ class Setting_manager extends Tools_manager implements ISetting_manager {
     return true;
   }
 
-  public function set_configs(ISetting $configs = null, $new_ci = true) {
-    if ($new_ci)
-      $this->ci = &get_instance();
+  public function set_configs($configs = null, $new_ci = true) : bool {
+    if (!parent::set_configs($configs, $new_ci)) return false;
     $this->configs = is_null($configs->get('configs')) ? $this->configs : $configs;
     return true;
   }

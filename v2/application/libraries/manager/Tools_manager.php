@@ -22,9 +22,11 @@ class Tools_manager implements ITools_manager {
     $this->configs = $configs;
   }
 
-  public function set_configs(ISetting $configs = null, bool $new_ci = false) {
+  public function set_configs($configs = null, bool $new_ci = false) : bool {
     if ($new_ci)
       $this->ci = &get_instance();
+    if (!$configs instanceof ISetting)
+      return false;
     $this->configs = is_null($configs) ? $this->configs : $configs;
     return true;
   }

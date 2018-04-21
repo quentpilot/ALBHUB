@@ -9,7 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 * @see Layout as example
 */
 
-class Template_model extends MY_Model {
+class Template_model extends MY_DAO_Model {
 
   /**
   * template attribute is the current instance of Template library class

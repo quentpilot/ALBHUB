@@ -7,6 +7,8 @@ class Items_manager_model extends MY_Manager_Model implements IManager_model {
 
   public function __construct(IDao_manager $dao = null, IFormat_manager $format = null, string $type = null) {
     parent::__construct($dao, $format, $type);
+    $this->datatable = is_null($this->setting) ? null : $this->setting->get('item_datatable');
+    $this->prefix = is_null($this->setting) ? null : $this->setting->get('item_prefix');
   }
 
   public function nav_menu(Items_manager_setting $configs = null) {
@@ -23,7 +25,8 @@ class Items_manager_model extends MY_Manager_Model implements IManager_model {
     $types = array('table', 'table', 'pagination', 'pagination');
     $this->setting->set_table();
     $this->tools($tools, $types);
-    echo $this->setting->get('query_string');
+    $query = $this->select();
+    debug($query->result());
     return $this->result['format.table'];
   }
 

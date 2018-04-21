@@ -58,4 +58,13 @@ class Items_manager_format extends Tools_manager implements IFormat_manager {
     $this->result = $folder;
     return true;
   }
+
+  public function set_configs($configs = null, bool $new_ci = false) : bool {
+    if ($new_ci)
+      $this->ci = &get_instance();
+    if (!$configs instanceof Items_manager_setting)
+      return false;
+    $this->configs = is_null($configs) ? $this->configs : $configs;
+    return true;
+  }
 }

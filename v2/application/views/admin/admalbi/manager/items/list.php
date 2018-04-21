@@ -1,4 +1,4 @@
-<?php print_r($data_nav_menu) ?>
+<?php //print_r($data_nav_menu) ?>
 <section class="tables">
   <div class="container-fluid">
     <div class="row">
