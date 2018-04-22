@@ -38,6 +38,10 @@ class MY_Model extends CI_Model {
      $this->response = ($process) ? $this->build() : new Res();
    }
 
+   protected function _config(array $config = null) {
+     return false;
+   }
+
    public function init(array $attributes) : bool {
      foreach ($attributes as $key => $value) {
        if (!$this->set($key, $value))
@@ -140,6 +144,32 @@ class MY_DAO_Model extends MY_Model {
     parent::__construct();
   }
 
+  protected function _config(array $config = null) {
+    $config = is_null($config) ? $this->config : $config;
+    // load ORM libraries
+    $this->_load_libraries($config);
+    return true;
+  }
+
+  protected function _load_libraries($config) {
+    $lib_config = is_object($config)
+                    ? $config->item('orm')['load_libraries']
+                    : $config['orm']['load_libraries'];
+    $lib_config = isset($lib_config) ? $lib_config : null;
+    if (!is_null($lib_config) && is_array($lib_config)) {
+      $it = 1;
+      foreach ($lib_config as $class) {
+        //$pre = ($it == count($lib_config)) ? '' : 'orm/';
+        $pre = 'orm/';
+        $this->load->library('tool/' . $pre . $class);
+        $it++;
+      }
+      $this->load->library('tool/' . $pre . 'orm');
+      return true;
+    }
+    return false;
+  }
+
   protected function orm(string $tablename = null, string $delim = '_') {
     $tablename = is_null($tablename) ? $this->prefix . $this->datatable : $tablename;
     $delim = is_null($delim) ? '_' : $delim;
@@ -147,29 +177,42 @@ class MY_DAO_Model extends MY_Model {
     return $this->orm;
   }
 
-  public function select($query = null) {
-    return $this->orm()->query()->select();
-  }
-
-  public function new($query = null) {
-    $ci = &get_instance();
-    return $this->orm()->set_datatable();
-  }
-
   public function create(IQuery_builder $query = null) {
     return false;
   }
 
+  public function rule($rule = null) {
+    $rule = (is_array($rule)) ? $rule : array($rule);
+    return $rule;
+  }
+
+  public function select($query = null) {
+    $query = $this->rule($query);
+    return $this->orm()->query()->select($query);
+  }
+
+  public function new($query = null) {
+    return $this->orm()->set_datatable();
+  }
+
   public function insert($query = null) {
-    return false;
+    $query = $this->rule($query);
+    return $this->orm()->query()->insert($query);
   }
 
   public function update($query = null) {
-    return false;
+    $query = $this->rule($query);
+    return $this->orm()->query()->update($query);
   }
 
   public function delete($query = null) {
-    return false;
+    $query = $this->rule($query);
+    return $this->orm()->query()->delete($query);
+  }
+
+  public function copy($query = null) {
+    $query = $this->rule($query);
+    return $this->orm()->query()->copy($query);
   }
 
   public function exists($id = null) {

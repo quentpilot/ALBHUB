@@ -25,8 +25,14 @@ class Items_manager_model extends MY_Manager_Model implements IManager_model {
     $types = array('table', 'table', 'pagination', 'pagination');
     $this->setting->set_table();
     $this->tools($tools, $types);
-    $query = $this->select();
-    debug($query->result());
+    $select = $this->rule('slug, sta_id');
+    $from = $this->rule($this->prefix . $this->datatable);
+    $where = $this->rule(array('itm.id', 1));
+    //$and_where = $this->rule(array('itm.', 'itm.id'));
+    $order_by = $this->rule('id');
+    $query = $this->select($select)->from($from)->where($where)->order_by($order_by);
+    debug($query->get('query'));
+    //debug($this->datatable);
     return $this->result['format.table'];
   }
 

@@ -18,8 +18,9 @@ class Table_result implements IORM_result {
     $this->query = $query;
   }
 
-  public function build() {
-
+  public function build(IORM_query $query = null) {
+    $this->query = $query;
+    $this->tablename = is_null($query) ? $this->tablename : $query->tablename;
     return $this->result();
   }
 

@@ -75,6 +75,8 @@ $autoload['libraries'] = array(
   'tool/orm/builder/table/datatable_builder',
   'tool/orm/result/table_result',
   'tool/orm/result/datatable_result',
+  'tool/orm/builder/query/queries_builder',
+  'tool/orm/builder/query/dataqueries_builder',
   'tool/orm/builder/query/query_builder',
   'tool/orm/builder/query/dataquery_builder',
   'tool/orm/query/table_query',
@@ -166,7 +168,7 @@ $autoload['helper'] = array('url', 'debug', 'token');
 | config files.  Otherwise, leave it blank.
 |
 */
-$autoload['config'] = array('templates', 'transferts');
+$autoload['config'] = array('orm', 'templates', 'transferts');
 
 /*
 | -------------------------------------------------------------------

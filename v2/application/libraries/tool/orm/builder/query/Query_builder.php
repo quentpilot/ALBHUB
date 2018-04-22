@@ -11,15 +11,18 @@ class Query_builder implements IQuery_builder {
 
   public $configs = null;
 
-  protected $ci = null;
-
   protected $tablename = null;
 
+  protected $queries = null;
+
   protected $result = null;
+
+  protected $ci = null;
 
   public function __construct(string $tablename = null) {
     $this->ci = &get_instance();
     $this->tablename = $tablename;
+    $this->queries = new Queries_builder();
     $this->result = array();
   }
 
@@ -27,6 +30,16 @@ class Query_builder implements IQuery_builder {
     $tablename = is_null($tablename) ? $this->tablename : $tablename;
     $this->tablename = $tablename;
     return $this->process();
+  }
+
+  public function query() : IQueries_builder {
+    return $this->queries;
+  }
+
+  public function result() : array {
+    if ($this->queries->execute())
+      $this->result = $this->queries->get('ci_result');
+    return $this->result;
   }
 
   public function process() : bool {
@@ -38,8 +51,8 @@ class Query_builder implements IQuery_builder {
     return false;
   }
 
-  public function result() : array {
-    return $this->result;
+  public function concat() : bool {
+    return false;
   }
 
   /**

@@ -8,6 +8,8 @@ interface IORM_builder {
 
   public function build();
 
+  //public function explode_tablename();
+
   public function get(string $property);
 
   public function set(string $property, $value);

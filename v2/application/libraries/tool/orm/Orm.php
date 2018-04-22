@@ -34,7 +34,7 @@ class Orm implements IORM {
 
   protected $errors = null;
 
-  public function __construct(int $id = 0, string $datatable = null, $it = null, string $delim = '_') {
+  public function __construct($id = 0, string $datatable = null, $it = null, string $delim = '_') {
     $delim = is_null($delim) ? '_' : $delim;
     $this->delim = $delim;
     $this->it = (is_null($it) || !is_int($it)) ? ($this->it + 1) : $it;

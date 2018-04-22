@@ -10,9 +10,9 @@ class Table_query implements IORM_query {
 
   public $tablename = null;
 
-  public $data = null;
+  public $rules = null;
 
-  public $query_string = null;
+  public static $query_string = null;
 
   public $query_builder = null;
 
@@ -20,11 +20,11 @@ class Table_query implements IORM_query {
 
   public $result = null;
 
-  public function __construct(string $tablename = null, $rules = null) {
+  public function __construct(string $tablename = null, $rules = null, IQuery_builder $query_builder = null, IResult_ $result_builder = null, IDatatable_builder $table_builder = null) {
     $this->tablename = $tablename;
-    $this->data = $rules;
+    $this->rules = $rules;
     $this->query_builder = new Query_builder();
-    $this->table_builder = new Table_builder();
+    $this->table_builder = new Datatable_builder();
     $this->result = new Table_result();
   }
 
@@ -32,32 +32,36 @@ class Table_query implements IORM_query {
     return false;
   }
 
-  public function select(string $tablename = null, $data = null) {
-    $this->set($tablename);
+  public function select($rules = null) {
+    $this->set(null, $rules);
+    // if rules, then concat a string representing several queries_builder methods to call
+    // else, return a queries_builder select object
+    return $this->query_builder->query()->select($rules);
+  }
+
+  public function insert($rules = null) {
+    $this->set(null, $rules);
     return $this;
   }
 
-  public function insert(string $tablename = null) {
-    $this->set($tablename);
+  public function update($rules = null) {
+    $this->set(null, $rules);
     return $this;
   }
 
-  public function update(string $tablename = null) {
-    $this->set($tablename);
+  public function delete($rules = null) {
+    $this->set(null, $rules);
     return $this;
   }
 
-  public function delete(string $tablename = null) {
-    $this->set($tablename);
+  public function copy($rules = null) {
+    $this->set(null, $rules);
     return $this;
   }
 
-  public function copy(string $tablename = null) {
-    $this->set($tablename);
-    return $this;
-  }
-
-  public function result(string $tablename = null) {
+  public function result($rules = null) {
+    $this->result->build($this);
+    $this->result->set('query', null);
     return $this->result;
   }
 
@@ -69,7 +73,7 @@ class Table_query implements IORM_query {
     if (!is_null($tablename))
       $this->tablename = $tablename;
     if (!is_null($value))
-      $this->data = $value;
+      $this->rules = $value;
     return true;
   }
 }

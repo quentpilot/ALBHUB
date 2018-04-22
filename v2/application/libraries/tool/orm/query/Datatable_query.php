@@ -6,10 +6,9 @@
 
 class Datatable_query extends Table_query {
 
-  public function __construct(string $tablename = null, $data = null) {
-    parent::__construct($tablename, $data);
+  public function __construct(string $tablename = null, $rules = null) {
+    parent::__construct($tablename, $rules);
     $this->query_builder = new Dataquery_builder();
-    $this->table_builder = new Datatable_builder();
     $this->result = new Datatable_result();
   }
 }

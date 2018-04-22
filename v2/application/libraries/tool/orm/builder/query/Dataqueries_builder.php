@@ -5,10 +5,9 @@
  * then store new class to libraries/tool/orm/database/tables/tablename_classname.php
  */
 
-class Dataquery_builder extends Query_builder {
+class Dataqueries_builder extends Queries_builder {
 
   public function __construct(string $tablename = null) {
     parent::__construct($tablename);
-    $this->queries = new Dataqueries_builder();
   }
 }
