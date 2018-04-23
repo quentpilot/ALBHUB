@@ -59,8 +59,8 @@ class MY_Model extends CI_Model {
      return false;
    }
 
-   public function result($data = null) {
-     return $data;
+   public function result($query = null) {
+     return $query;
    }
 
    protected function build() {
@@ -102,7 +102,7 @@ class MY_Model extends CI_Model {
    /**
    * get method would to return class attribute value entered as param
    */
-   public function get($property = null) {
+   public function get(string $property = null) {
      if (is_null($property))
        return false;
      if (property_exists($this, $property))
@@ -112,7 +112,7 @@ class MY_Model extends CI_Model {
    /**
    * set method would to set attribute choosen with wanted value
    */
-   public function set($property = null, $value = null) {
+   public function set(string $property = null, $value = null) {
      if (is_null($property))
        return false;
      if (property_exists($this, $property)) {
@@ -138,11 +138,148 @@ class MY_Admin_Model extends MY_Model {
   }
 }
 
-class MY_DAO_Model extends MY_Model {
+class MY_ORM_Model extends MY_Model implements IORM {
 
-  public function __construct() {
+  public $it = 0;
+
+  public $id = 0;
+
+  public $alias = null;
+
+  public $status = false;
+
+  public $classname = null;
+
+  public $datatable = null;
+
+  public $prefix = null;
+
+  public $delim = null;
+
+  public $entity = null;
+
+  protected $queries = null;
+
+  protected $results = null;
+
+  protected $table_builder = null;
+
+  protected $entity_builder = null;
+
+  protected $query = null;
+
+  protected $result = null;
+
+  protected $errors = null;
+
+  public function __construct(string $datatable = null, string $classname = null, $id = 0, $delim = '_', $it = null, IDatatable_builder $table_builder = null, IEntity_builder $entity_builder = null, IORM_query $query = null, IORM_result $result = null) {
     parent::__construct();
+    $this->delim = is_string($delim) ? $delim : '_';
+    $this->id = $id;
+    $this->it = (is_null($it) || !is_int($it)) ? ($this->it + 1) : $it;
+    $this->datatable = is_null($datatable) ? $this->datatable : $datatable;
+    $this->classname = is_null($classname) ? explode('_', get_class($this))[0] : $classname;
+    $this->prefix = is_null($this->datatable) ? null : explode($delim, $datatable)[0] . $delim;
+    $this->table_builder = is_null($table_builder) ? new Datatable_builder($this->datatable) : $table_builder;
+    $this->entity_builder = is_null($entity_builder) ? new Dataentity_builder($this->datatable, $this->classname) : $entity_builder;
+    $this->query = is_null($query) ? new Datatable_query($this->datatable) : $query;
+    $this->result = is_null($result) ? new Datatable_result($this->query) : $result;
+    $this->queries = array();
+    $this->results = array();
   }
+
+  public function query($query = null) {
+    $query = is_null($query) ? $this->query : $query;
+    if ($query instanceof IORM_query) {
+      $this->query = $query;
+      $this->query->tablename = $this->datatable;
+      $this->prefix = is_null($this->datatable) ? null : explode($this->delim, $this->datatable)[0] . $this->delim;
+      return $this->query;
+    }
+    return false;
+  }
+
+  public function result($query = null) {
+    $response = $this->query->result();
+    $this->result = $response;
+    return $this->result;
+  }
+
+  public function entity(string $classname = null, string $tablename = null,string $repository = null) {
+    $tablename = is_null($tablename) ? $this->datatable : $tablename;
+    $classname = is_null($classname) ? $tablename : $classname;
+
+    $this->entity_builder->set('repository', $repository);
+    $this->entity_builder->build($tablename, $classname);
+    $this->entity = $this->entity_builder->result();
+    return $this->entity;
+  }
+
+  public function refresh(array $tables = array(), bool $return = false) {
+    return $this->table_builder->refresh_datatables($tables, $return);
+  }
+
+  public function iterate($id = null) {
+    if (is_null($id)) {
+      $this->it = $this->it + 1;
+      return $this->it;
+    }
+    $it = (is_int($id) || is_numeric($id)) ? $this->it + $id : $id;
+    $this->it = $it;
+    return $it;
+  }
+
+  public function queries($id = null) {
+    $id = is_null($id) ? $this->it : $id;
+    if (is_array($this->queries) && count($this->queries)) {
+      if (isset($this->queries[$id]))
+        return $this->queries[$id];
+    }
+    return null;
+  }
+
+  public function results($id = null) {
+    $id = is_null($id) ? $this->it : $id;
+    if (is_array($this->results) && count($this->results)) {
+      if (isset($this->results[$id]))
+        return $this->results[$id];
+    }
+    return null;
+  }
+
+  public function new_datatable(string $datatable, bool $refresh = false) {
+    if ($refresh && !$this->refresh()) return null;
+    if ($this->table_builder->build($datatable))
+      return $this->get_datatable();
+    return null;
+  }
+
+  public function get_datatable() {
+    return $this->table_builder->object;
+  }
+
+  public function set_datatable(string $datatable = null) {
+    $datatable = is_null($datatable) ? $this->datatable : $datatable;
+    if (is_null($datatable)) return false;
+    return $this->new_datatable($datatable);
+  }
+
+  public function get_tablename(bool $build = true) : string {
+    $tablename = ($build) ? $this->prefix . $this->delim . $this->datatable : $this->datatable;
+    return $tablename;
+  }
+
+  public function set_tablename(string $datatable = null, string $delim = '_') {
+    $datatable = is_null($datatable) ? $this->datatable : $datatable;
+    if (is_null($datatable) || is_null($delim)) return false;
+    $exp = explode($delim, $datatable);
+    $prefix = $exp[0] . $delim;
+    $this->datatable = $datatable;
+    $this->prefix = $prefix;
+    $this->delim = $delim;
+    return true;
+  }
+
 
   protected function _config(array $config = null) {
     $config = is_null($config) ? $this->config : $config;
@@ -169,66 +306,9 @@ class MY_DAO_Model extends MY_Model {
     }
     return false;
   }
-
-  protected function orm(string $tablename = null, string $delim = '_') {
-    $tablename = is_null($tablename) ? $this->prefix . $this->datatable : $tablename;
-    $delim = is_null($delim) ? '_' : $delim;
-    $this->orm->set_tablename($tablename, $delim);
-    return $this->orm;
-  }
-
-  public function create(IQuery_builder $query = null) {
-    return false;
-  }
-
-  public function rule($rule = null) {
-    $rule = (is_array($rule)) ? $rule : array($rule);
-    return $rule;
-  }
-
-  public function select($query = null) {
-    $query = $this->rule($query);
-    return $this->orm()->query()->select($query);
-  }
-
-  public function new($query = null) {
-    return $this->orm()->set_datatable();
-  }
-
-  public function insert($query = null) {
-    $query = $this->rule($query);
-    return $this->orm()->query()->insert($query);
-  }
-
-  public function update($query = null) {
-    $query = $this->rule($query);
-    return $this->orm()->query()->update($query);
-  }
-
-  public function delete($query = null) {
-    $query = $this->rule($query);
-    return $this->orm()->query()->delete($query);
-  }
-
-  public function copy($query = null) {
-    $query = $this->rule($query);
-    return $this->orm()->query()->copy($query);
-  }
-
-  public function exists($id = null) {
-    return false;
-  }
-
-  public function count($query = null) {
-    return false;
-  }
-
-  public function result($data = null) {
-    return $this->orm->result();
-  }
 }
 
-class MY_Manager_Model extends MY_DAO_Model {
+class MY_Manager_Model extends MY_ORM_Model {
 
   protected $setting = null;
 
@@ -236,17 +316,15 @@ class MY_Manager_Model extends MY_DAO_Model {
 
   protected $format = null;
 
-  protected $type = null;
-
-  protected $result = null;
-
-  public function __construct(IDao_manager $dao = null, IFormat_manager $format = null, string $type = null) {
-    parent::__construct();
+  public function __construct(string $datatable = null, string $classname = null, $id = 0, $delim = '_', $it = null, IDatatable_builder $table_builder = null, IEntity_builder $entity_builder = null, IORM_query $query = null, IORM_result $result = null, string $type = null, IDao_manager $dao = null, IFormat_manager $format = null) {
+    parent::__construct($datatable, $classname, $id, $delim, $it, $table_builder, $entity_builder, $query, $result, $dao, $format);
     $part = $this->uri->segment(4);
     $type = is_null($type) ? substr($part, 0, strlen($part)) : $type;
     $this->type = $type;
     //$this->load();
     $this->load(array('setting', 'dao', 'format'));
+    $this->dao = is_null($dao) ? $this->dao : $dao;
+    $this->format = is_null($dao) ? $this->format : $format;
   }
 
   protected function load(array $tools, $type = null) {

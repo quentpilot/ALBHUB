@@ -1,6 +1,6 @@
 <?php
 
-class Ilp_items_layouts_parts {
+class ilp_items_layouts_parts {
 
 	public $ilp_id = null;
 

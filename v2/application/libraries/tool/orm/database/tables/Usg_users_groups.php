@@ -1,6 +1,6 @@
 <?php
 
-class Usg_users_groups {
+class usg_users_groups {
 
 	public $usg_id = null;
 

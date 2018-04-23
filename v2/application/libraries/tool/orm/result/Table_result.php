@@ -29,21 +29,46 @@ class Table_result implements IORM_result {
   }
 
   public function object() {
+    $this->result = is_array($result) ? $this->tab_to_obj($this->result) : $this->result;
     return $this->result;
   }
 
   public function array() {
+    $this->result = is_array($this->result) ? $this->result : $this->obj_to_tab($this->result);
+    return $this->result;
+  }
+
+  public function string() {
+    return $this->result->to_string();
+  }
+
+  public function json() {
+    return json_encode($this->result);
+  }
+
+  public function rand() {
     return $this->result;
   }
 
   public function count() {
-    return count($this->result);
+    $counter = is_object($this->result) ? count($this->obj_to_tab($this->result)) : count($this->result);
+    $counter = (($counter == 0) && is_array($this->result)) ? count(array_keys($this->result)) : $counter;
+    return $counter;
   }
 
   public function row($key) {
+    $result = is_array($this->result) ? $this->result : $this->obj_to_tab($this->result);
     if (array_key_exists($key, $this->result))
       return $this->result[$key];
     return null;
+  }
+
+  public function obj_to_tab(object $obj) : array {
+    return array();
+  }
+
+  public function tab_to_obj(array $tab) : object {
+    return new Object();
   }
 
   public function get(string $tablename = null) {

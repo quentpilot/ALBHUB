@@ -1,6 +1,6 @@
 <?php
 
-class Ust_users_settings {
+class ust_users_settings {
 
 	public $ust_id = null;
 

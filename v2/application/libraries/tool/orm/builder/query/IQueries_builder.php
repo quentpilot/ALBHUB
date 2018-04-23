@@ -14,7 +14,7 @@ interface IQueries_builder {
 
   public function format();
 
-  public function concat(string $text, $index = null, $value = null, $delim = ',');
+  public function concat(string $text = null, $index = null, $value = null, $delim = ',');
 
   public function execute();
 

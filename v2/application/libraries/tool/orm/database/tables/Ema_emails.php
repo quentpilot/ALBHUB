@@ -1,6 +1,6 @@
 <?php
 
-class Ema_emails {
+class ema_emails {
 
 	public $ema_id = null;
 

@@ -8,9 +8,11 @@ interface IORM {
 
   public function query($query = null);
 
-  public function result();
+  public function result($query = null);
 
-  public function refresh(array $tables = array());
+  public function entity();
+
+  public function refresh(array $tables = array(), bool $return = false);
 
   public function iterate();
 
@@ -23,6 +25,8 @@ interface IORM {
   public function get_datatable();
 
   public function set_datatable(string $datatable = null);
+
+  public function get_tablename(bool $build = true);
 
   public function set_tablename(string $tablename = null, string $delim = '_');
 

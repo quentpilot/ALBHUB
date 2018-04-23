@@ -59,14 +59,20 @@ class Orm implements IORM {
     return false;
   }
 
-  public function result() {
+  public function result($query = null) {
     $response = $this->query->result();
     $this->result = $response;
     return $this->result;
   }
 
-  public function refresh(array $tables = array()) {
-    return $this->table_builder->refresh_datatables($tables);
+  public function entity($query = null) {
+    //$this->entity_builder->build($query);
+    //$this->entity = $this->$entity_builder->result();
+    return $this->entity;
+  }
+
+  public function refresh(array $tables = array(), bool $return = false) {
+    return $this->table_builder->refresh_datatables($tables, $return);
   }
 
   public function iterate($id = null) {
@@ -112,6 +118,11 @@ class Orm implements IORM {
     $datatable = is_null($datatable) ? $this->datatable : $datatable;
     if (is_null($datatable)) return false;
     return $this->new_datatable($datatable);
+  }
+
+  public function get_tablename(bool $build = true) : string {
+    $tablename = ($build) ? $this->prefix . $this->delim . $this->datatable : $this->datatable;
+    return $tablename;
   }
 
   public function set_tablename(string $datatable = null, string $delim = '_') {

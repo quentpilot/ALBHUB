@@ -1,6 +1,6 @@
 <?php
 
-class Usi_users_infos {
+class usi_users_infos {
 
 	public $usi_user_id = null;
 

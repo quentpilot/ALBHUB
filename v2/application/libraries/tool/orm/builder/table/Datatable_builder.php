@@ -13,15 +13,24 @@ class Datatable_builder implements IDatatable_builder {
 
   protected $tablename = null;
 
+  protected $classname = null;
+
+  protected $folder = null;
+
+  protected $type = null;
+
   protected $column = null;
 
   protected $layout = null;
 
   public $object = null;
 
-  public function __construct(string $tablename = null, Datacolumn_builder $column = null, Layout_builder $layout = null) {
+  public function __construct(string $tablename = null, string $classname = null, Datacolumn_builder $column = null, Layout_builder $layout = null) {
     $this->ci = &get_instance();
     $this->tablename = strtolower($tablename);
+    $this->classname = ucfirst($classname);
+    $this->folder = APPPATH . 'libraries/tool/orm/database/';
+    $this->type = 'tables';
     $this->column = is_null($column) ? new Datacolumn_builder($tablename) : $column;
     $this->layout = is_null($layout) ? new Datalayout_builder() : $layout;
     if (!is_null($tablename) && $this->build())
@@ -29,12 +38,12 @@ class Datatable_builder implements IDatatable_builder {
     return false;
   }
 
-  public function build(string $tablename = null) : bool {
+  public function build(string $tablename = null, string $classname = null) : bool {
     $tablename = is_null($tablename) ? $this->tablename : strtolower($tablename);
+    $classname = is_null($classname) ? $this->classname : ucfirst($classname);
     if (is_null($tablename))
       return false;
     $this->tablename = $tablename;
-
     if ($this->class_exists()) {
       $this->object = $this->get_class();
       return true;
@@ -56,8 +65,8 @@ class Datatable_builder implements IDatatable_builder {
 
   protected function create_class(string $portability = 'public', bool $var_type = false) {
     //$tpl = $this->layout->build();
-    $classname = ucfirst($this->tablename);
-    $tpl_head = "<?php\n\nclass $classname {\n\n";
+    $classname = is_null($this->classname) ? ucfirst($this->tablename) : $this->classname;
+    $tpl_head = "<?php\n\nclass $this->tablename {\n\n";
     $tpl_attr_start = "\t$portability ";
     $tpl_attr_end = ' = null;';
     $tpl_attr = '';
@@ -96,12 +105,12 @@ class Datatable_builder implements IDatatable_builder {
 
   protected function save_class(string $template) {
     $classname = ucfirst($this->tablename) . '.php';
-    $file = APPPATH . 'libraries/tool/orm/database/tables/' .$classname;
+    $file = $this->folder . $this->type . '/' .$classname;
     return file_put_contents($file, $template);
   }
 
   protected function class_exists() : bool {
-    $path = APPPATH . 'libraries/tool/orm/database/tables';
+    $path = $this->folder . $this->type;
     $files = scandir($path);
     if (!$files)
       return false;
@@ -117,7 +126,7 @@ class Datatable_builder implements IDatatable_builder {
 
   protected function get_class() {
     $classname = ucfirst($this->tablename);
-    $file = APPPATH . 'libraries/tool/orm/database/tables/' . $classname . '.php';
+    $file = $this->folder . $this->type . '/' . $classname . '.php';
 
     if (file_exists($file)) {
       include_once($file);

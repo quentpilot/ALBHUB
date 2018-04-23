@@ -1,6 +1,6 @@
 <?php
 
-class Apc_app_categories {
+class apc_app_categories {
 
 	public $apc_id = null;
 

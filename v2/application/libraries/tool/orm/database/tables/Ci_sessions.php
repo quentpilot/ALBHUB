@@ -1,6 +1,6 @@
 <?php
 
-class Ci_sessions {
+class ci_sessions {
 
 	public $id = null;
 

@@ -1,6 +1,6 @@
 <?php
 
-class Bic_bills_categories {
+class bic_bills_categories {
 
 	public $bic_id = null;
 

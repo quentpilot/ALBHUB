@@ -14,10 +14,10 @@ class User_log {
 
   public function is_loged() {
     if (!is_null($this->user))
-      $this->status = $this->user->get('status_id');
-    elseif (get_instance()->session->has_userdata('status_id')) {
+      $this->status = $this->user->get('sta_id');
+    elseif (get_instance()->session->has_userdata('sta_id')) {
       // TODO : build this user with session
-      $this->status = get_instance()->session->userdata('status_id');
+      $this->status = get_instance()->session->userdata('sta_id');
     } else
       return false;
     return $this->status;
@@ -34,7 +34,7 @@ class User_log {
       'register_date' => $user->usr_register_date,
       'last_log' => $user->usr_last_log,
       'group_id' => $user->usr_group_id,
-      'status_id' => $user->usr_status_id
+      'sta_id' => $user->usr_sta_id
     );
 
     get_instance()->session->set_userdata($usr_user);
@@ -58,7 +58,7 @@ class User_log {
     }
     $this->user = $user;
     $this->infos = $infos;
-    $this->status = $user->usr_status_id;
+    $this->status = $user->usr_sta_id;
     return true;
   }
 

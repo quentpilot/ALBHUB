@@ -79,6 +79,8 @@ $autoload['libraries'] = array(
   'tool/orm/builder/query/dataqueries_builder',
   'tool/orm/builder/query/query_builder',
   'tool/orm/builder/query/dataquery_builder',
+  'tool/orm/builder/entity/entity_builder',
+  'tool/orm/builder/entity/dataentity_builder',
   'tool/orm/query/table_query',
   'tool/orm/query/datatable_query',
   'tool/orm/Orm',

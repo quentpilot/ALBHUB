@@ -10,7 +10,7 @@ class User_session {
   public $usr_register_date = null;
   public $usr_last_log = null;
   public $usr_group_id = 1;
-  public $usr_status_id = 0;
+  public $usr_sta_id = 0;
 
   public function __construct(int $id = 0, string $username = null, string $email = null, string $password = null, int $valid_email = 0, $register_date = null, $last_log = null, int $group_id = 1, int $status_id = 0) {
     $this->usr_id = $id;
@@ -21,7 +21,7 @@ class User_session {
     $this->usr_register_date = $register_date;
     $this->usr_last_log = $last_log;
     $this->usr_group_id = $group_id;
-    $this->usr_status_id = $status_id;
+    $this->usr_sta_id = $status_id;
   }
 
   public function copy(object $obj = null) : bool {
@@ -36,7 +36,7 @@ class User_session {
     $this->usr_register_date = $obj->usr_register_date;
     $this->usr_last_log = $obj->usr_last_log;
     $this->usr_group_id = $obj->usr_group_id;
-    $this->usr_status_id = $obj->usr_status_id;
+    $this->usr_sta_id = $obj->usr_sta_id;
     return true;
   }
 

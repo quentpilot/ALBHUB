@@ -1,6 +1,6 @@
 <?php
 
-class Lap_layout_parts {
+class lap_layout_parts {
 
 	public $lap_id = null;
 

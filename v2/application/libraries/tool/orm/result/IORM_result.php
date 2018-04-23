@@ -14,9 +14,19 @@ interface IORM_result {
 
   public function array();
 
+  public function string();
+
+  public function json();
+
+  public function rand();
+
   public function count();
 
   public function row($key);
+
+  public function obj_to_tab(object $obj);
+
+  public function tab_to_obj(array $tab);
 
   public function get(string $tablename = null);
 

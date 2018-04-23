@@ -85,13 +85,18 @@ class User extends MY_Admin_Controller {
 		else {
 			$user = $this->user_model->log_user();
 			//print_r($user);
-			if ($user->get('usr_status_id')) {
+			if ($user->get('usr_sta_id')) {
 				if ($this->user_log->set_session($user, $this->user_infos)) {
-					$this->session->set_flashdata('alert_message', "Bonjour <b> ".$this->user_infos->usi_firstname."</b> !");
+					$this->session->set_flashdata(
+						'alert_message',
+						'Bonjour <b> <a href="'.site_url().'/admin/user/profile/'.$user->usr_username.'">'.$this->user_infos->usi_firstname.'</a></b> !'
+					);
 					redirect('admin/dashboard');
 				}
 			}
-			$this->session->set_flashdata('alert_message', "Le nom d'utilisateur<b> ".$this->input->post('username')."</b> n'existe pas ou le mot de passe est incorrecte.");
+			$this->session->set_flashdata(
+				'alert_message',
+				"Le nom d'utilisateur<b> ".$this->input->post('username')."</b> n'existe pas ou le mot de passe est incorrecte.");
 			$this->render('login');
 		}
 	}

@@ -166,22 +166,23 @@ class User_model extends MY_Session_Model {
     $req = $this->db->select()->from($this->prefix.'users')->where($this->prefix.'username', $username)->or_where($this->prefix.'email', $username)->limit(1)->get();
 
     if (count($req->result()) && $password === $req->result()[0]->usr_password && $req->result()[0]->usr_valid_email == 1) {
+
       // set main user data
       $this->user_session->copy($req->result()[0]);
-      $this->user_session->set($this->prefix.'status_id', 1);
+      $this->user_session->set($this->prefix.'sta_id', 1);
       $this->user = $this->user_session;
       $this->db->where($this->prefix.'id', $this->user_session->usr_id)->update($this->prefix.'users', $this->user_session);
       // get and set advanced user data
       $req = $this->db->select()->from('usi_users_infos')->where('usi_user_id', $this->user_session->usr_id)->get();
       $this->user_infos->copy($req->result()[0]);
     } else {
-      $this->user_session->usr_status_id = 0;
+      $this->user_session->usr_sta_id = 0;
     }
     return $this->user_session;
   }
 
   public function logout_user() : bool {
-    $this->db->set($this->prefix.'status_id', 0)
+    $this->db->set($this->prefix.'sta_id', 0)
              ->where($this->prefix.'id', $this->session->userdata('id'))
              ->update($this->prefix.'users');
     $this->session->userdata = array();
@@ -207,7 +208,7 @@ class User_model extends MY_Session_Model {
   }
 
   protected function get_contact_infos() {
-    $req = $this->db->select()->from('set_settings')->where('set_status_id', 1)->order_by('set_id')->limit(1)->get()->result()[0];
+    $req = $this->db->select()->from('set_settings')->where('set_sta_id', 1)->order_by('set_id')->limit(1)->get()->result()[0];
     if (isset($req) && !is_null($req)) {
       $infos = $req;
       return (is_null($infos)) ? null : $infos;

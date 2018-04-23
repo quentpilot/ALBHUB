@@ -53,8 +53,9 @@ class Queries_builder implements IQueries_builder {
     return false;
   }
 
-  public function concat(string $text, $index = null, $value = null, $delim = ',') : bool {
+  public function concat(string $text = null, $index = null, $value = null, $delim = ',') : bool {
     $callback = debug_backtrace()[1]['function'];
+    $text = is_null($text) ? $callback . ' ' : $text;
     $index = is_null($index) ? strtoupper($callback) : $index;
     $this->result[$index] = is_null($value) ? trim($text) : $value;
     $value = is_null($value) ? '' : $value;
@@ -75,6 +76,7 @@ class Queries_builder implements IQueries_builder {
   }
 
   public function select(array $rules = null) : IQueries_builder {
+    $rules = is_null($rules) ? array() : $rules;
     $tables = $rules;
     $query = array();
     foreach ($tables as $key => $table) {
@@ -86,56 +88,56 @@ class Queries_builder implements IQueries_builder {
     return $this;
   }
 
-  public function insert(array $rules = null) : IQueries_builder {
-    $this->concat('INSERT ', null, $rules);
+  public function insert(array $rules = array()) : IQueries_builder {
+    $this->concat(null, null, $rules);
     return $this;
   }
-  public function update(array $rules = null) : IQueries_builder {
-    $this->concat('UPDATE ', null, $rules);
+  public function update(array $rules = array()) : IQueries_builder {
+    $this->concat(null, null, $rules);
     return $this;
   }
-  public function delete(array $rules = null) : IQueries_builder {
-    $this->concat('DELETE ', null, $rules);
+  public function delete(array $rules = array()) : IQueries_builder {
+    $this->concat(null, null, $rules);
     return $this;
   }
-  public function copy(array $rules = null) : IQueries_builder {
-    $this->concat('DUPLICATE ', null, $rules);
+  public function copy(array $rules = array()) : IQueries_builder {
+    $this->concat(null, null, $rules);
     return $this;
   }
-  public function drop(array $rules = null) : IQueries_builder {
-    $this->concat('DROP ', null, $rules);
+  public function drop(array $rules = array()) : IQueries_builder {
+    $this->concat(null, null, $rules);
     return $this;
   }
-  public function truncate(array $rules = null) : IQueries_builder {
-    $this->concat('TRUNCATE ', null, $rules);
+  public function truncate(array $rules = array()) : IQueries_builder {
+    $this->concat(null, null, $rules);
     return $this;
   }
-  public function import(array $rules = null) : IQueries_builder {
-    $this->concat('IMPORT ', null, $rules);
+  public function import(array $rules = array()) : IQueries_builder {
+    $this->concat(null, null, $rules);
     return $this;
   }
-  public function export(array $rules = null) : IQueries_builder {
-    $this->concat('EXPORT ', null, $rules);
+  public function export(array $rules = array()) : IQueries_builder {
+    $this->concat(null, null, $rules);
     return $this;
   }
 
-  public function asc(array $rules = null) : IQueries_builder {
-    $this->concat('ASC ', null, $rules);
+  public function asc(array $rules = array()) : IQueries_builder {
+    $this->concat(null, null, $rules);
     return $this;
   }
-  public function count(array $rules = null) : IQueries_builder {
-    $this->concat('COUNT ', null, $rules);
+  public function count(array $rules = array()) : IQueries_builder {
+    $this->concat(null, null, $rules);
     return $this;
   }
-  public function desc(array $rules = null) : IQueries_builder {
-    $this->concat('DESC ', null, $rules);
+  public function desc(array $rules = array()) : IQueries_builder {
+    $this->concat(null, null, $rules);
     return $this;
   }
-  public function distinct(array $rules = null) : IQueries_builder {
-    $this->concat('DISTINCT ', null, $rules);
+  public function distinct(array $rules = array()) : IQueries_builder {
+    $this->concat(null, null, $rules);
     return $this;
   }
-  public function from(array $rules = null) : IQueries_builder {
+  public function from(array $rules = array()) : IQueries_builder {
     $tables = $rules;
     $query = array();
     foreach ($tables as $key => $table) {
@@ -146,31 +148,31 @@ class Queries_builder implements IQueries_builder {
     $this->concat('FROM ', null, $rules);
     return $this;
   }
-  public function join(array $rules = null) : IQueries_builder {
-    $this->concat('JOIN ', null, $rules);
+  public function join(array $rules = array()) : IQueries_builder {
+    $this->concat(null, null, $rules);
     return $this;
   }
-  public function limit(array $rules = null) : IQueries_builder {
-    $this->concat('LIMIT ', null, $rules);
+  public function limit(array $rules = array()) : IQueries_builder {
+    $this->concat(null, null, $rules);
     return $this;
   }
-  public function order_by(array $rules = null) : IQueries_builder {
+  public function order_by(array $rules = array()) : IQueries_builder {
     $this->concat('ORDER BY ', null, $rules);
     return $this;
   }
-  public function rand(array $rules = null) : IQueries_builder {
-    $this->concat('RAND ', null, $rules);
+  public function rand(array $rules = array()) : IQueries_builder {
+    $this->concat(null, null, $rules);
     return $this;
   }
-  public function sub(array $rules = null) : IQueries_builder {
-    $this->concat('SUB ', null, $rules);
+  public function sub(array $rules = array()) : IQueries_builder {
+    $this->concat(null, null, $rules);
     return $this;
   }
-  public function sum(array $rules = null) : IQueries_builder {
-    $this->concat('SUM ', null, $rules);
+  public function sum(array $rules = array()) : IQueries_builder {
+    $this->concat(null, null, $rules);
     return $this;
   }
-  public function where(array $rules = null) : IQueries_builder {
+  public function where(array $rules = array()) : IQueries_builder {
     $rules = implode(' = ', $rules);
     $rule = array_key_exists('WHERE', $this->result) ? 'AND ' : 'WHERE ';
     $index = ($rule == 'WHERE ') ? 'WHERE' : 'AND' ;

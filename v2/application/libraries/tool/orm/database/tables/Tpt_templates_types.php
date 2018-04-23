@@ -1,6 +1,6 @@
 <?php
 
-class Tpt_templates_types {
+class tpt_templates_types {
 
 	public $tpt_id = null;
 
