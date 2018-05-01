@@ -15,17 +15,23 @@ class Entity_builder implements IEntity_builder {
 
   public $classname = null;
 
+  public $delim = null;
+
   public $repository = null;
+
+  protected $builder = null;
 
   protected $result = null;
 
   protected $ci = null;
 
-  public function __construct(string $tablename = null, string $classname = null, string $repository = null) {
+  public function __construct(string $tablename = null, string $classname = null, string $repository = null, $delim = '_') {
     $this->ci = &get_instance();
     $this->tablename = $tablename;
     $this->classname = $classname;
     $this->repository = $repository;
+    $this->delim = $delim;
+    $this->builder = new Datatable_builder();
     $this->result = null;
   }
 
@@ -45,15 +51,60 @@ class Entity_builder implements IEntity_builder {
     return false;
   }
 
-  public function format() : bool {
-    return false;
+  public function format(array $obj_db_result = array()) : bool {
+    $result = array();
+
+    foreach ($obj_db_result as $entity) {
+      if (is_object($entity))
+        $entity = $this->create_object($entity);
+      elseif (is_array($entity))
+        $entity = $this->create_array($entity);
+      $result[] = $entity;
+    }
+
+    $this->result = $result;
+    return true;
+  }
+
+  protected function create_array(array $entity) {
+    $result = array();
+    foreach ($entity as $key => $value) {
+      $exp = explode('_', $key);
+      $index = $exp[0];
+      unset($exp[0]);
+      $name = implode('_', $exp);
+      $result[$name] = $value;
+    }
+    //echo $this->classname;
+    $this->builder->set('type', 'entities');
+    $this->builder->build($this->tablename, $this->classname);
+    $entity = $this->builder->object;
+    //debug($entity);
+    $result = $entity;
+    return $result;
+  }
+
+  protected function create_object(object $entity) {
+    return $entity->itm_id;
   }
 
   public function result() {
     /*if ($this->queries->execute())
       $this->result = $this->queries->get('ci_result');*/
-    $this->result = $this->classname;
+    //$this->result = $this->classname;
     return $this->result;
+  }
+
+  public function hydrate($datatable = null) {
+    return $this->result;
+  }
+
+  public function fill() {
+    return $this->hydrate();
+  }
+
+  public function feed() {
+    return $this->fill();
   }
 
   /**

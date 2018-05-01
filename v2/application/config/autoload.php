@@ -81,8 +81,12 @@ $autoload['libraries'] = array(
   'tool/orm/builder/query/dataquery_builder',
   'tool/orm/builder/entity/entity_builder',
   'tool/orm/builder/entity/dataentity_builder',
+  'tool/orm/builder/tool/tool_builder',
+  'tool/orm/builder/tool/tool_manager_builder',
   'tool/orm/query/table_query',
   'tool/orm/query/datatable_query',
+  'tool/orm/entity/table_entity',
+  'tool/orm/entity/datatable_entity',
   'tool/orm/Orm',
   // Haby libraries used by controllers and models
   'transfert/protocol/validation/validation',
@@ -121,6 +125,8 @@ $autoload['libraries'] = array(
   'manager/dao/items/pages_manager_dao',
   'manager/format/items/items_manager_format',
   'manager/format/items/pages_manager_format',
+  'manager/form/items/items_manager_form',
+  'manager/form/items/pages_manager_form',
   // Haby libraries used to build and display the final output
   'renderer/layout',
   'renderer/template',
@@ -156,7 +162,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('url', 'debug', 'token');
+$autoload['helper'] = array('url', 'debug', 'token', 'html', 'form', 'string');
 
 /*
 | -------------------------------------------------------------------

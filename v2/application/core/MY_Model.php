@@ -178,12 +178,13 @@ class MY_ORM_Model extends MY_Model implements IORM {
     $this->id = $id;
     $this->it = (is_null($it) || !is_int($it)) ? ($this->it + 1) : $it;
     $this->datatable = is_null($datatable) ? $this->datatable : $datatable;
-    $this->classname = is_null($classname) ? explode('_', get_class($this))[0] : $classname;
+    $this->classname = is_null($classname) ? explode($this->delim, get_class($this))[0] . '_entity' : $classname;
     $this->prefix = is_null($this->datatable) ? null : explode($delim, $datatable)[0] . $delim;
     $this->table_builder = is_null($table_builder) ? new Datatable_builder($this->datatable) : $table_builder;
     $this->entity_builder = is_null($entity_builder) ? new Dataentity_builder($this->datatable, $this->classname) : $entity_builder;
     $this->query = is_null($query) ? new Datatable_query($this->datatable) : $query;
     $this->result = is_null($result) ? new Datatable_result($this->query) : $result;
+    $this->entity = new Datatable_entity($this->datatable);
     $this->queries = array();
     $this->results = array();
   }
@@ -192,7 +193,7 @@ class MY_ORM_Model extends MY_Model implements IORM {
     $query = is_null($query) ? $this->query : $query;
     if ($query instanceof IORM_query) {
       $this->query = $query;
-      $this->query->tablename = $this->datatable;
+      $this->query->tablename = $this->get_tablename();
       $this->prefix = is_null($this->datatable) ? null : explode($this->delim, $this->datatable)[0] . $this->delim;
       return $this->query;
     }
@@ -205,7 +206,7 @@ class MY_ORM_Model extends MY_Model implements IORM {
     return $this->result;
   }
 
-  public function entity(string $classname = null, string $tablename = null,string $repository = null) {
+  public function entity(string $classname = null, string $tablename = null, string $repository = null) {
     $tablename = is_null($tablename) ? $this->datatable : $tablename;
     $classname = is_null($classname) ? $tablename : $classname;
 
@@ -316,15 +317,18 @@ class MY_Manager_Model extends MY_ORM_Model {
 
   protected $format = null;
 
-  public function __construct(string $datatable = null, string $classname = null, $id = 0, $delim = '_', $it = null, IDatatable_builder $table_builder = null, IEntity_builder $entity_builder = null, IORM_query $query = null, IORM_result $result = null, string $type = null, IDao_manager $dao = null, IFormat_manager $format = null) {
+  protected $form = null;
+
+  public function __construct(string $datatable = null, string $classname = null, $id = 0, $delim = '_', $it = null, IDatatable_builder $table_builder = null, IEntity_builder $entity_builder = null, IORM_query $query = null, IORM_result $result = null, string $type = null, IDao_manager $dao = null, IFormat_manager $format = null, IForm_manager $form = null) {
     parent::__construct($datatable, $classname, $id, $delim, $it, $table_builder, $entity_builder, $query, $result, $dao, $format);
     $part = $this->uri->segment(4);
     $type = is_null($type) ? substr($part, 0, strlen($part)) : $type;
     $this->type = $type;
     //$this->load();
-    $this->load(array('setting', 'dao', 'format'));
+    $this->load(array('setting', 'dao', 'format', 'form'));
     $this->dao = is_null($dao) ? $this->dao : $dao;
-    $this->format = is_null($dao) ? $this->format : $format;
+    $this->format = is_null($format) ? $this->format : $format;
+    $this->form = is_null($form) ? $this->form : $form;
   }
 
   protected function load(array $tools, $type = null) {
@@ -346,7 +350,6 @@ class MY_Manager_Model extends MY_ORM_Model {
           $tool_instance = is_null($this->$tool) ? $tool_instance : $this->$tool;
           $this->$tool = $tool_instance;
         }
-        //print_r($this->setting);
       }
     }
     return true;

@@ -68,14 +68,14 @@ abstract class Query_parser_engine extends Parser {
   */
   protected function load_parsers() {
     $parsers = $this->config->item('transfert_protocol')['parser']['types'];
-    $preffix = 'query_';
+    $prefix = 'query_';
     $suffix = '_parser';
     $path_root = 'transfert/parser/';
     $classname = null;
     $ci = &get_instance();
 
     foreach ($parsers as $parser) {
-        $classname = $preffix.$parser.$suffix;
+        $classname = $prefix.$parser.$suffix;
         $path = $path_root.$classname;
         $attribute = $parser.$suffix;
         if (!$ci->load->library($path) || !property_exists($this, $attribute))

@@ -23,7 +23,6 @@ class Datatype_builder extends Table_builder {
       return false;
     $types = array();
     foreach ($table as $key => $value) {
-      //print_r($value);
       $types[] = $value->DATA_TYPE;
     }
     $this->types = $types;

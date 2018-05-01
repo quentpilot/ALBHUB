@@ -40,10 +40,11 @@ class Datatable_builder implements IDatatable_builder {
 
   public function build(string $tablename = null, string $classname = null) : bool {
     $tablename = is_null($tablename) ? $this->tablename : strtolower($tablename);
-    $classname = is_null($classname) ? $this->classname : ucfirst($classname);
+    $classname = is_null($classname) ? $tablename : ucfirst($classname);
     if (is_null($tablename))
       return false;
     $this->tablename = $tablename;
+    $this->classname = $classname;
     if ($this->class_exists()) {
       $this->object = $this->get_class();
       return true;
@@ -66,7 +67,7 @@ class Datatable_builder implements IDatatable_builder {
   protected function create_class(string $portability = 'public', bool $var_type = false) {
     //$tpl = $this->layout->build();
     $classname = is_null($this->classname) ? ucfirst($this->tablename) : $this->classname;
-    $tpl_head = "<?php\n\nclass $this->tablename {\n\n";
+    $tpl_head = "<?php\n\nclass $classname {\n\n";
     $tpl_attr_start = "\t$portability ";
     $tpl_attr_end = ' = null;';
     $tpl_attr = '';
@@ -104,20 +105,21 @@ class Datatable_builder implements IDatatable_builder {
   }
 
   protected function save_class(string $template) {
-    $classname = ucfirst($this->tablename) . '.php';
-    $file = $this->folder . $this->type . '/' .$classname;
+    $classname = is_null($this->classname) ? ucfirst($this->tablename) . '.php' : $this->classname . '.php';
+    $file = $this->folder . $this->type . '/' . $classname;
     return file_put_contents($file, $template);
   }
 
   protected function class_exists() : bool {
     $path = $this->folder . $this->type;
+    $classname = is_null($this->classname) ? $this->tablename : $this->classname;
     $files = scandir($path);
     if (!$files)
       return false;
 
     foreach ($files as $key => $value) {
       $value = strtolower($value);
-      if ($value == $this->tablename . '.php') {
+      if ($value == $classname . '.php') {
         return true;
       }
     }
@@ -125,7 +127,7 @@ class Datatable_builder implements IDatatable_builder {
   }
 
   protected function get_class() {
-    $classname = ucfirst($this->tablename);
+    $classname = is_null($this->classname) ? ucfirst($this->tablename) : $this->classname;
     $file = $this->folder . $this->type . '/' . $classname . '.php';
 
     if (file_exists($file)) {
@@ -140,7 +142,6 @@ class Datatable_builder implements IDatatable_builder {
   public function table_exists(string $tablename) : bool {
     $tablename = strtolower($tablename);
     $table = $this->ci->db->table_exists($tablename);
-    //$table = $this->ci->db->query("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'$tablename'")->result();
     if ($table) return true;
     return false;
   }

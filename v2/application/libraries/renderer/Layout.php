@@ -80,6 +80,9 @@ class Layout implements IViews {
   /**
   * build method would to build each partial view from parts/ repository
   *
+  * data are formated to views following loader engine type (CI_Output or CI_Parser)
+  * set over Render class
+  *
   * @see Render::build_view()
   */
   public function build() {
@@ -95,6 +98,7 @@ class Layout implements IViews {
       if ($part != 'body') {
         // select data to use for each part
         $data[$part] = $this->get_data($part);
+        // import controller data to views following render parser value
         if ($this->render->get('load_parser'))
           $output = $this->ci->parser->parse($this->path.$part, $data[$part], true);
         else

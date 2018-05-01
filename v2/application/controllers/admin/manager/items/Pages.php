@@ -18,7 +18,6 @@ class Pages extends MY_Admin_Manager_Controller {
 		$views = array(
 			'index',
 			'../list',
-			'../list',
 		);
 		$this->manager('pages', 'nav_menu');
 		$this->manager('pages', 'list');
@@ -30,6 +29,52 @@ class Pages extends MY_Admin_Manager_Controller {
 		//$res = $this->orm->new_datatable('usr_users', true);
 		//debug($res);
 		//debug($this->orm->refresh(array(), true));
+		$this->render($views, $this->data);
+	}
+
+	public function add() {
+		$views = array(
+			'index',
+			'../list',
+			'../list',
+		);
+		$this->manager('pages', 'nav_menu');
+		$this->manager('pages', 'list');
+		$this->render($views, $this->data);
+	}
+
+	public function edit() {
+		$views = array(
+			'index',
+			'../list',
+			'../list',
+		);
+		$this->manager('pages', 'nav_menu');
+		$this->manager('pages', 'list');
+		$this->render($views, $this->data);
+	}
+
+	public function delete() {
+		$views = array(
+			'index',
+			'../list',
+			'../list',
+		);
+		$this->manager('pages', 'nav_menu');
+		$this->manager('pages', 'list');
+		$this->render($views, $this->data);
+	}
+
+	public function list($api_config = null) {
+		// if API configs, load related view data (array on PHP, Json, CSV, SQl, XML, HTML)
+		// else, it's an admin action on manager so load a datatable view
+		$views = array(
+			'index',
+			'../list',
+			'../list',
+		);
+		$this->manager('pages', 'nav_menu');
+		$this->manager('pages', 'list');
 		$this->render($views, $this->data);
 	}
 

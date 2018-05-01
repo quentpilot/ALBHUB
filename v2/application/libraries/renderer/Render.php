@@ -98,11 +98,9 @@ class Render implements IViews {
   }
 
   /*
-  * render method to set and build view output to load and display what controller wants
+  * render method would to set and build view output to load and display what controller wants
   */
   public function render($view = null, $data = array(), $return_output = false, $load_parser = false) {
-    // able to load only one or several views
-    //$this->view = is_array($view) ? $view : array($view);
     $this->view = $this->set_view($view);
     $this->data = $data;
     $this->return_output = $return_output;
@@ -223,6 +221,7 @@ class Render implements IViews {
     $view = is_array($view) ? $view : array($view);
     $path = '';
     $views = array();
+
     if (!is_null($this->folder))
       $path = $this->folder . '/';
     foreach ($view as $file) {

@@ -6,9 +6,9 @@
 
 interface IORM {
 
-  public function query($query = null);
+  public function query();
 
-  public function result($query = null);
+  public function result();
 
   public function entity();
 

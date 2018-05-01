@@ -7,6 +7,8 @@ class Items_manager_setting extends Setting_manager {
 
   protected $item_id = 0;
 
+  protected $delim = null;
+
   protected $item_datatable = null;
 
   protected $content_datatable = null;
@@ -31,14 +33,15 @@ class Items_manager_setting extends Setting_manager {
     parent::__construct($configs);
     $this->user_id = $this->ci->session->userdata('user_id');
     $this->item_id = 0;
+    $this->delim = '_';
     $this->item_datatable = 'items';
-    $this->item_prefix = 'itm_';
+    $this->item_prefix = 'itm';
     $this->content_datatable = 'items_content';
-    $this->content_prefix = 'itc_';
+    $this->content_prefix = 'itc';
     $this->cat_datatable = 'layouts_parts';
-    $this->cat_prefix = 'lap_';
+    $this->cat_prefix = 'lap';
     $this->part_datatable = 'items_layouts_parts';
-    $this->part_prefix = 'ilp_';
+    $this->part_prefix = 'ilp';
   }
 
   public function set_nav_menu() {

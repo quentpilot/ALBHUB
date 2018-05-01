@@ -75,7 +75,7 @@ class MY_Controller extends CI_Controller {
 
 class MY_Admin_Controller extends MY_Controller {
 
-	public function __construct($template_name = null) {
+  public function __construct($template_name = null) {
     parent::__construct();
     $this->_connect();
 		$this->_config($template_name);
@@ -96,7 +96,66 @@ class MY_Admin_Controller extends MY_Controller {
 	}
 }
 
-class MY_Admin_Manager_Controller extends MY_Admin_Controller {
+/*class MY_ORM_Controller extends MY_Controller {
+  public function __construct($template_name = null) {
+    parent::__construct($template_name);
+    $this->data = array();
+    $this->view->set('folder', 'manager');
+  }
+
+  public function manager(string $manager_type, string $method) {
+    $model = ucfirst(strtolower($manager_type)) . '_manager_model';
+    if (class_exists($model)) {
+      $model = strtolower($model);
+      if (isset($this->$model)) {
+        if (method_exists($this->$model, $method)) {
+          $result = $this->$model->$method();
+          $result = is_array($result) ? array("data_" . $method => $result) : array("data_" . $method => array($result));
+          $this->data = array_merge($this->data, $result);
+          $views = $this->view->get('view');
+          $views = is_array($views) ? $views : array($views);
+          $this->view->set('view', array_merge($views, $this->$model->get('format')->load_views()));
+          //TODO : pseudo API when url got manager method and args
+          if (count($this->uri->segments) == 7 && $this->uri->segment(5) == 'manager')
+            print_r(json_encode($result));
+          return $result;
+        }
+      }
+    }
+    return false;
+  }
+}
+
+class MY_Admin_ORM_Controller extends MY_Admin_Controller {
+  public function __construct($template_name = null) {
+    parent::__construct($template_name);
+    $this->data = array();
+    $this->view->set('folder', 'manager');
+  }
+
+  public function manager(string $manager_type, string $method) {
+    $model = ucfirst(strtolower($manager_type)) . '_manager_model';
+    if (class_exists($model)) {
+      $model = strtolower($model);
+      if (isset($this->$model)) {
+        if (method_exists($this->$model, $method)) {
+          $result = $this->$model->$method();
+          $result = is_array($result) ? array("data_" . $method => $result) : array("data_" . $method => array($result));
+          $this->data = array_merge($this->data, $result);
+          $views = $this->view->get('view');
+          $views = is_array($views) ? $views : array($views);
+          $this->view->set('view', array_merge($views, $this->$model->get('format')->load_views()));
+          //TODO : pseudo API when url got manager method and args
+          if (count($this->uri->segments) == 7 && $this->uri->segment(5) == 'manager')
+            print_r(json_encode($result));
+          return $result;
+        }
+      }
+    }
+    return false;
+  }
+
+class MY_Manager_Controller extends MY_Controller {
 
   protected $data = null;
 
@@ -112,6 +171,74 @@ class MY_Admin_Manager_Controller extends MY_Admin_Controller {
       $model = strtolower($model);
       if (isset($this->$model)) {
         if (method_exists($this->$model, $method)) {
+          $result = $this->$model->$method();
+          $result = is_array($result) ? array("data_" . $method => $result) : array("data_" . $method => array($result));
+          $this->data = array_merge($this->data, $result);
+          $views = $this->view->get('view');
+          $views = is_array($views) ? $views : array($views);
+          $this->view->set('view', array_merge($views, $this->$model->get('format')->load_views()));
+          //TODO : pseudo API when url got manager method and args
+          if (count($this->uri->segments) == 7 && $this->uri->segment(5) == 'manager')
+            print_r(json_encode($result));
+          return $result;
+        }
+      }
+    }
+    return false;
+  }
+}*/
+
+class MY_ORM_Controller extends MY_Controller {
+  public function __construct($template_name = null) {
+    parent::__construct($template_name);
+  }
+}
+
+class MY_Admin_ORM_Controller extends MY_Admin_Controller {
+  public function __construct($template_name = null) {
+    parent::__construct($template_name);
+  }
+}
+
+class MY_Manager_Controller extends MY_ORM_Controller {
+  public function __construct($template_name = null) {
+    parent::__construct($template_name);
+  }
+}
+
+class MY_Admin_Manager_Controller extends MY_Admin_ORM_Controller {
+
+  protected $manager = null;
+
+  protected $validator = null; // nop
+
+  protected $entity = null;
+
+  protected $data = null;
+
+	public function __construct($template_name = null) {
+    parent::__construct($template_name);
+    $this->manager = null;
+    $this->entity = null;
+    $this->data = array();
+    $this->view->set('folder', 'manager');
+  }
+
+  protected function entity() {
+    return $this->entity;
+  }
+
+  protected function validator() {
+    return $this->validator;
+  }
+
+  public function manager(string $manager_type, string $method) {
+    $model = ucfirst(strtolower($manager_type)) . '_manager_model';
+    if (class_exists($model)) {
+      $model = strtolower($model);
+      if (isset($this->$model)) {
+        if (method_exists($this->$model, $method)) {
+          $this->manager = $this->$model;
           $result = $this->$model->$method();
           $result = is_array($result) ? array("data_" . $method => $result) : array("data_" . $method => array($result));
           $this->data = array_merge($this->data, $result);

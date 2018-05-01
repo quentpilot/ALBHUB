@@ -16,7 +16,7 @@
         <li><a href="{site_url}/admin/manager/hub/alb-impression">ALB Impression</a></li>
         <li><a href="{site_url}/admin/manager/hub/portfolio">Portfolio</a></li>
         <li><a href="{site_url}/admin/manager/hub/e-commerce">E-Commerce</a></li>
-        <li><a href="{site_url}/admin/manager/hub/crm">Relation Clients</a></li>
+        <li><a href="{site_url}/admin/manager/hub/crm">Relations Clients</a></li>
       </ul>
     </li>
   </ul>
