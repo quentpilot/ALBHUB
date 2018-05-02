@@ -5,11 +5,12 @@ require_once APPPATH . 'models/manager/IManager_model.php';
 
 class Items_manager_model extends MY_Manager_Model implements IManager_model {
 
-  public function __construct(string $datatable = null, string $classname = null, $id = 0, $delim = '_', $it = null, IDatatable_builder $table_builder = null, IEntity_builder $entity_builder = null, IORM_query $query = null, IORM_result $result = null, string $type = null, IDao_manager $dao = null, IFormat_manager $format = null, IForm_manager $form = null) {
-    parent::__construct($datatable, $classname, $id, $delim, $it, $table_builder, $entity_builder, $query, $result, $type, $dao, $format, $form);
+  public function __construct(string $datatable = null, string $classname = null, $id = 0, $delim = '_', $it = null, IDatatable_builder $table_builder = null, IORM_entity $entity = null, IORM_query $query = null, IORM_result $result = null, string $type = null, IDao_manager $dao = null, IFormat_manager $format = null, IForm_manager $form = null) {
+    parent::__construct($datatable, $classname, $id, $delim, $it, $table_builder, $entity, $query, $result, $type, $dao, $format, $form);
     $this->datatable = is_null($this->setting) ? null : $this->setting->get('item_prefix') . $this->delim . $this->setting->get('item_datatable');
     $this->prefix = is_null($this->setting) ? null : $this->setting->get('item_prefix');
     $this->delim = is_null($this->setting) ? $this->delim : $this->setting->get('delim');
+    $this->tablename = is_null($this->datatable) ? null : explode($this->delim, $this->datatable)[1];
   }
 
   public function nav_menu(Items_manager_setting $configs = null) {
@@ -26,7 +27,10 @@ class Items_manager_model extends MY_Manager_Model implements IManager_model {
     $tools = array('dao', 'format', 'dao', 'format', 'form');
     $types = array('table', 'table', 'pagination', 'pagination', 'table');
     $this->setting->set_table();
-    $item = $this->db->select()->from($this->datatable)->where($this->prefix.$this->delim.'ilp_id', 1)->limit(10)->get();
+    //echo $this->prefix.$this->delim;
+    //echo $this->tablename;
+    $item = $this->db->select()->from($this->tablename)->where($this->row('ilp_id'), 1)->limit(10)->get();
+    $this->db->set_dbprefix();
     $list = $item->result_array();
     /*$this->entity_builder->tablename = $this->datatable;
     $this->entity_builder->classname = $this->classname;
@@ -34,7 +38,7 @@ class Items_manager_model extends MY_Manager_Model implements IManager_model {
     $list = $this->entity_builder->result();*/
 
     $this->setting->add('item_list', $list);
-    //debug($this->setting->get_item('item_list'));
+    debug($this->setting->get_item('item_list'));
 
     //debug($item->result());
     //$this->tools($tools, $types);

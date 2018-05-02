@@ -8,7 +8,7 @@ class Items_manager_dao extends Tools_manager implements IDao_manager {
   protected $orm = null;
 
   protected $pojo = null;
-  
+
   protected $db = null;
 
   public function __construct(Items_manager_setting $configs = null) {
