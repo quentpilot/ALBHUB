@@ -11,10 +11,13 @@ class Datacolumn_builder extends Table_builder {
 
   protected $types = null;
 
+  protected $values = null;
+
   public function __construct(string $tablename = null) {
     parent::__construct($tablename);
     $this->cols = array();
     $this->types = new Datatype_builder($tablename);
+    $this->values = new Datavalue_builder($tablename);
   }
 
   public function process() : bool {
@@ -23,22 +26,31 @@ class Datacolumn_builder extends Table_builder {
     if (!$table)
       return false;
     $cols = array();
+    //debug($table);
     foreach ($table as $key => $value) {
       $cols[] = $value->COLUMN_NAME;
     }
     $this->cols = $cols;
-    if($this->types->build($tablename))
-      return $this->format();
-    return false;
+    if(!$this->types->build($tablename))
+      return false;
+    if (!$this->values->build($tablename))
+      return false;
+    return $this->format();
   }
 
   public function format() : bool {
     $cols = $this->cols;
     $types = $this->types->result();
+    $values = $this->values->result();
     $result = array();
     $it = 0;
+
     foreach ($cols as $col) {
-      $result[] = $col;
+      $result[] = array(
+        'type' => $types[$it],
+        'name' => $col,
+        'value' => $values[$it],
+      );
       //$result[]['type'] = $types[$it];
       //$result[] = $col;
       $it++;

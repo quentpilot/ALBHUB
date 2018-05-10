@@ -1,6 +1,6 @@
 <?php
 
-class Itm_items {
+class itm_items {
 
 	public $itm_id = null;
 

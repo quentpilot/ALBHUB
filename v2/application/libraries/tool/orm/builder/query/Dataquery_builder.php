@@ -9,6 +9,6 @@ class Dataquery_builder extends Query_builder {
 
   public function __construct(string $tablename = null) {
     parent::__construct($tablename);
-    $this->queries = new Dataqueries_builder();
+    //$this->queries = new Dataqueries_builder();
   }
 }

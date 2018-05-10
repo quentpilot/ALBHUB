@@ -4,11 +4,11 @@
  *
  */
 
-require_once APPPATH . 'libraries/tool/orm/builder/IORM_builder.php';
+//require_once APPPATH . 'libraries/tool/orm/builder/IORM_builder.php';
 
-interface IQuery_builder extends IORM_builder {
+interface IQuery_builder {
 
-  public function query();
+  /*public function query();
 
   public function result();
 
@@ -16,5 +16,5 @@ interface IQuery_builder extends IORM_builder {
 
   public function format();
 
-  public function concat();
+  public function concat();*/
 }

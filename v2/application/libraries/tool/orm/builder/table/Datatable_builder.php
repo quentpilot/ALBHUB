@@ -11,13 +11,13 @@ class Datatable_builder implements IDatatable_builder {
 
   protected $ci = null;
 
-  protected $tablename = null;
+  public $tablename = null;
 
-  protected $classname = null;
+  public $classname = null;
 
-  protected $folder = null;
+  public $folder = null;
 
-  protected $type = null;
+  public $type = null;
 
   protected $column = null;
 
@@ -55,7 +55,6 @@ class Datatable_builder implements IDatatable_builder {
   }
 
   protected function process() : bool {
-    // create class
     if (!$this->column->build($this->tablename))
       return false;
     if (!$this->create_class())
@@ -64,10 +63,10 @@ class Datatable_builder implements IDatatable_builder {
     return true;
   }
 
-  protected function create_class(string $portability = 'public', bool $var_type = false) {
+  protected function create_class(string $portability = 'public', bool $var_type = true) {
     //$tpl = $this->layout->build();
     $classname = is_null($this->classname) ? ucfirst($this->tablename) : $this->classname;
-    $tpl_head = "<?php\n\nclass $classname {\n\n";
+    $tpl_head = "<?php\n\nclass $classname extends Datatable_database {\n\n";
     $tpl_attr_start = "\t$portability ";
     $tpl_attr_end = ' = null;';
     $tpl_attr = '';
@@ -86,14 +85,17 @@ class Datatable_builder implements IDatatable_builder {
 
     // build attributes and constructor
     $result = $this->column->result();
+
     foreach ($result as $cols => $col) {
-      $type = ($var_type) ? $cols['type'] : '';
-      //$attr = '$' . $cols['name'];
-      $attr = '$' . $col;
+      $type = ($var_type) ? $col['type'] . ' ' : '';
+      $attr = '$' . $col['name'];
+      $value = $col['value'];
+      $tpl_attr_end = " = $value;";
+      //$attr = '$' . $col;
       $tpl_attr .= $tpl_attr_start . $attr . $tpl_attr_end . PHP_EOL . PHP_EOL;
       $tpl_construct_delim = (count($this->column->result()) == $it) ? '' : $tpl_construct_delim;
-      $tpl_construct .= $type . $attr . ' = null' . $tpl_construct_delim;
-      $tpl_construct_cpy .= $tpl_construct_cpy_start . $col . ' = $' . $col . $tpl_construct_cpy_end;
+      $tpl_construct .= $type . $attr . ' = ' . $value . $tpl_construct_delim;
+      $tpl_construct_cpy .= $tpl_construct_cpy_start . $col['name'] . ' = ' . $attr . $tpl_construct_cpy_end;
       $it++;
     }
 
@@ -112,6 +114,7 @@ class Datatable_builder implements IDatatable_builder {
 
   protected function class_exists() : bool {
     $path = $this->folder . $this->type;
+    echo $path;
     $classname = is_null($this->classname) ? $this->tablename : $this->classname;
     $files = scandir($path);
     if (!$files)
@@ -119,6 +122,7 @@ class Datatable_builder implements IDatatable_builder {
 
     foreach ($files as $key => $value) {
       $value = strtolower($value);
+      $classname = strtolower($classname);
       if ($value == $classname . '.php') {
         return true;
       }
@@ -149,6 +153,7 @@ class Datatable_builder implements IDatatable_builder {
   public function refresh_datatables(array $tables = array(), bool $return = false) {
     $tables = count($tables) ? $tables : '*';
     $datatables = $this->ci->db->list_tables();
+    $this->classname = is_null($this->classname) ? null : $this->classname;
     $new_tables = array();
     $select = (is_array($tables) && count($tables)) ? $tables : $datatables;
 
@@ -157,6 +162,7 @@ class Datatable_builder implements IDatatable_builder {
     foreach ($datatables as $table => $name) {
       if (is_array($select) && count($select) && in_array($name, $select)) {
         $this->tablename = strtolower($name);
+
         if ($this->process())
           $new_tables[] = $this->object;
       }

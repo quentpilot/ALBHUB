@@ -1,6 +1,6 @@
 <?php
 
-class itl_items_languages {
+class Itl_items_languages {
 
 	public $itl_id = null;
 

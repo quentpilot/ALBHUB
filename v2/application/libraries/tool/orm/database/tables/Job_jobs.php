@@ -1,6 +1,6 @@
 <?php
 
-class job_jobs {
+class Job_jobs {
 
 	public $job_id = null;
 

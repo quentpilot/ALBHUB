@@ -1,6 +1,6 @@
 <?php
 
-class sta_status {
+class Sta_status {
 
 	public $sta_id = null;
 

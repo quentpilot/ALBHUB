@@ -1,6 +1,6 @@
 <?php
 
-class bil_bills {
+class Bil_bills {
 
 	public $bil_id = null;
 

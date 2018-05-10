@@ -1,8 +1,8 @@
 <?php
 
-class Pages_entity {
+class Pages_entity extends Datatable_database {
 
-	public $itm_id = null;
+	public $itm_id = 0;
 
 	public $itm_title = null;
 
@@ -16,13 +16,13 @@ class Pages_entity {
 
 	public $itm_table_content = null;
 
-	public $itm_usr_id = null;
+	public $itm_usr_id = 0;
 
-	public $itm_ilp_id = null;
+	public $itm_ilp_id = 0;
 
-	public $itm_sta_id = null;
+	public $itm_sta_id = 0;
 
-	public function __construct($itm_id = null, $itm_title = null, $itm_subtitle = null, $itm_slug = null, $itm_published = null, $itm_edited = null, $itm_table_content = null, $itm_usr_id = null, $itm_ilp_id = null, $itm_sta_id = null) {
+	public function __construct(int $itm_id = 0, string $itm_title = null, string $itm_subtitle = null, string $itm_slug = null, string $itm_published = null, string $itm_edited = null, string $itm_table_content = null, int $itm_usr_id = 0, int $itm_ilp_id = 0, int $itm_sta_id = 0) {
 		$this->itm_id = $itm_id;
 		$this->itm_title = $itm_title;
 		$this->itm_subtitle = $itm_subtitle;

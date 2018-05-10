@@ -62,6 +62,27 @@ class User_log {
     return true;
   }
 
+  public function update_user_logs(IORM_database $entity, string $action_type) {
+    $ci = &get_instance();
+    $date = date('Y-m-d H:i:s');
+    $data = array(
+      'usl_tb_id' => $entity->get($entity->get('tb_primary_key')),
+      'usl_tb_name' => $entity->get('tb_name'),
+      'usl_tb_primary_key' => $entity->get('tb_primary_key'),
+      'usl_'.$action_type.'_by' => $ci->session->userdata('id'),
+      'usl_'.$action_type.'_date' => $date,
+      'usl_sta_id' => 1
+    );
+    if ($action_type == 'created') {
+      $ci->db->insert('usl_users_logs', $data);
+    } else {
+      $ci->db->where('usl_tb_id', $data['usl_tb_id'])
+             ->where('usl_tb_name', $data['usl_tb_name'])
+             ->update('usl_users_logs', $data);
+    }
+    return true;
+  }
+
   /**
   * get method would to return class attribute value entered as param
   */

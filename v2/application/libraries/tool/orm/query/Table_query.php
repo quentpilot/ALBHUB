@@ -10,6 +10,8 @@ class Table_query implements IORM_query {
 
   public $tablename = null;
 
+  public $prefix = null;
+
   public $rules = null;
 
   public static $query_string = null;
@@ -28,15 +30,21 @@ class Table_query implements IORM_query {
     $this->result = new Table_result();
   }
 
-  public function build() {
-    return false;
+  public function build($config = null) {
+    return $this->query_builder;
+  }
+
+  public function query(string $sql = null) {
+    if (!is_null($sql))
+      return $this->query_builder->query($sql);
+    return $this->query_builder;
   }
 
   public function select($rules = null) {
     $this->set(null, $rules);
     // if rules, then concat a string representing several queries_builder methods to call
     // else, return a queries_builder select object
-    return $this->query_builder->query()->select($rules);
+    return $this->query_builder->select($rules);
   }
 
   public function insert($rules = null) {

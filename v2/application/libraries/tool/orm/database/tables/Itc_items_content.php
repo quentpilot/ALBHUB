@@ -1,6 +1,6 @@
 <?php
 
-class itc_items_content {
+class Itc_items_content {
 
 	public $itc_item_id = null;
 

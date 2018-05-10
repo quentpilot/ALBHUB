@@ -1,6 +1,6 @@
 <?php
 
-class app_applications {
+class App_applications {
 
 	public $app_id = null;
 

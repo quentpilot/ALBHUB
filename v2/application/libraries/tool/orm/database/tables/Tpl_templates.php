@@ -1,6 +1,6 @@
 <?php
 
-class tpl_templates {
+class Tpl_templates {
 
 	public $tpl_id = null;
 

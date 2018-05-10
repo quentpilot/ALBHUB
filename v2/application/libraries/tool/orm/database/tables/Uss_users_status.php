@@ -1,6 +1,6 @@
 <?php
 
-class uss_users_status {
+class Uss_users_status {
 
 	public $uss_id = null;
 

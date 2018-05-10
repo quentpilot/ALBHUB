@@ -1,6 +1,6 @@
 <?php
 
-class set_settings {
+class Set_settings {
 
 	public $id = null;
 

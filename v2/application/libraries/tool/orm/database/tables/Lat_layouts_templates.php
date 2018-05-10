@@ -1,6 +1,6 @@
 <?php
 
-class lat_layouts_templates {
+class Lat_layouts_templates {
 
 	public $lat_id = null;
 

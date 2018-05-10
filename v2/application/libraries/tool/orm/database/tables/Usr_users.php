@@ -1,6 +1,6 @@
 <?php
 
-class usr_users {
+class Usr_users {
 
 	public $usr_id = null;
 

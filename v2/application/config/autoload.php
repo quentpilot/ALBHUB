@@ -66,7 +66,10 @@ $autoload['libraries'] = array(
   'form_validation',
   'email',
   // Haby ORM used to manage database transfers
+  'tool/orm/database/table_database',
+  'tool/orm/database/datatable_database',
   'tool/orm/builder/table/table_builder',
+  'tool/orm/builder/table/datavalue_builder',
   'tool/orm/builder/table/datatype_builder',
   'tool/orm/builder/table/datacolumn_builder',
   'tool/orm/builder/table/template/layout_builder',

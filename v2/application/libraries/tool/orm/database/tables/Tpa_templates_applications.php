@@ -1,6 +1,6 @@
 <?php
 
-class tpa_templates_applications {
+class Tpa_templates_applications {
 
 	public $tpa_id = null;
 

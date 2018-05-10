@@ -27,18 +27,39 @@ class Items_manager_model extends MY_Manager_Model implements IManager_model {
     $tools = array('dao', 'format', 'dao', 'format', 'form');
     $types = array('table', 'table', 'pagination', 'pagination', 'table');
     $this->setting->set_table();
-    //echo $this->prefix.$this->delim;
-    //echo $this->tablename;
-    $item = $this->db->select()->from($this->tablename)->where($this->row('ilp_id'), 1)->limit(10)->get();
-    $this->db->set_dbprefix();
-    $list = $item->result_array();
+
+    $entity = $this->entity()->factory()->result()->select(1);
+    $this->result = $entity;
+    //$entity->set('title', 'Bienvenue');
+    //echo $entity->get('title');
+    //$entity->duplicate();
+
+    //$result = $this->db->select()->from($this->datatable)->where($this->row('ilp_id'), 1)->limit(10)->get()->result();
+
+    //$entity = $this->entity()->hydrate()->result()->select(1);
+    //$entity->set('title', 'Welcome');
+
+    /*debug($entity->join(
+        $this->setting->get('part_prefix') . $this->delim . $this->setting->get('part_datatable'),
+        $this->setting->get('part_prefix') . $this->delim . 'it = 1'
+    ));*/
+
+    //debug($entity);
+    //debug($entity->find(null, 'ilp_id = 1'));
+    //debug($entity->query('select * from itm_items where itm_id = 1'));
+    //debug($this->entity->result());
+
+
+    //echo $this->query()->select()->result_json();
+
+
     /*$this->entity_builder->tablename = $this->datatable;
     $this->entity_builder->classname = $this->classname;
     $this->entity_builder->format($list);
     $list = $this->entity_builder->result();*/
 
-    $this->setting->add('item_list', $list);
-    debug($this->setting->get_item('item_list'));
+    //$this->setting->add('item_list', $list);
+    //debug($this->setting->get_item('item_list'));
 
     //debug($item->result());
     //$this->tools($tools, $types);

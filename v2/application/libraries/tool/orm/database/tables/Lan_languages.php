@@ -1,6 +1,6 @@
 <?php
 
-class lan_languages {
+class Lan_languages {
 
 	public $lan_id = null;
 

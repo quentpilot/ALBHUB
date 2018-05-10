@@ -1,6 +1,6 @@
 <?php
 
-class lay_layouts {
+class Lay_layouts {
 
 	public $lay_id = null;
 

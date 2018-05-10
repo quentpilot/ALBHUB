@@ -166,8 +166,6 @@ class MY_ORM_Model extends MY_Model implements IORM {
 
   protected $table_builder = null;
 
-  protected $entity_builder = null;
-
   protected $query = null;
 
   protected $result = null;
@@ -192,13 +190,13 @@ class MY_ORM_Model extends MY_Model implements IORM {
     $this->results = array();
   }
 
-  public function query($query = null) {
-    $query = is_null($query) ? $this->query : $query;
+  public function query(string $sql = null) {
+    $query = $this->query;
     if ($query instanceof IORM_query) {
       $this->query = $query;
       $this->query->tablename = $this->get_tablename();
       $this->prefix = is_null($this->datatable) ? null : explode($this->delim, $this->datatable)[0] . $this->delim;
-      return $this->query;
+      return $this->query->build($sql);
     }
     return false;
   }
@@ -211,11 +209,13 @@ class MY_ORM_Model extends MY_Model implements IORM {
 
   public function entity(string $classname = null, string $tablename = null, string $repository = null) {
     $tablename = is_null($tablename) ? $this->datatable : $tablename;
-    $classname = is_null($classname) ? $tablename : $classname;
+    $classname = is_null($classname) ? $this->classname : $classname;
 
-    /*$this->entity_builder->set('repository', $repository);
-    $this->entity_builder->build($tablename, $classname);
-    $this->entity = $this->entity_builder->result();*/
+    $this->entity->classname = $classname;
+    $this->entity->tablename = $tablename;
+    $this->entity->prefix = $this->prefix;
+    $this->entity->delim = $this->delim;
+
     return $this->entity;
   }
 
@@ -402,15 +402,38 @@ class MY_Manager_Model extends MY_ORM_Model {
   }
 
   protected function row(string $name) {
-    $result = null;
+    $result = '';
     $pre = $this->prefix . $this->delim;
-    $result = $pre . $name;
+    $name = explode(',', $name);
+
+    foreach ($name as $key => $col) {
+      $col = trim($col);
+      $delim = '';
+      if (($key + 1) < count($name))
+        $delim = ', ';
+      $result .= $pre . $col . $delim;
+    }
+    return $result;
+  }
+
+  protected function rows(array $name) {
+    $result = '';
+    $pre = $this->prefix . $this->delim;
+
+    foreach ($name as $key => $col) {
+      $col = trim($col);
+      $delim = '';
+      if (($key + 1) < count($name))
+        $delim = ', ';
+      $result .= $pre . $col . $delim;
+    }
     return $result;
   }
 
   protected function set_configs(ISetting_manager $configs = null) {
     $this->setting = is_null($configs) ? $this->setting : $configs;
-    $this->db->set_dbprefix($this->prefix.$this->delim);
+    //$this->db->set_dbprefix($this->prefix.$this->delim);
+    //$this->query->query_builder->set_dbprefix($this->prefix.$this->delim);
     return true;
   }
 }

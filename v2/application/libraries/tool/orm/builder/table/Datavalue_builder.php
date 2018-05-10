@@ -5,13 +5,13 @@
  * then store new class to libraries/tool/orm/database/tables/tablename_classname.php
  */
 
-class Datatype_builder extends Table_builder {
+class Datavalue_builder extends Table_builder {
 
-  protected $types = null;
+  protected $values = null; // default attr values
 
   public function __construct(string $tablename = null) {
     parent::__construct($tablename);
-    $this->type = array();
+    $this->values = array();
   }
 
   public function process() : bool {
@@ -19,29 +19,32 @@ class Datatype_builder extends Table_builder {
     $table = $this->ci->db->query("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'$tablename'")->result();
     if (!$table)
       return false;
-    $types = array();
+    $values = array();
     foreach ($table as $key => $value) {
-      $types[] = $value->DATA_TYPE;
+      $values[] = array(
+        'default' => $value->COLUMN_DEFAULT,
+        'type' => $value->DATA_TYPE
+      );
     }
-    $this->types = $types;
+    $this->values = $values;
     return $this->format();
   }
 
   public function format() : bool {
-    $format_types = array(
-      'int' => 'int',
-      'varchar' => 'string',
-      'text' => 'string',
-      'timestamp' => 'string',
-      'datetime' => 'string',
-      'date' => 'string',
-      'time' => 'string'
+    $format_values = array(
+      'int' => 0,
+      'varchar' => 'null',
+      'text' => 'null',
+      'timestamp' => 'null',
+      'datetime' => 'null',
+      'date' => 'null',
+      'time' => 'null'
     );
-    $types = $this->types;
+    $values = $this->values;
     $result = array();
-    foreach ($types as $type) {
-      //$result['name'] = $col;
-      $result[] = (array_key_exists($type, $format_types)) ? $format_types[$type] : $type;
+    foreach ($values as $value) {
+      //$result[] = $value['default'];
+      $result[] = (array_key_exists($value['type'], $format_values)) ? $format_values[$value['type']] : $value['default'];
     }
     $this->result = $result;
     return true;

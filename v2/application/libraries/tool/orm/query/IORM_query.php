@@ -8,6 +8,8 @@ interface IORM_query {
 
   public function build();
 
+  public function query();
+
   public function select();
 
   public function insert();

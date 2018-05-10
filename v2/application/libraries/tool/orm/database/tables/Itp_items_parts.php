@@ -1,6 +1,6 @@
 <?php
 
-class itp_items_parts {
+class Itp_items_parts {
 
 	public $itp_itm_id = null;
 

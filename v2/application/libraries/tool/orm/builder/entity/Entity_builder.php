@@ -26,17 +26,13 @@ class Entity_builder implements IEntity_builder {
   protected $ci = null;
 
   public function __construct(string $tablename = null, string $classname = null, string $repository = null, $delim = '_') {
-    $this->ci = &get_instance();
+    //$this->ci = &get_instance();
     $this->tablename = $tablename;
     $this->classname = $classname;
     $this->repository = $repository;
     $this->delim = $delim;
     $this->builder = new Datatable_builder();
     $this->result = null;
-  }
-
-  public function find() {
-    return null;
   }
 
   public function build(string $tablename = null, $classname = null) {
@@ -93,18 +89,6 @@ class Entity_builder implements IEntity_builder {
       $this->result = $this->queries->get('ci_result');*/
     //$this->result = $this->classname;
     return $this->result;
-  }
-
-  public function hydrate($datatable = null) {
-    return $this->result;
-  }
-
-  public function fill() {
-    return $this->hydrate();
-  }
-
-  public function feed() {
-    return $this->fill();
   }
 
   /**
