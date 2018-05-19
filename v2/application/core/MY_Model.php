@@ -320,18 +320,22 @@ class MY_Manager_Model extends MY_ORM_Model {
 
   protected $format = null;
 
-  protected $list = null; // TODO: create lib to build datatable html views easily as form lib
+  protected $table = null; // TODO: create lib to build datatable html views easily as form lib
 
   protected $form = null;
 
   public function __construct(string $datatable = null, string $classname = null, $id = 0, $delim = '_', $it = null, IDatatable_builder $table_builder = null, IORM_entity $entity = null, IORM_query $query = null, IORM_result $result = null, string $type = null, IDao_manager $dao = null, IFormat_manager $format = null, IForm_manager $form = null) {
     parent::__construct($datatable, $classname, $id, $delim, $it, $table_builder, $entity, $query, $result, $dao, $format);
     $this->tablename = is_null($this->datatable) ? null : explode($this->delim, $this->datatable)[1];
+    $part = $this->uri->segment(5);
+
     $part = $this->uri->segment(4);
+    if (!$part)
+      $part = $this->uri->segment(3);
     $type = is_null($type) ? substr($part, 0, strlen($part)) : $type;
     $this->type = $type;
     //$this->load();
-    $this->load(array('setting', 'dao', 'format', 'form'));
+    $this->load(array('setting', 'dao', 'format', 'table', 'form'));
     $this->dao = is_null($dao) ? $this->dao : $dao;
     $this->format = is_null($format) ? $this->format : $format;
     $this->form = is_null($form) ? $this->form : $form;
@@ -399,6 +403,36 @@ class MY_Manager_Model extends MY_ORM_Model {
       }
     }
     return null;
+  }
+
+  public function entities(array $config, int $iterate = 1) {
+
+    $entities = array();
+    $data = array();
+
+    foreach ($config as $key => $entity) {
+      for ($it = 0; $it < $iterate; $it++) {
+        $tablename = isset($entity['tablename']) ? $entity['tablename'] : $this->datatable;
+        $classname = isset($entity['classname']) ? $entity['classname'] : $this->classname;
+        $prefix = isset($entity['prefix']) ? $entity['prefix'] : $this->prefix;
+        $delim = isset($entity['delim']) ? $entity['delim'] : $this->delim;
+        $id = isset($entity['primary']) ? $entity['primary'] : 0;
+
+        $this->entity->classname = $classname;
+        $this->entity->tablename = $tablename;
+        $this->entity->prefix = $prefix;
+        $this->entity->delim = $delim;
+
+        $pre = $this->entity->prefix();
+        $data[0][$pre.'id'] = $id;
+
+        $table = $this->entity->factory($data);
+        if ($id) $table->select();
+        $entities[] = $table;
+      }
+    }
+
+    return $entities;
   }
 
   protected function row(string $name) {

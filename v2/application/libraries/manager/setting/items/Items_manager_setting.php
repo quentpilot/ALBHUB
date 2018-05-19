@@ -3,11 +3,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Items_manager_setting extends Setting_manager {
 
-  protected $user_id = null;
+  public $user_id = null;
 
-  protected $item_id = 0;
+  //public $
 
-  protected $delim = null;
+  public $item_id = 0;
+
+  public $delim = null;
 
   protected $item_datatable = null;
 
@@ -27,12 +29,15 @@ class Items_manager_setting extends Setting_manager {
 
   protected $query_string = null;
 
+  protected $view_folder = null;
+
   protected $status = false;
 
   public function __construct(array $configs = array()) {
     parent::__construct($configs);
     $this->user_id = $this->ci->session->userdata('user_id');
     $this->item_id = 0;
+    $this->type = null;
     $this->delim = '_';
     $this->item_datatable = 'items';
     $this->item_prefix = 'itm';
@@ -42,6 +47,7 @@ class Items_manager_setting extends Setting_manager {
     $this->cat_prefix = 'lap';
     $this->part_datatable = 'items_layouts_parts';
     $this->part_prefix = 'ilp';
+    $this->view_folder = 'admin/admalbi/manager/items/';
   }
 
   public function set_nav_menu() {
@@ -53,22 +59,89 @@ class Items_manager_setting extends Setting_manager {
   }
 
   public function set_table() {
+    $post_lan_code = get_lang_code();
+    $post_limit = empty($_POST['tb_limit']) ? 0 : $_POST['tb_limit'];
+    $post_order_by = $this->ci->input->post('tb_order_by');
+    $post_order_by = (is_null($post_order_by)) ? 'itm.itm_id' : $post_order_by;
+    $post_like = empty($_POST['tb_search']) ? null : $_POST['tb_search'];
+
+    $query_lan_id = get_lang_id($post_lan_code);
+    $query_type = substr($this->type, 0, strlen($this->type) - 1);
+    $query_from = $this->content_prefix . ', ' . $this->cat_prefix . ', ' . $this->part_prefix . ', sta';
+    $query_like = is_null($post_like) ? "" : "%$post_like%";
+
+    $tb_limit = is_null($post_limit) ? 25 : $post_limit;
+    $tb_order_by = is_null($this->ci->input->post('tb_order_by')) ? 'itm.itm_id' : $this->ci->input->post('tb_order_by');
+    $tb_action_url = '{site_url}/admin/manager/items/' . $this->type;
+
     $config = array(
       'user_id' => $this->user_id,
       'dao.table.query_result' => 'array',
+      // set orm model request
+      'tb_from' => $query_from,
+      'tb_limit' => $tb_limit,
+      'tb_order_by' => $tb_order_by,
+      'tb_view' => 'admin/admalbi/manager/items/list',
+      'tb_where' => array(
+        // TODO: join lan.lan_id
+        //'sta.sta_id = 1',
+        'itm.sta_id = sta.id',
+        'itm.ilp_id = ilp.id',
+        'ilp.lap_id = lap.id',
+        'itc.itm_id = itm.id',
+        //"lan.lan_id = $query_lan_id",
+        //"itl.itl_lan_id = $query_lan_id",
+        //"lan.id = itl.lan_id",
+        //"itm.id = itl.itm_id",
+        //"lap.lap_alias = '$query_type'",
+        //$post_like,
+      ),
+      // set datatable view list related to orm model request
+      'tb_head' => array(
+        'tb_primary_key' => 'ID',
+        'title' => 'Titre',
+        'subtitle' => 'Sous titre',
+        'slug' => 'Alias',
+        'ilp_name' => 'Type',
+        'lap_name' => 'Catégorie',
+        'itc_tags' => 'Tags',
+        'sta_name' => 'Statut',
+      ),
+      'tb_action' => array(
+        'edit' => array(
+          'col' => null,
+          'title' => "Modifier",
+          'icon' => 'fa fa-edit',
+          'target' => '_self',
+          'url' => $tb_action_url,
+          'level' => 'info'
+        ),
+        'copy' => array(
+          'col' => null,
+          'title' => "Dupliquer l'élément",
+          'icon' => 'fa fa-copy',
+          'target' => '_self',
+          'url' => $tb_action_url,
+          'level' => 'warning'
+        ),
+        'delete' => array(
+          'col' => null,
+          'title' => "Supprimer",
+          'icon' => 'fa fa-trash',
+          'target' => '_self',
+          'url' => $tb_action_url,
+          'level' => 'danger'
+        ),
+        'active' => array (
+          'col' => null,
+          'title' => "Publier / Dépublier l'élément",
+          'icon' => 'fa fa-eye-slash',
+          'target' => '_self',
+          'url' => $tb_action_url,
+          'level' => 'default'
+        ),
+      ),
     );
-
-    $itm_table = $this->item_prefix.$this->item_datatable;
-    $itc_table = $this->content_prefix.$this->content_datatable;
-    $lap_table = $this->cat_prefix.$this->cat_datatable;
-    $ilp_table = $this->part_prefix.$this->part_datatable;
-
-    $this->query_string = $this->ci->db->select()
-                        ->from($itm_table, $itc_table, $lap_table, $ilp_table)
-                        ->join($itc_table, "$itc_table.item_id = $itm_table.".$this->item_prefix.'id')
-                        ->where($this->item_prefix.'ilp_id', $this->part_prefix.'id')
-                        ->limit(50)
-                        ->get_compiled_select();
 
     $this->set_items($config);
     return $this->result;

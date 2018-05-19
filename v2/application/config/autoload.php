@@ -128,6 +128,8 @@ $autoload['libraries'] = array(
   'manager/dao/items/pages_manager_dao',
   'manager/format/items/items_manager_format',
   'manager/format/items/pages_manager_format',
+  'manager/table/items/items_manager_table',
+  'manager/table/items/pages_manager_table',
   'manager/form/items/items_manager_form',
   'manager/form/items/pages_manager_form',
   // Haby libraries used to build and display the final output
@@ -165,7 +167,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('url', 'debug', 'token', 'html', 'form', 'string');
+$autoload['helper'] = array('url', 'debug', 'token', 'html', 'form', 'string', 'getter');
 
 /*
 | -------------------------------------------------------------------

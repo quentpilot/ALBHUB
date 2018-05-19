@@ -64,6 +64,7 @@ class User_log {
 
   public function update_user_logs(IORM_database $entity, string $action_type) {
     $ci = &get_instance();
+    debug($entity);
     $date = date('Y-m-d H:i:s');
     $data = array(
       'usl_tb_id' => $entity->get($entity->get('tb_primary_key')),
@@ -73,6 +74,7 @@ class User_log {
       'usl_'.$action_type.'_date' => $date,
       'usl_sta_id' => 1
     );
+
     if ($action_type == 'created') {
       $ci->db->insert('usl_users_logs', $data);
     } else {

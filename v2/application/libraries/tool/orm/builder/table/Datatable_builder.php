@@ -41,16 +41,18 @@ class Datatable_builder implements IDatatable_builder {
   public function build(string $tablename = null, string $classname = null) : bool {
     $tablename = is_null($tablename) ? $this->tablename : strtolower($tablename);
     $classname = is_null($classname) ? $tablename : ucfirst($classname);
+
     if (is_null($tablename))
       return false;
     $this->tablename = $tablename;
     $this->classname = $classname;
+
     if ($this->class_exists()) {
       $this->object = $this->get_class();
       return true;
-    }
-    elseif ($this->process())
+    } elseif ($this->process()) {
       return true;
+    }
     return false;
   }
 
@@ -107,18 +109,27 @@ class Datatable_builder implements IDatatable_builder {
   }
 
   protected function save_class(string $template) {
-    $classname = is_null($this->classname) ? ucfirst($this->tablename) . '.php' : $this->classname . '.php';
-    $file = $this->folder . $this->type . '/' . $classname;
-    return file_put_contents($file, $template);
+    $classname = is_null($this->classname) ? ucfirst($this->tablename) : $this->classname;
+
+    if (is_null($classname))
+      return false;
+    $classname .= '.php';
+    if ($classname == '.php')
+      return false;
+    $folder = $this->folder . $this->type;
+    $file = $folder . '/' . $classname;
+
+    if (file_exists($folder))
+      return file_put_contents($file, $template);
+    return false;
   }
 
   protected function class_exists() : bool {
     $path = $this->folder . $this->type;
-    echo $path;
     $classname = is_null($this->classname) ? $this->tablename : $this->classname;
     $files = scandir($path);
-    if (!$files)
-      return false;
+
+    if (!$files) return false;
 
     foreach ($files as $key => $value) {
       $value = strtolower($value);
@@ -162,7 +173,6 @@ class Datatable_builder implements IDatatable_builder {
     foreach ($datatables as $table => $name) {
       if (is_array($select) && count($select) && in_array($name, $select)) {
         $this->tablename = strtolower($name);
-
         if ($this->process())
           $new_tables[] = $this->object;
       }

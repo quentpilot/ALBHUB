@@ -5,8 +5,6 @@ require_once APPPATH . 'libraries/manager/dao/IDao_manager.php';
 
 class Items_manager_dao extends Tools_manager implements IDao_manager {
 
-  protected $orm = null;
-
   protected $pojo = null;
 
   protected $db = null;
@@ -14,6 +12,8 @@ class Items_manager_dao extends Tools_manager implements IDao_manager {
   public function __construct(Items_manager_setting $configs = null) {
     parent::__construct($configs);
     $type = $this->ci->uri->segment(4);
+    if (!$type)
+      $type = $this->ci->uri->segment(3);
     $type = ucfirst(substr($type, 0, strlen($type) -1));
     if (class_exists($type))
       $this->pojo = new $type();

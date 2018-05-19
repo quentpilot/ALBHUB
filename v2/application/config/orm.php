@@ -16,5 +16,15 @@ $config['orm'] = array(
     'query/table_query',
     'query/datatable_query',
     'Orm'
-  )
+  ),
+  'entity' => array(
+    'find' => array(
+      'tb_select' => '',
+      'tb_from' => '',
+      'tb_where' => '',
+      'tb_like' => '',
+      'tb_limit' => '',
+      'tb_order_by' => '',
+    ),
+  ),
 );

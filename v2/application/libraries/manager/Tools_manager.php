@@ -13,6 +13,7 @@ require_once APPPATH . 'libraries/manager/ITools_manager.php';
 class Tools_manager implements ITools_manager {
 
   protected $ci = null;
+  protected $orm = null;
   protected $configs = null;
   protected $result = null;
   protected $errors = null;

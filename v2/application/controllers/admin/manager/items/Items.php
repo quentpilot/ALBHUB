@@ -2,10 +2,10 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
-* Pages controller class would be a controller to manage main admin pages easily
+* Items controller class would be a controller to manage main admin pages easily
 */
 
-class Pages extends MY_Admin_Manager_Controller {
+class Items extends MY_Admin_Manager_Controller {
 
 	public function __construct() {
 		parent::__construct();
@@ -17,7 +17,7 @@ class Pages extends MY_Admin_Manager_Controller {
     // format model dump result with response class or else
 		$views = array(
 			'index',
-			//'../list',
+			'../list',
 		);
 
 		$this->manager('pages', 'nav_menu');
@@ -30,15 +30,17 @@ class Pages extends MY_Admin_Manager_Controller {
 		$views = array(
 			'index',
 			'../list',
+			'../list',
 		);
 		$this->manager('pages', 'nav_menu');
 		$this->manager('pages', 'list');
 		$this->render($views, $this->data);
 	}
 
-	public function edit($id = null) {
+	public function edit() {
 		$views = array(
 			'index',
+			'../list',
 			'../list',
 		);
 		$this->manager('pages', 'nav_menu');
@@ -60,7 +62,14 @@ class Pages extends MY_Admin_Manager_Controller {
 	public function list($api_config = null) {
 		// if API configs, load related view data (array on PHP, Json, CSV, SQl, XML, HTML)
 		// else, it's an admin action on manager so load a datatable view
-		//redirect('admin/manager/items/pages/index');
+		$views = array(
+			'index',
+			'../list',
+			'../list',
+		);
+		$this->manager('pages', 'nav_menu');
+		$this->manager('pages', 'list');
+		$this->render($views, $this->data);
 	}
 
 	public function config($page_id = 0) {

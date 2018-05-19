@@ -1,3 +1,4 @@
-<?php print_r($data_list) ?>
-<br>
-<?php //print_r($pagin_table) ?>
+<?php
+  debug($data_list['body']);
+  echo $data_list['view'];
+?>
