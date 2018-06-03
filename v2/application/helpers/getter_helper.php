@@ -2,6 +2,7 @@
 
 function get_lang_code($lan_id = null) {
   $ci = &get_instance();
+
   if (!is_null($lan_id)) {
     return $ci->db->select('lan_code')
                              ->from('lan_languages')
@@ -16,6 +17,7 @@ function get_lang_code($lan_id = null) {
 
 function get_lang_id(string $lan_code = null) {
   $ci = &get_instance();
+  
   if (is_null($lan_code)) {
     $lan_code = get_lang_code();
   }

@@ -12,7 +12,7 @@ class Items_manager_model extends MY_Manager_Model implements IManager_model {
     $this->delim = is_null($this->setting) ? $this->delim : $this->setting->get('delim');
     $this->tablename = is_null($this->datatable) ? null : explode($this->delim, $this->datatable)[1];
     if (!empty($this->setting))
-      $this->setting->type = $this->type;
+      $this->setting->set('type', $this->type);
   }
 
   public function nav_menu(Items_manager_setting $configs = null) {
@@ -28,8 +28,8 @@ class Items_manager_model extends MY_Manager_Model implements IManager_model {
     $this->set_configs($configs);
     $this->setting->set_table();
 
-    $tools = array('dao', 'format', 'dao', 'format', 'form', 'table');
-    $types = array('table', 'table', 'pagination', 'pagination', 'table', 'table');
+    $tools = array('dao', 'format', 'form', 'table');
+    $types = array('table', 'table', 'table', 'table');
 
     $tb_from = $this->setting->get_item('tb_from');
     $tb_where = $this->setting->get_item('tb_where');
@@ -38,14 +38,11 @@ class Items_manager_model extends MY_Manager_Model implements IManager_model {
 
     $entity = $this->entity()->factory();
     $list = $entity->find($tb_where, $tb_from, $tb_limit, $tb_order_by);
-    $list[0]->cache();
-    //debug($list[0]);
-    //debug($list[0]->cache(false));
     $this->setting->add('model.list', $list);
-    $this->result = $entity;
 
     $this->tools($tools, $types);
-    $datatable = $this->setting->get_item('table.table');
+
+    $datatable = $this->table->result;
     $this->result = $datatable;
     return $this->result;
   }
@@ -68,9 +65,23 @@ class Items_manager_model extends MY_Manager_Model implements IManager_model {
 
   public function form_edit(Items_manager_setting $configs = null) {
     $this->set_configs($configs);
-    $tools = array('dao', 'format');
-    $types = array('pagination', 'pagination');
+    $this->setting->set_form_edit();
+
+    $tools = array('form');
+    $types = array('edit');
+
+    $entity = $this->entity()->factory();
+    $entity->select($this->setting->item_id);
+
+    if ($this->form_validation->run() && $this->form->is_valid()) {
+      $entity->dump($this->input->post())->update();
+    }
+    $this->setting->add('model.form_edit', $entity);
+
     $this->tools($tools, $types);
+
+    $form = $this->form->result;
+    $this->result = $form;
     return $this->result;
   }
 

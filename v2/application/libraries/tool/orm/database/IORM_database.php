@@ -46,6 +46,10 @@ interface IORM_database {
 
   public function get_name_from_id();
 
+  public function list_fields();
+
+  public function list_values();
+
   public function row();
 
   public function add();

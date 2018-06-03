@@ -15,7 +15,7 @@ class Tools_manager implements ITools_manager {
   protected $ci = null;
   protected $orm = null;
   protected $configs = null;
-  protected $result = null;
+  public $result = null;
   protected $errors = null;
 
   public function __construct($configs = null) {

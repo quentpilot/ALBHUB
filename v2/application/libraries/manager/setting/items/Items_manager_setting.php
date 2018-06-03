@@ -36,7 +36,7 @@ class Items_manager_setting extends Setting_manager {
   public function __construct(array $configs = array()) {
     parent::__construct($configs);
     $this->user_id = $this->ci->session->userdata('user_id');
-    $this->item_id = 0;
+    $this->item_id = $this->ci->uri->segment(6);
     $this->type = null;
     $this->delim = '_';
     $this->item_datatable = 'items';
@@ -68,7 +68,7 @@ class Items_manager_setting extends Setting_manager {
     $query_lan_id = get_lang_id($post_lan_code);
     $query_type = substr($this->type, 0, strlen($this->type) - 1);
     $query_from = $this->content_prefix . ', ' . $this->cat_prefix . ', ' . $this->part_prefix . ', sta';
-    $query_like = is_null($post_like) ? "" : "%$post_like%";
+    $query_like = is_null($post_like) ? "" : "itm.itm_title = '$post_like'";
 
     $tb_limit = is_null($post_limit) ? 25 : $post_limit;
     $tb_order_by = is_null($this->ci->input->post('tb_order_by')) ? 'itm.itm_id' : $this->ci->input->post('tb_order_by');
@@ -94,14 +94,24 @@ class Items_manager_setting extends Setting_manager {
         //"lan.id = itl.lan_id",
         //"itm.id = itl.itm_id",
         //"lap.lap_alias = '$query_type'",
-        //$post_like,
+        //$query_like,
       ),
       // set datatable view list related to orm model request
-      'tb_head' => array(
+      /*'tb_head' => array(
         'tb_primary_key' => 'ID',
         'title' => 'Titre',
         'subtitle' => 'Sous titre',
         'slug' => 'Alias',
+        'ilp_name' => 'Type',
+        'lap_name' => 'Catégorie',
+        'itc_tags' => 'Tags',
+        'sta_name' => 'Statut',
+      ),*/
+      'tb_head' => array(
+        'tb_primary_key' => 'ID',
+        'itm_title' => 'Titre',
+        'itm_subtitle' => 'Sous titre',
+        'itc_slug' => 'Alias',
         'ilp_name' => 'Type',
         'lap_name' => 'Catégorie',
         'itc_tags' => 'Tags',
@@ -138,7 +148,7 @@ class Items_manager_setting extends Setting_manager {
           'icon' => 'fa fa-eye-slash',
           'target' => '_self',
           'url' => $tb_action_url,
-          'level' => 'default'
+          'level' => 'primary'
         ),
       ),
     );
@@ -151,6 +161,15 @@ class Items_manager_setting extends Setting_manager {
     $config = array(
       'user_id' => $this->user_id,
     );
+    $this->set_items($config);
+    return $this->result;
+  }
+
+  public function set_form_edit() {
+    $config = array(
+      'item_id' => $this->item_id
+    );
+
     $this->set_items($config);
     return $this->result;
   }

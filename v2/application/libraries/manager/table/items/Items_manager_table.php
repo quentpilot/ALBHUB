@@ -9,10 +9,13 @@ class Items_manager_table extends Tools_manager implements ITable_manager {
 
   protected $file_data = null;
 
+  protected $table = null;
+
   public function __construct(Items_manager_setting $configs = null) {
     parent::__construct($configs);
     $this->view_file = $this->ci->uri->segment(4);
     $this->file_data = array('table_data_table' => array('title' => $this->view_file));
+    $this->table = $this->ci->datatable;
   }
 
   public function build() {
@@ -29,29 +32,21 @@ class Items_manager_table extends Tools_manager implements ITable_manager {
 
   public function load_table(Items_manager_setting $configs = null) {
     $this->set_configs($configs, true);
-    $folder = explode('/', $this->ci->get('view')->get('folder'));
-    unset($folder[count($folder) - 1]);
-    $folder = implode('/', $folder).'/';
     $list = $this->configs->get_item('model.list');
 
-    // $this->configs->add('table.table',array(
-    //   'body' => $list,
-    //   'head' => $this->configs->get_item('tb_head'),
-    //   'action' => $this->configs->get_item('tb_action'),
-    // ));
-
-    $result = array(
-      'body' => $list,
+    $config = array(
       'head' => $this->configs->get_item('tb_head'),
+      'body' => $list,
       'action' => $this->configs->get_item('tb_action'),
+      'view' => $this->configs->get_item('tb_view'),
     );
 
-    $result['view'] = $this->ci->load->view($this->configs->get_item('tb_view'), array('data_list' => $result), true);
+    $this->table->config($config);
+    $this->table->build();
+    $result['view'] = $this->table->output;
 
     $this->configs->add('table.table', $result);
-
-    //$this->result = $this->ci->load->view($folder.'list', null, true);
-    $this->result = $folder;
+    $this->result = $result;
     return true;
   }
 

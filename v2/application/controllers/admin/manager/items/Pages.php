@@ -15,15 +15,11 @@ class Pages extends MY_Admin_Manager_Controller {
 	public function index() {
     // select pages into db following $hub var value
     // format model dump result with response class or else
-		$views = array(
-			'index',
-			//'../list',
-		);
 
 		$this->manager('pages', 'nav_menu');
 		$this->manager('pages', 'list');
 
-		$this->render($views, $this->data);
+		$this->render('index', $this->data);
 	}
 
 	public function add() {
@@ -37,13 +33,10 @@ class Pages extends MY_Admin_Manager_Controller {
 	}
 
 	public function edit($id = null) {
-		$views = array(
-			'index',
-			'../list',
-		);
 		$this->manager('pages', 'nav_menu');
-		$this->manager('pages', 'list');
-		$this->render($views, $this->data);
+		$this->manager('pages', 'form_edit');
+
+		$this->render('../form', $this->data);
 	}
 
 	public function delete() {

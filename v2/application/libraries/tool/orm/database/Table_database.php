@@ -41,7 +41,7 @@ class Table_database implements IORM_database {
   */
   public function ci(string $classname = null) {
     $ci = &get_instance();
-    $instance = null;
+    $instance = $ci;
 
     if (is_null($classname)) {
       $instance = $ci->db;
@@ -194,7 +194,7 @@ class Table_database implements IORM_database {
 
     // get query result
     $result = $db->get()->result();
-    
+
     //debug(count($result[0]));
     if ($result) {
       // set first occurence to himself, then return query result
@@ -514,6 +514,34 @@ class Table_database implements IORM_database {
   }
 
   /*
+  * list_fields method would to return an array of each object properties
+  */
+  public function list_fields($instance = null) {
+    $instance = is_null($instance) ? $this : $instance;
+    $fields = array();
+    $attrs = get_object_vars($instance);
+
+    foreach ($attrs as $key => $value) {
+      array_push($fields, $key);
+    }
+    return $fields;
+  }
+
+  /*
+  * list_values method would to return an array of each object property values
+  */
+  public function list_values($instance = null) {
+    $instance = is_null($instance) ? $this : $instance;
+    $values = array();
+    $attrs = get_object_vars($instance);
+
+    foreach ($attrs as $key => $value) {
+      array_push($values, $value);
+    }
+    return $values;
+  }
+
+  /*
   * row method would to concatenate data table column name without any prefix with current object prefix requested
   */
   public function row(string $name = null, IORM_database $datatable = null) {
@@ -585,6 +613,7 @@ class Table_database implements IORM_database {
   */
   public function get(string $property) {
     $prefixed = $this->tb_id . $property;
+
     if (property_exists($this, $property))
       return $this->$property;
     elseif (property_exists($this, $prefixed))
@@ -597,6 +626,7 @@ class Table_database implements IORM_database {
   */
   public function set(string $property, $value = null) {
     $prefixed = $this->tb_id . $property;
+
     if (property_exists($this, $property)) {
       $this->$property = $value;
     } elseif (property_exists($this, $prefixed)) {

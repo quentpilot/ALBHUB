@@ -320,7 +320,7 @@ class MY_Manager_Model extends MY_ORM_Model {
 
   protected $format = null;
 
-  protected $table = null; // TODO: create lib to build datatable html views easily as form lib
+  protected $table = null;
 
   protected $form = null;
 

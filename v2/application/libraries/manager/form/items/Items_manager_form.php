@@ -39,6 +39,32 @@ class Items_manager_form extends Tools_manager implements IForm_manager {
     return true;
   }
 
+  public function load_edit(Items_manager_setting $configs = null) {
+    $this->ci = &get_instance();
+    $this->configs = $configs;
+    $this->configs->add('form.edit', 'form done');
+    $result['view'] = $this->configs->get_item('model.form_edit');
+    $this->result = $result;
+    return true;
+  }
+
+  public function is_valid(IORM_Database $entity = null, $except = array()) : bool {
+    $this->ci = &get_instance();
+    $post = $this->ci->input->post();
+    $except = count($except) ? $except : array('submit');
+
+    if (is_null($entity))
+      return false;
+
+    foreach ($post as $key => $value) {
+      if (!in_array($key, $except)) {
+        if (is_null($entity->get($key)))
+          return false;
+      }
+    }
+    return true;
+  }
+
   public function load_pagination(Items_manager_setting $configs = null) {
     $this->ci = &get_instance();
     $this->configs = $configs;

@@ -65,6 +65,7 @@ $autoload['libraries'] = array(
   'parser',
   'form_validation',
   'email',
+  'table',
   // Haby ORM used to manage database transfers
   'tool/orm/database/table_database',
   'tool/orm/database/datatable_database',
@@ -119,6 +120,10 @@ $autoload['libraries'] = array(
   'item/widget/widget',
   'item/page/page',
   'item/item_factory',
+  // Haby libraries to build a datatable view
+  'datatable/datatable',
+  // Haby libraries to build a form view
+  'formulary/formulary',
   // Haby libraries used to manage items
   'manager/tools_manager',
   'manager/setting/setting_manager',
