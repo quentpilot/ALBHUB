@@ -123,6 +123,8 @@ $autoload['libraries'] = array(
   // Haby libraries to build a datatable view
   'datatable/datatable',
   // Haby libraries to build a form view
+  'formulary/formulary_fields',
+  'formulary/formulary_generator',
   'formulary/formulary',
   // Haby libraries used to manage items
   'manager/tools_manager',
@@ -172,7 +174,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('url', 'debug', 'token', 'html', 'form', 'string', 'getter');
+$autoload['helper'] = array('url', 'debug', 'token', 'html', 'form', 'string', 'getter', 'template');
 
 /*
 | -------------------------------------------------------------------

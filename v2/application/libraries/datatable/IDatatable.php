@@ -14,5 +14,7 @@ interface IDatatable {
 
   public function builder();
 
+  public function view();
+
   public function set_template();
 }

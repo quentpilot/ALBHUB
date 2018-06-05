@@ -167,7 +167,18 @@ class Items_manager_setting extends Setting_manager {
 
   public function set_form_edit() {
     $config = array(
-      'item_id' => $this->item_id
+      'item_id' => $this->item_id,
+      'tb_view' => 'admin/admalbi/manager/items/form',
+    );
+
+    $this->set_items($config);
+    return $this->result;
+  }
+
+  public function set_active() {
+    $config = array(
+      'item_id' => $this->item_id,
+      'tb_view' => 'admin/admalbi/manager/items/list',
     );
 
     $this->set_items($config);

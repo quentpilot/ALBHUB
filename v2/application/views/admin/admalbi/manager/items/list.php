@@ -9,7 +9,8 @@
               <button type="button" id="closeCard3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
               <div aria-labelledby="closeCard3" class="dropdown-menu dropdown-menu-right has-shadow">
                 <a href="#" class="dropdown-item edit" onclick="history.go(0)"> <i class="fa fa-refresh"></i>Rafraîchir</a>
-                <a href="#" class="dropdown-item edit"> <i class="fa fa-external-link"></i>Exporter</a>
+                <a href="{site_url}/admin/manager/items/pages/export" class="dropdown-item edit"> <i class="fa fa-external-link"></i>Exporter</a>
+                <a href="#" class="dropdown-item edit"> <i class="fa fa-cog"></i>Paramètres</a>
                 <a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Fermer</a>
               </div>
             </div>

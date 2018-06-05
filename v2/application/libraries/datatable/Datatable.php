@@ -119,21 +119,6 @@ class Datatable implements IDatatable {
     return $this->set_template();
   }
 
-  public function view() {
-    $ci = &get_instance();
-    $data = array(
-      'datatable' => $this,
-      'datatable.title' => $this->title,
-      'datatable.describe' => $this->describe,
-      'datatable.output' => $this->output,
-    );
-
-    $output = $ci->parser->parse($this->configs['view'], $data, true);
-
-    $this->output = $output;
-    return true;
-  }
-
   public function add_heading($rows = array()) {
     $this->builder->set_heading($rows);
     return $this;
@@ -147,6 +132,21 @@ class Datatable implements IDatatable {
   public function builder($builder = null) {
     $this->builder = is_null($builder) ? $this->builder : $builder;
     return $this->builder;
+  }
+
+  public function view() {
+    $ci = &get_instance();
+    $data = array(
+      'datatable' => $this,
+      'datatable.title' => $this->title,
+      'datatable.describe' => $this->describe,
+      'datatable.output' => $this->output,
+    );
+
+    $output = $ci->parser->parse($this->configs['view'], $data, true);
+
+    $this->output = $output;
+    return true;
   }
 
 	public function set_template($config = null) {

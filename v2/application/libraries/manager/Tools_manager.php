@@ -38,8 +38,10 @@ class Tools_manager implements ITools_manager {
 
   public function load_views(array $views = array()) {
     $views = count($views) ? $views : array('render.views');
-    $this->configs->set_views($views);
-    $views = $this->configs->get_item('render.views');
+    if (!is_null($this->configs)) {
+      $this->configs->set_views($views);
+      $views = $this->configs->get_item('render.views');
+    }
     return $views;
   }
 

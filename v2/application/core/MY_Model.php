@@ -466,6 +466,10 @@ class MY_Manager_Model extends MY_ORM_Model {
 
   protected function set_configs(ISetting_manager $configs = null) {
     $this->setting = is_null($configs) ? $this->setting : $configs;
+    $this->dao->set('orm', $this);
+    $this->format->set('orm', $this);
+    $this->table->set('orm', $this);
+    $this->form->set('orm', $this);
     //$this->db->set_dbprefix($this->prefix.$this->delim);
     //$this->query->query_builder->set_dbprefix($this->prefix.$this->delim);
     return true;

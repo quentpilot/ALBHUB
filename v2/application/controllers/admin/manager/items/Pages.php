@@ -10,15 +10,13 @@ class Pages extends MY_Admin_Manager_Controller {
 	public function __construct() {
 		parent::__construct();
     $this->view->set('folder', 'manager/items/pages');
+		$this->manager('pages', 'nav_menu');
 	}
 
 	public function index() {
     // select pages into db following $hub var value
     // format model dump result with response class or else
-
-		$this->manager('pages', 'nav_menu');
 		$this->manager('pages', 'list');
-
 		$this->render('index', $this->data);
 	}
 
@@ -27,16 +25,20 @@ class Pages extends MY_Admin_Manager_Controller {
 			'index',
 			'../list',
 		);
-		$this->manager('pages', 'nav_menu');
 		$this->manager('pages', 'list');
 		$this->render($views, $this->data);
 	}
 
 	public function edit($id = null) {
-		$this->manager('pages', 'nav_menu');
 		$this->manager('pages', 'form_edit');
+		$entity = $this->data['data_form_edit']['entity'];
 
-		$this->render('../form', $this->data);
+		if (!$entity->get('id')) {
+			return $this->_error_404();
+		}
+
+		$this->data['entity'] = $entity;
+		$this->render('edit', $this->data);
 	}
 
 	public function delete() {
@@ -45,9 +47,13 @@ class Pages extends MY_Admin_Manager_Controller {
 			'../list',
 			'../list',
 		);
-		$this->manager('pages', 'nav_menu');
 		$this->manager('pages', 'list');
 		$this->render($views, $this->data);
+	}
+
+	public function active($id = null) {
+		$this->manager('pages', 'active');
+		redirect('admin/manager/items/pages');
 	}
 
 	public function list($api_config = null) {
@@ -69,5 +75,9 @@ class Pages extends MY_Admin_Manager_Controller {
 		//$this->pages_manager_model->dao('table');
 		//$this->pages_manager_model->format('table');
 		$this->render($views, $data);
+	}
+
+	public function export() {
+
 	}
 }

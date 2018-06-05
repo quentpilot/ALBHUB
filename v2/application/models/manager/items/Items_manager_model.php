@@ -73,8 +73,11 @@ class Items_manager_model extends MY_Manager_Model implements IManager_model {
     $entity = $this->entity()->factory();
     $entity->select($this->setting->item_id);
 
-    if ($this->form_validation->run() && $this->form->is_valid()) {
-      $entity->dump($this->input->post())->update();
+    //if ($this->form_validation->run() && $this->form->is_valid()) {
+    if (($valid = $this->form->is_valid($entity))) {
+      $entity = $valid;
+      $entity->update();
+      //debug($entity);
     }
     $this->setting->add('model.form_edit', $entity);
 
@@ -82,6 +85,26 @@ class Items_manager_model extends MY_Manager_Model implements IManager_model {
 
     $form = $this->form->result;
     $this->result = $form;
+    return $this->result;
+  }
+
+  public function active(Items_manager_setting $configs = null) {
+    $this->set_configs($configs);
+    $this->setting->set_active();
+    $entity = $this->entity()->factory();
+    $entity->select($this->setting->item_id);
+
+    $sta_id = $entity->get('sta_id');
+
+    if ($sta_id)
+      $sta_id = 0;
+    else
+      $sta_id = 1;
+
+    $entity->set('sta_id', $sta_id)
+           ->update();
+
+    $this->result = $entity;
     return $this->result;
   }
 

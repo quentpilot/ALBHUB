@@ -43,6 +43,14 @@ class MY_Controller extends CI_Controller {
      return $this->view->render($view, $data, $return, $parser);
    }
 
+   public function _error_404() {
+     $error_404 = array('heading' => 'Page not found', 'message' => 'The page you wish seems to be a dream...');
+     $this->data = $error_404;
+     $view = '../../../errors/404';
+     $this->data['page_bar']['title'] = '404 error ' . space(3, true) . '-' . space(3, true) . ' page not found';
+     return $this->render($view, $this->data);
+   }
+
    public function request($query = null, $data = null, $type = null) {
      $this->request->query($query, $data, $type);
      return $this->request->result();

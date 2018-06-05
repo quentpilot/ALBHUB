@@ -92,16 +92,25 @@ class Admalbi_template_model extends Template_model {
 
   protected function _get_page_bar() {
     $views_data = $this->render->get('data');
-    //print_r($views_data);
-    //print_r($views_data['data_page_bar']);
-    $page_data = (isset($views_data['page_bar']) && !is_null($views_data['page_bar'])) ? $views_data['page_bar'] : array() ;
+    $page_data = (isset($views_data['page_bar']) && !is_null($views_data['page_bar'])) ? $views_data['page_bar'] : array();
+
+    $entity = isset($views_data['entity']) ? $views_data['entity'] : NULL;
+    $title = is_null($entity)
+              ? (isset($page_data) && isset($page_data['title']))
+                ? $page_data['title']
+                : $this->uri->segment(count($this->uri->segments)) . ' manager'
+              : get_page_bar_title($entity->get('title'));
+
     $data = array(
       'assets_url' => $this->_asset_path(),
       'site_url' => site_url(),
       'breadcrumb' => explode('>', implode('>', $this->uri->segments)),
       'breadcrumb_url' => array(),
-      'title' => (isset($page_data) && isset($page_data['title'])) ? $page_data['title'] : $this->uri->segment(count($this->uri->segments)) . ' manager',
+      //'title' => (isset($page_data) && isset($page_data['title'])) ? $page_data['title'] : $this->uri->segment(count($this->uri->segments)) . ' manager',
+      //'title' => get_page_bar_title($entity->get('title')),
+      'title' => $title,
     );
+
     return $data;
   }
 

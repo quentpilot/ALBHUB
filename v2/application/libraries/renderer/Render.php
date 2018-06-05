@@ -101,11 +101,12 @@ class Render implements IViews {
   * render method would to set and build view output to load and display what controller wants
   */
   public function render($view = null, $data = array(), $return_output = false, $load_parser = false) {
+    $error = ($return_output) ? null : false;
     $this->view = $this->set_view($view);
     $this->data = $data;
     $this->return_output = $return_output;
     $this->parser = $load_parser;
-    return $this->build_template() ? $this->build_view() : false;
+    return $this->build_template() ? $this->build_view() : $error;
   }
 
   /**

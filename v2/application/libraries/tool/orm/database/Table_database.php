@@ -304,10 +304,10 @@ class Table_database implements IORM_database {
     $tb_primary = $this->tb_primary_key;
     $id = is_null($id) ? $this->$tb_primary : $id;
 
-    $result = $ci->select()->from($tb_name)->where($tb_primary, $id)->get()->result();
+    $result = $ci->select()->from($tb_name)->where($tb_primary, $id)->get()->row();
 
     if ($result)
-      return $this->dump($result[0]);
+      return $this->dump($result);
     return null;
   }
 
@@ -590,8 +590,13 @@ class Table_database implements IORM_database {
     $tb_id = $this->tb_id;
 
     foreach ($properties as $key => $row) {
-      $prefix = substr($row, 0, strlen($tb_id));
-      if ($prefix != $tb_id) $this->unset($row);
+      $prefix = substr($key, 0, 3);
+      if ($prefix == 'tb_') {
+        $this->unset($key);
+      } else {
+        $prefix = substr($row, 0, strlen($tb_id));
+        if ($prefix != $tb_id) $this->unset($row);
+      }
     }
     return true;
   }
