@@ -73,11 +73,9 @@ class Items_manager_model extends MY_Manager_Model implements IManager_model {
     $entity = $this->entity()->factory();
     $entity->select($this->setting->item_id);
 
-    //if ($this->form_validation->run() && $this->form->is_valid()) {
     if (($valid = $this->form->is_valid($entity))) {
       $entity = $valid;
       $entity->update();
-      //debug($entity);
     }
     $this->setting->add('model.form_edit', $entity);
 

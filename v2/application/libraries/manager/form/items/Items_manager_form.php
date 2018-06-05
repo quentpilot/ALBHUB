@@ -58,6 +58,16 @@ class Items_manager_form extends Tools_manager implements IForm_manager {
       'class_col' => 'col-lg-8',
       'fields' => array(
         array(
+          'type' => 'hidden',
+          'name' => 'tb_name',
+          'label' => '',
+          'value' => 'itc_items_contents',//$entity->get('tb_name'),
+          'config' => array(
+            'class' => 'form-control',
+            //'class_col' => 'col-lg-4',
+          ),
+        ),
+        array(
           'type' => 'text',
           'name' => 'title',
           'label' => 'Titre',
