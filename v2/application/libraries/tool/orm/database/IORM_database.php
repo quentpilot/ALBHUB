@@ -6,7 +6,7 @@ interface IORM_database {
 
   public function hydrate(object $data);
 
-  public function hydrate_all(array $data, array $tb_ids);
+  public function hydrate_all(array $data, array $tb_ids, array $db_table_list = array(), bool $r_all = false);
 
   public function array_to_object(array $data);
 
@@ -18,9 +18,13 @@ interface IORM_database {
 
   public function find();
 
+  public function find_all();
+
   public function join();
 
   public function select();
+
+  public function save();
 
   public function insert();
 
@@ -45,6 +49,8 @@ interface IORM_database {
   public function add_tb_id();
 
   public function get_name_from_id();
+
+  public function get_id_from_name();
 
   public function list_fields();
 

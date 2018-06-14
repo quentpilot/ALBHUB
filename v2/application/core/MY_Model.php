@@ -208,15 +208,40 @@ class MY_ORM_Model extends MY_Model implements IORM {
   }
 
   public function entity(string $classname = null, string $tablename = null, string $repository = null) {
+    $prefix = $this->prefix;
+    $datatable = $this->setting->get('item_prefix') . $this->delim . $this->setting->get('item_datatable');
+
     $tablename = is_null($tablename) ? $this->datatable : $tablename;
     $classname = is_null($classname) ? $this->classname : $classname;
 
+    if (count(explode('_', $tablename)) == 1) {
+      $prefix = str_replace('_', '', trim($tablename));
+      $entity = $this->entity($datatable, $datatable)->factory();
+      if ($entity) {
+        $tb_name = $entity->get_name_from_id($prefix);
+
+        if (is_null($tb_name)) {
+          $prefix = $this->setting->get('item_prefix');
+          $tablename = $datatable;
+        } else {
+          $tablename = $tb_name;
+        }
+      }
+    } else {
+      $this->prefix = $this->setting->get('item_prefix');
+      $this->datatable = $this->setting->get('item_prefix') . $this->delim . $this->setting->get('item_datatable');
+    }
+
+    $this->prefix = $prefix;
+    $this->datatable = $tablename;
     $this->entity->classname = $classname;
     $this->entity->tablename = $tablename;
     $this->entity->prefix = $this->prefix;
     $this->entity->delim = $this->delim;
 
-    return $this->entity;
+    $entity = $this->entity;
+    return $entity;
+
   }
 
   public function refresh(array $tables = array(), bool $return = false) {
@@ -405,7 +430,26 @@ class MY_Manager_Model extends MY_ORM_Model {
     return null;
   }
 
-  public function entities(array $config, int $iterate = 1) {
+  public function create_entities($config = null) {
+    $entities = array();
+    $result = null;
+
+    if (is_null($config)) {
+      return $result;
+    }
+    if (is_string($config)) {
+      $entity = $this->entity()->factory();
+    } elseif (is_array($config)) {
+      $entity = $this->entity()->factory();
+      foreach ($config as $key => $prefix) {
+        $tb_name = $entity->get_name_from_id($prefix);
+        echo $tb_name;
+      }
+    }
+    return $result;
+  }
+
+  public function entities_(array $config, int $iterate = 1) {
 
     $entities = array();
     $data = array();

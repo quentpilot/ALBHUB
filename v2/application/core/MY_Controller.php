@@ -242,10 +242,13 @@ class MY_Admin_Manager_Controller extends MY_Admin_ORM_Controller {
 
   public function manager(string $manager_type, string $method) {
     $model = ucfirst(strtolower($manager_type)) . '_manager_model';
+
     if (class_exists($model)) {
       $model = strtolower($model);
       if (isset($this->$model)) {
-        if (method_exists($this->$model, $method)) {
+        if ($method == '$this') {
+          //return $this->$model;
+        } else if (method_exists($this->$model, $method)) {
           $this->manager = $this->$model;
           $result = $this->$model->$method();
           $result = is_array($result) ? array("data_" . $method => $result) : array("data_" . $method => array($result));
@@ -253,6 +256,7 @@ class MY_Admin_Manager_Controller extends MY_Admin_ORM_Controller {
           $views = $this->view->get('view');
           $views = is_array($views) ? $views : array($views);
           $this->view->set('view', array_merge($views, $this->$model->get('format')->load_views()));
+
           //TODO : pseudo API when url got manager method and args
           if (count($this->uri->segments) == 7 && $this->uri->segment(5) == 'manager')
             print_r(json_encode($result));

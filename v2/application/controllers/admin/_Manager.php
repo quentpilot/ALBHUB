@@ -12,7 +12,6 @@ class _Manager extends MY_Admin_Controller {
 	}
 
 	public function manage($section = null) {
-		debug(array('coucou'));
 		$this->render();
 	}
 

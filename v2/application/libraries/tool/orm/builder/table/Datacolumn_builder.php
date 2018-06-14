@@ -26,7 +26,6 @@ class Datacolumn_builder extends Table_builder {
     if (!$table)
       return false;
     $cols = array();
-    //debug($table);
     foreach ($table as $key => $value) {
       $cols[] = $value->COLUMN_NAME;
     }

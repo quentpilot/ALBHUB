@@ -30,7 +30,6 @@ class MY_Table extends CI_Table {
 
 		foreach ($object as $row)
 		{
-      //debug($row);
 			$this->rows[] = $this->_prep_args($row->list_values());
 		}
 	}

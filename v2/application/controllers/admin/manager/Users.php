@@ -12,7 +12,6 @@ class Users extends MY_Admin_Manager_Controller {
 	}
 
 	public function manage($section = null) {
-		debug(array('coucou'));
 		$this->render();
 	}
 

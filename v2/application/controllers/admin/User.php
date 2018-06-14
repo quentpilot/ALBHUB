@@ -64,7 +64,6 @@ class User extends MY_Admin_Controller {
 				$this->session->set_flashdata('alert_message', "Une erreur est survenue lors de votre inscription.<pre>".$error."</pre><br> Veuillez réessayer");
 				$this->render('signin');
 			}
-			//debug($this->input->post());
 		}
 	}
 

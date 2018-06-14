@@ -71,11 +71,9 @@ class Entity_builder implements IEntity_builder {
       $name = implode('_', $exp);
       $result[$name] = $value;
     }
-    //echo $this->classname;
     $this->builder->set('type', 'entities');
     $this->builder->build($this->tablename, $this->classname);
     $entity = $this->builder->object;
-    //debug($entity);
     $result = $entity;
     return $result;
   }

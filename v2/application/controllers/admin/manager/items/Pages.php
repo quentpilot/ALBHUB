@@ -21,16 +21,21 @@ class Pages extends MY_Admin_Manager_Controller {
 	}
 
 	public function add() {
-		$views = array(
-			'index',
-			'../list',
-		);
-		$this->manager('pages', 'list');
-		$this->render($views, $this->data);
+		$this->manager('pages', 'form_edit');
+		$this->manager('pages', 'form_edit_content');
+		$this->manager('pages', 'form_edit_config');
+
+		$entity = $this->data['data_form_edit']['entity'];
+
+		$this->data['entity'] = $entity;
+		$this->render('edit', $this->data);
 	}
 
 	public function edit($id = null) {
 		$this->manager('pages', 'form_edit');
+		$this->manager('pages', 'form_edit_content');
+		//$this->manager('pages', 'form_edit_config');
+
 		$entity = $this->data['data_form_edit']['entity'];
 
 		if (!$entity->get('id')) {

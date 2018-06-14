@@ -26,6 +26,7 @@ class Table_database implements IORM_database {
 
   /**
   * tb_cache attribute would store each query result merged to an array
+  * TODO: create attributes to cache queries string and results
   */
   public $tb_cache = array();
 
@@ -68,10 +69,11 @@ class Table_database implements IORM_database {
   /**
   * hydrate method would to fill object with related data as object
   */
-  public function hydrate_all(array $ci_result, array $tb_ids) {
+  public function hydrate_all(array $ci_result, array $tb_ids, array $db_table_list = array(), bool $r_all = false) {
     $table = $this->ci('datatable_entity');
     $tables = (count($tb_ids)) ? $tb_ids : explode('_', $this->id)[0];
     $datatables = array();
+    $db_tables = (count($db_table_list))  ?  $db_table_list : $this->ci()->list_tables();
 
     for ($it = 0; $it < count($ci_result); $it++) {
       $result = array($ci_result[$it]);
@@ -79,7 +81,7 @@ class Table_database implements IORM_database {
       foreach ($tables as $key => $name) {
         $tb = null;
         $name = trim($name);
-        $tablename = $this->get_name_from_id($name);
+        $tablename = $this->get_name_from_id($name, $db_tables);
 
         if (!is_null($tablename)) {
           $table->tablename = $tablename;
@@ -90,8 +92,11 @@ class Table_database implements IORM_database {
           $table->hydrate($result, true);
           $tb = $table->result();
           $cname = get_class($this);
-          if ($tb->get('tb_name') == $this->tb_name)
+          if ($tb->get('tb_name') == $this->tb_name && !$r_all) {
             $datatables[] = $tb;
+          } elseif ($r_all) {
+            $tb->get('tb_name') == $this->tb_name;
+          }
         }
       }
     }
@@ -210,7 +215,49 @@ class Table_database implements IORM_database {
   }
 
   /**
-  * from method would to format a string for CI query build from method
+  * find_all method would to fill object as find method except that object(s) returned
+  * are all those related to object request.
+  *
+  * Note: only objects returned corresponding to from query string tables name
+  *
+  * @see hydrate_all()
+  */
+  public function find_all($where = null, string $from = null, int $limit = 0, string $order_by = null) {
+    $db = $this->ci();
+    $tb_id = $this->tb_id;
+    $tb_name = $this->tb_name;
+    $tb_primary = $this->tb_primary_key;
+    $id = $this->$tb_primary;
+    $tb_primary = $this->tb_primary_key;
+    $tb_key = explode('_', $tb_primary)[1];
+    $id = $this->$tb_primary;
+
+    $from = is_null($from) ? '' : $from;
+    $where = is_null($where) ? array($tb_primary, $id) : $where;
+
+    $tfrom = $this->from($from);
+    $result = $db->select()->from($tfrom);
+    $result = $this->where($result, $where);
+
+    if ($limit > 0) $result->limit($limit);
+    if (!is_null($order_by)) $result->order_by($order_by);
+
+    $result = $db->get()->result();
+
+    if ($result) {
+      $this->dump($result[0]);
+      $tables = array(str_replace('_', '', $tb_id));
+      $tables = array_merge($tables, explode(',', $from));
+      $db_tables = $db->list_tables();
+      $tbs = $this->hydrate_all($result, $tables, $db_tables, true);
+      $result = $tbs;
+      return $result;
+    }
+    return null;
+  }
+
+  /**
+  * from method would to format a string for CI query builder from method
   */
   protected function from(string $from_query) {
     $from_result = null;
@@ -225,10 +272,11 @@ class Table_database implements IORM_database {
 
     $it = 1;
     $tables = '';
+    $db_tables = $this->ci()->list_tables();
 
     foreach ($exp as $prefix) {
       $prefix = strtolower(trim($prefix));
-      $name = $this->get_name_from_id($prefix);
+      $name = $this->get_name_from_id($prefix, $db_tables);
       if (!is_null($name)) {
         if (count($exp) == $it) $comma = '';
         $tables .= $name . ' AS ' . $prefix . $comma;
@@ -308,6 +356,33 @@ class Table_database implements IORM_database {
 
     if ($result)
       return $this->dump($result);
+    return null;
+  }
+
+  /**
+  * save method would to insert or update himself
+  */
+  public function save() {
+    $ci = $this->ci();
+    $tb_id = $this->tb_id;
+    $tb_name = $this->tb_name;
+    $tb_primary = $this->tb_primary_key;
+    $id = $this->$tb_primary;
+
+    $exists = $this->select($id);
+    $result = null;
+
+    if ($exists) {
+      $result = $this->update();
+    } else {
+      $result = $this->insert();
+    }
+
+    //debug($exists);
+    //debug($result);
+
+    if ($result)
+      return $this;
     return null;
   }
 
@@ -488,7 +563,6 @@ class Table_database implements IORM_database {
       $col = $this->tb_id . trim($name);
       $row = array($col => trim($value));
       $cols = array_merge($row, $cols);
-      //debug($cols);
     }
     return $cols;
   }
@@ -496,21 +570,40 @@ class Table_database implements IORM_database {
   /**
   * get_name_from_id method would to find the full tablename from an unique table prefix
   */
-  public function get_name_from_id(string $prefix = null) {
+  public function get_name_from_id(string $prefix = null, array $db_tables = array()) {
     if (is_null($prefix))
       return null;
-    $db = $this->ci();
-    $prefix = str_replace('_', '', $prefix);
 
-    if ($db) {
-      $tables = $db->list_tables();
-      foreach ($tables as $key => $table) {
-        $pre = explode('_', $table)[0];
-        if ($pre == $prefix)
-          return $table;
-      }
+    $prefix = str_replace('_', '', $prefix);
+    $tables = count($db_tables) ? $db_tables : $this->ci()->list_tables();
+
+    foreach ($tables as $key => $table) {
+      $pre = explode('_', $table)[0];
+      if ($pre == $prefix)
+        return $table;
     }
     return null;
+  }
+
+  /**
+  * get_id_from_name method would to find the table prefix from an unique tablename
+  */
+  public function get_id_from_name(string $tb_name = null, array $db_tables = array()) {
+    $prefix = null;
+    if (is_null($tb_name))
+      return $prefix;
+    $name = explode('_', $tb_name);
+
+    if(count($name)) {
+      $tables = count($db_tables) ? $db_tables : $this->ci()->list_tables();
+      $prefix = str_replace('_', '', trim($name[0]));
+      if (!is_null($this->get_name_from_id($prefix, $tables))) {
+        $prefix .= '_';
+      } else {
+        $prefix = null;
+      }
+    }
+    return $prefix;
   }
 
   /*

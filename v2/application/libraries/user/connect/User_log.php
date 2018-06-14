@@ -64,7 +64,6 @@ class User_log {
 
   public function update_user_logs(IORM_database $entity, string $action_type) {
     $ci = &get_instance();
-    debug($entity);
     $date = date('Y-m-d H:i:s');
     $data = array(
       'usl_tb_id' => $entity->get($entity->get('tb_primary_key')),

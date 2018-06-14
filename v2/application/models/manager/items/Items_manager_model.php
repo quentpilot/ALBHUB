@@ -36,9 +36,25 @@ class Items_manager_model extends MY_Manager_Model implements IManager_model {
     $tb_limit = $this->setting->get_item('tb_limit');
     $tb_order_by = $this->setting->get_item('tb_order_by');
 
+    $entities = $this->entity()->factory()->find_all($tb_where, $tb_from, $tb_limit, $tb_order_by);
+
+    //debug($entities);
+
     $entity = $this->entity()->factory();
     $list = $entity->find($tb_where, $tb_from, $tb_limit, $tb_order_by);
     $this->setting->add('model.list', $list);
+
+
+
+    /*for ($it = 0; $it < count($list); $it++) {
+      if ($it % 5 == 0) {
+        debug($list[$it]);
+        debug($list[$it + 1]);
+      }
+    }*/
+
+    //debug($list);
+    //die();
 
     $this->tools($tools, $types);
 
@@ -65,7 +81,88 @@ class Items_manager_model extends MY_Manager_Model implements IManager_model {
 
   public function form_edit(Items_manager_setting $configs = null) {
     $this->set_configs($configs);
-    $this->setting->set_form_edit();
+
+    $tools = array('form');
+    $types = array('edit');
+
+    /**/
+
+    /*$this->setting->set_table();
+    $tb_from = $this->setting->get_item('tb_from');
+    $tb_where = $this->setting->get_item('tb_where');
+    $tb_limit = $this->setting->get_item('tb_limit');
+    $tb_order_by = $this->setting->get_item('tb_order_by');
+
+    $entity = $this->entity()->factory();
+    $list = $entity->find($tb_where, $tb_from, $tb_limit, $tb_order_by);*/
+
+    //$entity = $this->entity()->factory();
+    //debug($entity);
+    //$entities = $this->entities()->factory();
+    //debug($entities);
+
+    /**/
+
+    $entity = $this->entity()->factory();
+    $entity->select($this->setting->item_id);
+
+    $this->setting->set_form_edit($entity);
+
+    if (($valid = $this->form->is_valid($entity))) {
+      $entity = $valid;
+      $entity->update();
+        //debug($valid);
+    } else {
+      // TODO: debug form error
+    }
+
+    $this->setting->add('model.form_edit.title', 'Edition de ' . $entity->get('title'));
+    $this->setting->add('model.form_edit.describe', 'Formulaire destiné à modifier l\'élément ' . $entity->get('title'));
+    $this->setting->add('model.form_edit', $entity);
+
+    $this->tools($tools, $types);
+
+    $form = $this->form->result;
+    $this->result = $form;
+    return $this->result;
+  }
+
+  public function form_edit_content(Items_manager_setting $configs = null) {
+    $this->set_configs($configs);
+
+    $tools = array('form');
+    $types = array('edit');
+
+    //$this->prefix = 'itc';
+    //$this->refresh();
+    //$this->datatable = 'itc_items_content';
+    $entity = $this->entity('Page_Content', 'itc')->factory()
+                ->set('tb_primary_key', 'itc_itm_id')
+                ->select($this->setting->item_id);
+
+    $this->setting->set_form_edit_content($entity);
+
+    if (($valid = $this->form->is_valid($entity))) {
+      $entity = $valid;
+      //debug($entity);
+      die();
+      $entity->update();
+    } else {
+      // TODO: debug form error
+    }
+    $this->setting->add('model.form_edit.title', 'Edition du contenu');
+    $this->setting->add('model.form_edit.describe', 'Formulaire destiné à modifier le contenu de l\'élément');
+    $this->setting->add('model.form_edit', $entity);
+
+    $this->tools($tools, $types);
+
+    $form = $this->form->result;
+    $this->result = $form;
+    return $this->result;
+  }
+
+  public function form_edit_config(Items_manager_setting $configs = null) {
+    $this->set_configs($configs);
 
     $tools = array('form');
     $types = array('edit');
@@ -73,10 +170,17 @@ class Items_manager_model extends MY_Manager_Model implements IManager_model {
     $entity = $this->entity()->factory();
     $entity->select($this->setting->item_id);
 
+    $this->setting->set_form_edit_config($entity);
+
     if (($valid = $this->form->is_valid($entity))) {
       $entity = $valid;
       $entity->update();
+    } else {
+      // TODO: debug form error
     }
+
+    $this->setting->add('model.form_edit.title', 'Edition de ' . $entity->get('title'));
+    $this->setting->add('model.form_edit.describe', 'Formulaire destiné à modifier l\'élément ' . $entity->get('title'));
     $this->setting->add('model.form_edit', $entity);
 
     $this->tools($tools, $types);

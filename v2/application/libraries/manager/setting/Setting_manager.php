@@ -5,10 +5,12 @@ require_once APPPATH . 'libraries/manager/setting/ISetting_manager.php';
 
 class Setting_manager extends Tools_manager implements ISetting_manager {
 
+  public $item_id = 0;
   public $type = null;
 
   public function __construct(array $configs = array()) {
     parent::__construct($configs);
+    $this->item_id = $this->ci->uri->segment(6);
     $part = $this->ci->uri->segment(4);
     $type = substr($part, 0, strlen($part) - 1);
     $this->type = $type;
@@ -32,7 +34,8 @@ class Setting_manager extends Tools_manager implements ISetting_manager {
     if (!is_null($key) && array_key_exists($key, $this->configs))
       return $this->configs[$key];
     elseif (is_null($key) || !array_key_exists($key, $this->configs)) {
-      return $this->configs;
+      //return $this->configs;
+      return null;
     } else {
       return false;
     }

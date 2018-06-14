@@ -50,125 +50,26 @@ class Items_manager_form extends Tools_manager implements IForm_manager {
     $this->configs = $configs;
     $this->configs->add('form.edit', 'form done');
     $entity = $this->configs->get_item('model.form_edit');
-    $result['entity'] = $entity;
-
-    $config = array(
-      'entity' => $entity,
-      'view' => $this->configs->get_item('tb_view'),
-      'class_col' => 'col-lg-8',
-      'fields' => array(
-        array(
-          'type' => 'hidden',
-          'name' => 'tb_name',
-          'label' => '',
-          'value' => 'itc_items_contents',//$entity->get('tb_name'),
-          'config' => array(
-            'class' => 'form-control',
-            //'class_col' => 'col-lg-4',
-          ),
-        ),
-        array(
-          'type' => 'text',
-          'name' => 'title',
-          'label' => 'Titre',
-          'value' => $entity->get('title'),
-          'config' => array(
-            'class' => 'form-control',
-            //'class_col' => 'col-lg-4',
-          ),
-        ),
-        array(
-          'type' => 'text',
-          'name' => 'subtitle',
-          'label' => 'Sous-titre',
-          'value' => $entity->get('subtitle'),
-          'config' => array(
-            'class' => 'form-control',
-            //'class_col' => 'col-lg-4',
-          ),
-        ),
-        array(
-          'type' => 'text',
-          'name' => 'slug',
-          'label' => 'Alias',
-          'value' => $entity->get('slug'),
-          'config' => array(
-            'class' => 'form-control',
-          ),
-        ),
-        array(
-          'type' => 'textarea',
-          'name' => 'table_content',
-          'label' => 'Contenu',
-          'value' => $entity->get('table_content'),
-          'config' => array(
-            'class' => 'form-control',
-            'rows' => '5',
-          ),
-        ),
-        array(
-          'type' => 'submit',
-          'name' => 'submit',
-          'label' => '',
-          'value' => 'Enregistrer',
-          'config' => array(
-            'class' => 'form-control input-success',
-          ),
-        ),
-      ),
-    );
-
+    $config = $this->configs->get_item('form_fields');
     $result = $config;
-
     $form = $this->form;
 
-    $form->title = 'Edition de ' . $entity->get('title');
-    $form->describe = 'Formulaire destiné à modifier l\'élément ' . $entity->get('title');
+    $form->title = $this->configs->get_item('model.form_edit.title');
+    $form->describe = $this->configs->get_item('model.form_edit.describe');
 
     $form->config($config);
     $form->build();
+    $result['entity'] = $entity;
     $result['view'] = $form->output;
 
     //$this->orm->datatable = 'itc_items_contents';
     //$this->orm->prefix = 'itc';
     //debug($this->orm->entities(array('itc', 'itm')));
 
-    $form->title = 'Options de l\'élément ' . $entity->get('title');
-    $form->describe = 'Formulaire destiné à modifier les options de configuration de l\'élément ' . $entity->get('title');
+    $form->title = 'Options de l\'élément';
+    $form->describe = 'Formulaire destiné à modifier les options de configuration de l\'élément ';
 
     $config['class_col'] = 'col-lg-4';
-    $config['fields'] = array(
-      array(
-        'type' => 'text',
-        'name' => 'title',
-        'label' => 'Titre',
-        'value' => $entity->get('title'),
-        'config' => array(
-          'class' => 'form-control',
-          //'class_col' => 'col-lg-4',
-        ),
-      ),
-      array(
-        'type' => 'text',
-        'name' => 'subtitle',
-        'label' => 'Sous-titre',
-        'value' => $entity->get('subtitle'),
-        'config' => array(
-          'class' => 'form-control',
-          //'class_col' => 'col-lg-4',
-        ),
-      ),
-      array(
-        'type' => 'text',
-        'name' => 'slug',
-        'label' => 'Alias',
-        'value' => $entity->get('slug'),
-        'config' => array(
-          'class' => 'form-control',
-          //'class_col' => 'col-lg-4',
-        ),
-      ),
-    );
 
     //$form->config($config);
     //$form->build();
@@ -178,11 +79,19 @@ class Items_manager_form extends Tools_manager implements IForm_manager {
     return true;
   }
 
-  public function is_valid(IORM_Database $entity = null, $except = array()) {
+  /**
+  * is_valid method would to verify each form field following config rules and entity type
+  *
+  * @return mixed entity hydrated using fields value on success or false on failure
+  *
+  * @see formulary library
+  */
+
+  public function is_valid(IORM_Database $entity = null, $except = array(), $valid_field = 'submit') {
     $this->ci = &get_instance();
     $this->rules .= '/' . $this->orm->type . '/edit';
     $post = $this->ci->input->post();
-    $except = count($except) ? $except : array('submit');
+    $except = count($except) ? $except : array('submit', $valid_field);
     $it = 0;
 
     if (is_null($entity))
@@ -190,7 +99,17 @@ class Items_manager_form extends Tools_manager implements IForm_manager {
     if (!$post)
       return false;
 
-    $entity->dump($this->ci->input->post());
+    $entity_form = $entity;
+    $entity = $entity->dump($this->ci->input->post());
+    $tb_name = $entity->get('tb_name');
+    $tb_id = $entity->get_id_from_name($tb_name);
+    //$tb_name = $entity->get_id_from_name('itc_items_content');
+    //echo $tb_name;
+    //die();
+    if ($entity->get('tb_id') != $tb_id)
+      return false;
+
+
 
     foreach ($post as $key => $value) {
       if (!in_array($key, $except)) {

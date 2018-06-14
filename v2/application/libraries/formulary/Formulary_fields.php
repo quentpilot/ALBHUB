@@ -21,7 +21,7 @@ class formulary_fields {
     $ci = &get_instance();
     $this->fields = $fields;
     $this->configs = array(
-      'div' => array('class' => 'form-group'),
+      'div' => array('class' => 'form-group row'),
       'label' => array('class' => 'form-control-label', 'for' => ''),
     );
     $this->classic_types = array(
@@ -29,7 +29,8 @@ class formulary_fields {
       'range', 'search', 'tel', 'url', 'week', 'number', 'color', 'submit', 'reset', 'button'
     );
     $this->custom_types = array(
-      'textarea', 'textarea-tmce', 'checkbox', 'checkbox-md', 'radio', 'radio-md', 'file-dd', 'datetime'
+      'textarea', 'textarea-tmce', 'checkbox', 'checkbox-md', 'radio', 'radio-md', 'file-dd', 'datetime', // md and other uses views
+      'select', 'select-md', 'multiselect', 'multiselect-md'
     );
     $this->tag_div = $tag_div;
     $this->tag_label = $tag_label;
@@ -120,10 +121,10 @@ class formulary_fields {
     $output .= '<textarea ' . $this->attributes($config) . '>' . $value . '</textarea>';
     $output .= $this->_div();*/
     $output = '
-      <div class="form-group '.$class_col.'">
+      <!--<div class="form-group '.$class_col.'">-->
         <label for="id_'.$name.'" class="form-control-label">'.$label.'</label>
         <textarea ' . $attributes . '>'.$value.'</textarea>
-      </div>';
+      <!--</div>-->';
 
     return $output;
   }

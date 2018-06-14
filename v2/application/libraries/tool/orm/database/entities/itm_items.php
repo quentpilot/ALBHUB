@@ -1,6 +1,6 @@
 <?php
 
-class itc_items_contents extends Datatable_database {
+class itm_items extends Datatable_database {
 
 	public $itm_id = 0;
 

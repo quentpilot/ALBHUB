@@ -5,10 +5,6 @@ class Items_manager_setting extends Setting_manager {
 
   public $user_id = null;
 
-  //public $
-
-  public $item_id = 0;
-
   public $delim = null;
 
   protected $item_datatable = null;
@@ -36,7 +32,6 @@ class Items_manager_setting extends Setting_manager {
   public function __construct(array $configs = array()) {
     parent::__construct($configs);
     $this->user_id = $this->ci->session->userdata('user_id');
-    $this->item_id = $this->ci->uri->segment(6);
     $this->type = null;
     $this->delim = '_';
     $this->item_datatable = 'items';
@@ -165,10 +160,223 @@ class Items_manager_setting extends Setting_manager {
     return $this->result;
   }
 
-  public function set_form_edit() {
+  public function set_form_edit($entity) {
     $config = array(
       'item_id' => $this->item_id,
       'tb_view' => 'admin/admalbi/manager/items/form',
+      'form_fields' => array(
+        'entity' => $entity,
+        'view' => 'admin/admalbi/manager/items/form',
+        'class_col' => 'col-lg-8',
+        'fields' => array(
+          array(
+            'type' => 'hidden',
+            'name' => 'tb_name',
+            'label' => '',
+            'value' => /*'itc_items_contents',*/$entity->get('tb_name'),
+            'config' => array(
+              'class' => 'form-control',
+              //'class_col' => 'col-lg-4',
+            ),
+          ),
+          array(
+            'type' => 'text',
+            'name' => 'title',
+            'label' => 'Titre',
+            'value' => $entity->get('title'),
+            'config' => array(
+              'class' => 'form-control',
+              //'class_col' => 'col-lg-4',
+            ),
+          ),
+          array(
+            'type' => 'text',
+            'name' => 'subtitle',
+            'label' => 'Sous-titre',
+            'value' => $entity->get('subtitle'),
+            'config' => array(
+              'class' => 'form-control',
+              //'class_col' => 'col-lg-4',
+            ),
+          ),
+          array(
+            'type' => 'text',
+            'name' => 'slug',
+            'label' => 'Alias',
+            'value' => $entity->get('slug'),
+            'config' => array(
+              'class' => 'form-control',
+            ),
+          ),
+          array(
+            'type' => 'textarea',
+            'name' => 'table_content',
+            'label' => 'Contenu',
+            'value' => $entity->get('table_content'),
+            'config' => array(
+              'class' => 'form-control',
+              'rows' => '5',
+            ),
+          ),
+          array(
+            'type' => 'submit',
+            'name' => 'submit',
+            'label' => '',
+            'value' => 'Enregistrer',
+            'config' => array(
+              'class' => 'form-control input-success',
+            ),
+          ),
+        ),
+      )
+    );
+
+    $this->set_items($config);
+    return $this->result;
+  }
+
+  public function set_form_edit_content($entity) {
+    $config = array(
+      'item_id' => $this->item_id,
+      'tb_view' => 'admin/admalbi/manager/items/form',
+      'form_fields' => array(
+        'entity' => $entity,
+        'view' => 'admin/admalbi/manager/items/form',
+        'class_col' => 'col-lg-8',
+        'fields' => array(
+          array(
+            'type' => 'hidden',
+            'name' => 'tb_name',
+            'label' => '',
+            'value' => /*'itc_items_contents',*/$entity->get('tb_name'),
+            'config' => array(
+              'class' => 'form-control',
+              //'class_col' => 'col-lg-4',
+            ),
+          ),
+          array(
+            'type' => 'text',
+            'name' => 'url_name',
+            'label' => 'Nom d\'accès URL',
+            'value' => $entity->get('url_link'),
+            'config' => array(
+              'class' => 'form-control col-lg-4',
+            ),
+          ),
+          array(
+            'type' => 'text',
+            'name' => 'url_link',
+            'label' => 'Lien URL',
+            'value' => $entity->get('url_link'),
+            'config' => array(
+              'class' => 'form-control col-lg-4',
+            ),
+          ),
+          array(
+            'type' => 'text',
+            'name' => 'url_target',
+            'label' => 'Cible de l\'URL',
+            'value' => $entity->get('url_target'),
+            'config' => array(
+              'class' => 'form-control col-lg-4',
+            ),
+          ),
+          array(
+            'type' => 'textarea',
+            'name' => 'text_content',
+            'label' => 'Contenu princpal',
+            'value' => $entity->get('text_content'),
+            'config' => array(
+              'class' => 'form-control',
+              'rows' => '5',
+            ),
+          ),
+          array(
+            'type' => 'submit',
+            'name' => 'submit',
+            'label' => '',
+            'value' => 'Enregistrer',
+            'config' => array(
+              'class' => 'form-control input-success',
+            ),
+          ),
+        ),
+      )
+    );
+
+    $this->set_items($config);
+    return $this->result;
+  }
+
+  public function set_form_edit_config($entity) {
+    $config = array(
+      'item_id' => $this->item_id,
+      'tb_view' => 'admin/admalbi/manager/items/form',
+      'form_fields' => array(
+        'entity' => $entity,
+        'view' => 'admin/admalbi/manager/items/form',
+        'class_col' => 'col-lg-8',
+        'fields' => array(
+          array(
+            'type' => 'hidden',
+            'name' => 'tb_name',
+            'label' => '',
+            'value' => /*'itc_items_contents',*/$entity->get('tb_name'),
+            'config' => array(
+              'class' => 'form-control',
+              //'class_col' => 'col-lg-4',
+            ),
+          ),
+          array(
+            'type' => 'text',
+            'name' => 'title',
+            'label' => 'Titre',
+            'value' => $entity->get('title'),
+            'config' => array(
+              'class' => 'form-control',
+              //'class_col' => 'col-lg-4',
+            ),
+          ),
+          array(
+            'type' => 'text',
+            'name' => 'subtitle',
+            'label' => 'Sous-titre',
+            'value' => $entity->get('subtitle'),
+            'config' => array(
+              'class' => 'form-control',
+              //'class_col' => 'col-lg-4',
+            ),
+          ),
+          array(
+            'type' => 'text',
+            'name' => 'slug',
+            'label' => 'Alias',
+            'value' => $entity->get('slug'),
+            'config' => array(
+              'class' => 'form-control',
+            ),
+          ),
+          array(
+            'type' => 'textarea',
+            'name' => 'table_content',
+            'label' => 'Contenu',
+            'value' => $entity->get('table_content'),
+            'config' => array(
+              'class' => 'form-control',
+              'rows' => '5',
+            ),
+          ),
+          array(
+            'type' => 'submit',
+            'name' => 'submit',
+            'label' => '',
+            'value' => 'Enregistrer',
+            'config' => array(
+              'class' => 'form-control input-success',
+            ),
+          ),
+        ),
+      )
     );
 
     $this->set_items($config);
